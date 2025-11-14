@@ -1,0 +1,9 @@
+.big-title {
+    @apply font-atten text-[28px] font-bold leading-8 text-center;
+    strong {
+        @apply text-main-yellow font-bold;
+    }
+}
+.title {
+    @apply font-atten text-xl font-bold;
+}

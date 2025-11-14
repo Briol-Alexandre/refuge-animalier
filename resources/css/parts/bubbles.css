@@ -1,0 +1,51 @@
+.bubble {
+    p {
+        b {
+            @apply font-atten font-extrabold text-base;
+        }
+    }
+}
+
+.bubble-number {
+    @apply font-atten font-extrabold text-xl;
+}
+
+.bubble1 {
+    @apply -top-2 -left-5;
+}
+
+.bubble2 {
+    @apply -bottom-2 -right-5;
+}
+
+.bubble3 {
+    @apply -top-2 -right-5;
+}
+
+.bubble4 {
+    @apply -bottom-2 -left-5;
+}
+
+.group-bubble1 {
+    animation: group1 8s infinite;
+}
+
+.group-bubble2 {
+    animation: group2 8s infinite;
+}
+
+@keyframes group1 {
+    0%   { opacity: 0; transform: translate(0,0); }
+    10%  { opacity: 1; transform: translate(2px, -2px); }
+    40%  { opacity: 1; transform: translate(3px, 1px); }
+    50%  { opacity: 0; transform: translate(0,0); }
+    100% { opacity: 0; transform: translate(0,0); }
+}
+
+@keyframes group2 {
+    0%   { opacity: 0; transform: translate(0,0); }
+    50%  { opacity: 0; transform: translate(0,0); }
+    60%  { opacity: 1; transform: translate(-2px, 2px); }
+    90%  { opacity: 1; transform: translate(-3px, -1px); }
+    100% { opacity: 0; transform: translate(0,0); }
+}

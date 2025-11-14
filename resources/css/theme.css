@@ -1,0 +1,29 @@
+@theme {
+
+    /* FONTS */
+    --font-poppins: 'Poppins', sans-serif;
+    --font-atten: 'New Atten Round', sans-serif;
+
+    /* FONT SIZES */
+    --text-mobile: 12px;
+
+    /* COLORS */
+    --color-softBlue: #F2F8FE;
+    --color-text: #353433;
+    --color-main-yellow: #F6C449;
+    --color-main-yellow-opacity: rgb(246, 196, 73, .2);
+    --color-main-red: #FF6E6E;
+    --color-main-red-opacity: rgb(255, 110, 110, .2);
+
+    /* SPACINGS */
+
+    --spacing-normal: 32px;
+    --spacing-huge: 64px;
+
+    /* RADIUS */
+    --radius-btn: 40px;
+    --radius-small: 15px;
+
+    /* SHADOW */
+    --shadow-basic: 0 0 10px rgba(0, 0, 0, .2);
+}

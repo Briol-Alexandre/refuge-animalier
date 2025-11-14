@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://use.typekit.net/wpr6kgt.css");
+@import "./theme.css";
+@import "./parts/nav.css";
+@import "./parts/texts.css";
+@import "./parts/bubbles.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,10 +14,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-sans:
-        Instrument Sans, ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+    --font-sans: Instrument Sans, ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -82,10 +87,9 @@
 @layer utilities {
     body,
     html {
-        --font-sans:
-            'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-            'Noto Color Emoji';
+        --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
     }
 }
 
@@ -124,6 +128,9 @@
     --sidebar-border: hsl(0 0% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
+
+    /* Custom variables */
+
 }
 
 .dark {
@@ -166,7 +173,28 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
     }
+
+    .grid-basic {
+        @apply grid grid-cols-7 gap-2.5;
+    }
+
+    .button-dark {
+        @apply after:bg-text overflow-hidden block after:origin-bottom after:-z-10 relative after:absolute after:w-full after:h-full after:top-0 after:left-0 after:scale-y-100  text-main-yellow text-sm w-fit px-normal border border-text py-2.5 mx-auto rounded-btn hover:bg-transparent hover:text-text hover:after:scale-y-0 after:transition-all after:duration-300;
+    }
+    .button-light {
+        @apply after:bg-main-yellow overflow-hidden block after:origin-bottom after:-z-10 relative after:absolute after:w-full after:h-full after:top-0 after:left-0 after:scale-y-100  text-text text-sm w-fit px-normal border border-main-yellow py-2.5 mx-auto rounded-btn hover:bg-transparent hover:text-text hover:after:scale-y-0 after:transition-all after:duration-300;
+    }
+
+    .slider-class {
+        @apply  flex w-[400%];
+        li {
+            @apply w-full;
+        }
+    }
 }
+
+

@@ -4,6 +4,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+Route::domain('lespattesheureuses.test')->group(function () {
+    Route::get('/', function () {
+        return view('client.homepage');
+    })->name('home.client');
+
+    Route::get('/pattesheureuses', function () {
+        return view('client.paws');
+    })->name('paws.client');
+    Route::get('/animals', function () {
+        return view('client.animals');
+    })->name('animals.client');
+});
+
+
 Route::domain('admin.lespattesheureuses.test')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Welcome', [
