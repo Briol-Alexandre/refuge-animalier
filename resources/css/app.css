@@ -7,6 +7,7 @@
 @import "./parts/nav.css";
 @import "./parts/texts.css";
 @import "./parts/bubbles.css";
+@import "./parts/animal-card.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -188,8 +189,17 @@
     .button-light {
         @apply after:bg-main-yellow overflow-hidden block after:origin-bottom after:-z-10 relative after:absolute after:w-full after:h-full after:top-0 after:left-0 after:scale-y-100  text-text text-sm w-fit px-normal border border-main-yellow py-2.5 mx-auto rounded-btn hover:bg-transparent hover:text-text hover:after:scale-y-0 after:transition-all after:duration-300;
     }
+    .button-light-hvr-lgt {
+        @apply after:bg-main-yellow overflow-hidden block after:origin-bottom after:-z-10 relative after:absolute after:w-full after:h-full after:top-0 after:left-0 after:scale-y-100  text-text hover:text-white text-sm w-fit px-normal border border-main-yellow py-2.5 mx-auto rounded-btn hover:bg-transparent hover:after:scale-y-0 after:transition-all after:duration-300;
+    }
 
     .slider-class {
+        @apply  flex w-[400%];
+        li {
+            @apply w-full;
+        }
+    }
+    .slider-class-animal {
         @apply  flex w-[400%];
         li {
             @apply w-full;

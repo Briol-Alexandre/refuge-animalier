@@ -5,7 +5,8 @@
     --font-atten: 'New Atten Round', sans-serif;
 
     /* FONT SIZES */
-    --text-mobile: 12px;
+    --text-mobile: 14px;
+    --text-xxs: 10px;
 
     /* COLORS */
     --color-softBlue: #F2F8FE;

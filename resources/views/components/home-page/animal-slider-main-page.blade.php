@@ -1,0 +1,11 @@
+<section aria-labelledby="animals-section" class="grid-basic mt-11">
+    <h2 id="animals-section" class="title col-start-2 col-end-7 text-center">
+        Nos animaux à l'adoption
+    </h2>
+    <div class="relative col-start-2 col-end-7">
+        <x-slider.slider-arrow-next :section_name="'animal'"/>
+        <x-slider.slider-arrow-prev :section_name="'animal'"/>
+        <x-slider.animal-slider-container/>
+    </div>
+    <a href="{{route("animals.client")}}" class="button-light col-span-full mt-8">Découvrir tous nos animaux</a>
+</section>

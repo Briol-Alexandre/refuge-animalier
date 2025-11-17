@@ -1,7 +1,7 @@
-let sliderButtons = document.querySelectorAll('.slider-button');
+let sliderButtons = document.querySelectorAll('.key-slider-button');
 
-const prevBtn = document.querySelector('[data-action="prev"]');
-const nextBtn = document.querySelector('[data-action="next"]');
+const prevBtn = document.querySelector('[data-action="key-prev"]');
+const nextBtn = document.querySelector('[data-action="key-next"]');
 
 let sliderInit = document.querySelector('.slider-init');
 sliderInit.classList.add('slider-class');
@@ -25,11 +25,11 @@ sliderButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
         let action = e.currentTarget.dataset.action;
 
-        if (action === 'prev') {
+        if (action === 'key-prev') {
             translate += itemW;
         }
 
-        if (action === 'next') {
+        if (action === 'key-next') {
             translate -= itemW;
         }
 

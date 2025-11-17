@@ -1,0 +1,45 @@
+<li class="slider-item-animal w-1/4 relative mx-4 min-h-80">
+    <article aria-labelledby="{{ $name }}-card" class="group relative h-full rounded-btn overflow-hidden">
+        <div class="absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
+                    transition-all duration-300 group-hover:bg-black/40"></div>
+        <img src="{{ asset('assets/img/dog.png') }}"
+             alt="Image de {{ $name }}"
+             class="w-full h-full object-cover">
+        <div class="animal-card-info relative z-10 p-3">
+            <h3 id="{{ $name }}-card" class="font-bold font-atten text-xl text-main-yellow">
+                {{ $name }}
+            </h3>
+            <div class="animal-info text-xs text-white font-normal
+                        max-h-0 overflow-hidden opacity-0
+                        transition-all duration-500 ease-out
+                        group-hover:max-h-[500px] group-hover:opacity-100">
+                <span class="grid grid-cols-2 gap-2 py-1 text-xxs
+                             border-y border-white/50 divide-x divide-white/50">
+
+                    <span class="flex items-center gap-1">
+                        <x-svgs.paw class="w-5 h-5"/>
+                        <div>
+                            <p class="font-bold">Race</p>
+                            <p>G. Retriever</p>
+                        </div>
+                    </span>
+
+                    <span class="flex items-center gap-1">
+                        <x-svgs.calendar class="w-5 h-5"/>
+                        <div>
+                            <p class="font-bold">Âge</p>
+                            <p>3 mois</p>
+                        </div>
+                    </span>
+
+                </span>
+                <p class="my-2 line-clamp-5">
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                </p>
+                <a href="" class="button-light-hvr-lgt z-20">Adoptez-moi !</a>
+            </div>
+        </div>
+
+    </article>
+</li>
