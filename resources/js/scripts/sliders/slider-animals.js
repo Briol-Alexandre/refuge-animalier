@@ -8,7 +8,11 @@ sliderInit.classList.add('slider-class-animal');
 const slider = document.querySelector('.slider-class-animal');
 
 const sliderItem = document.querySelector('.slider-item-animal');
-const itemW = 265;
+const sliderItemStyles = window.getComputedStyle(sliderItem);
+console.log(sliderItemStyles);
+const marginLeft = parseFloat(sliderItemStyles.marginLeft);
+const marginRight = parseFloat(sliderItemStyles.marginRight);
+const itemW = sliderItem.getBoundingClientRect().width + marginLeft + marginRight;
 console.log(itemW);
 
 

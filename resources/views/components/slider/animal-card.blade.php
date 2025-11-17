@@ -1,5 +1,6 @@
-<li class="slider-item-animal w-1/4 relative mx-4 min-h-80">
+<li class="slider-item-animal relative mx-4 mb-10 last:mb-0 h-80">
     <article aria-labelledby="{{ $name }}-card" class="group relative h-full rounded-btn overflow-hidden">
+        <a href="#" class="absolute-position z-20"></a>
         <div class="absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
                     transition-all duration-300 group-hover:bg-black/40"></div>
         <img src="{{ asset('assets/img/dog.png') }}"
@@ -37,7 +38,7 @@
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
                 </p>
-                <a href="" class="button-light-hvr-lgt z-20">Adoptez-moi !</a>
+                <div href="" class="button-light-hvr-lgt z-20">Adoptez-moi !</div>
             </div>
         </div>
 

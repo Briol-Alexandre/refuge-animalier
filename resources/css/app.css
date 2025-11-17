@@ -202,8 +202,12 @@
     .slider-class-animal {
         @apply  flex w-[400%];
         li {
-            @apply w-full;
+            @apply w-1/4 !mb-0;
         }
+    }
+
+    .absolute-position {
+        @apply w-full h-full top-0 left-0 absolute;
     }
 }
 
