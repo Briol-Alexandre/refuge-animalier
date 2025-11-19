@@ -1,5 +1,5 @@
 .big-title {
-    @apply font-atten text-[28px] font-bold leading-8 text-center;
+    @apply font-atten text-[28px] font-bold leading-8 text-center md:text-left lg:text-4xl xl:text-5xl xl:leading-none;
     strong {
         @apply text-main-yellow font-bold;
     }
@@ -9,5 +9,5 @@
 }
 
 .text-content {
-    @apply text-base font-normal;
+    @apply text-base font-normal xl:text-lg;
 }

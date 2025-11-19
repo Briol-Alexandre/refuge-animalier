@@ -1,7 +1,7 @@
 .bubble {
     p {
         b {
-            @apply font-atten font-extrabold text-base;
+            @apply font-atten font-extrabold text-base xl:text-2xl;
         }
     }
 }
