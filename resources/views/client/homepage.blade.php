@@ -2,5 +2,5 @@
     <x-home-page.header-main-page/>
     <x-home-page.slider-main-page/>
     <x-home-page.animal-slider-main-page/>
-    <x-home-page.cta title="Envie d’aider nos animaux et notre équipe ?" />
+    <x-home-page.cta :title="__('headings.want-benevole')" />
 </x-layouts.client-layout>

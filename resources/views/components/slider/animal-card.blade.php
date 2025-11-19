@@ -21,7 +21,7 @@
                         <x-svgs.paw class="w-5 h-5"/>
                         <div>
                             <p class="font-bold">Race</p>
-                            <p>G. Retriever</p>
+                            <p>{{$breed}}</p>
                         </div>
                     </span>
 
@@ -29,16 +29,15 @@
                         <x-svgs.calendar class="w-5 h-5"/>
                         <div>
                             <p class="font-bold">Âge</p>
-                            <p>3 mois</p>
+                            <p>{{$age}}</p>
                         </div>
                     </span>
 
                 </span>
                 <p class="my-2 line-clamp-5">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                    invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+                    {{$desc}}
                 </p>
-                <div class="button-light-hvr-lgt z-20">Adoptez-moi !</div>
+                <div class="button-light-hvr-lgt z-20 mx-auto">Adoptez-moi !</div>
             </div>
         </div>
 

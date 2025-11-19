@@ -45,9 +45,30 @@
     opacity: 0;
 }
 
-.active {
+@media (min-width: 1024px) {
 
+.active {
+    @apply relative;
+    &:before {
+        content: "";
+        @apply absolute -top-2 -left-4 bg-no-repeat bg-contain;
+        background-image: url('../../../public/assets/img/svg/paw.svg');
+        width: 16px;
+        height: 16px;
+        rotate: -45deg;
+    }
+
+    &:after {
+        content: "";
+        @apply absolute -bottom-2 -right-4 bg-no-repeat bg-contain;
+        background-image: url('../../../public/assets/img/svg/paw.svg');
+        width: 16px;
+        height: 16px;
+        rotate: 135deg;
+    }
 }
+}
+
 
 @keyframes pawBeforeAppear {
     0% {
@@ -88,10 +109,6 @@ header {
     .nav-close {
         @apply translate-x-full transition-transform duration-300;
     }
-}
-
-.nav-open {
-
 }
 
 .burger-container {

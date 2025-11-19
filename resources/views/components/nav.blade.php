@@ -16,9 +16,9 @@
             class="text-center max-lg:h-screen flex flex-col main-nav nav-close max-lg:bg-softBlue max-lg:fixed max-lg:top-0 max-lg:left-0 w-full z-30">
             <h2 class="sr-only" id="main-navigation">Navigation Principale</h2>
             <ul class="flex max-lg:flex-col max-lg:gap-huge justify-end gap-8 lg:items-center my-auto lg:text-sm xl:text-base">
-                <x-nav-item :label="__('nav.homepage')" :route="route('home.client')" :class="'link'"/>
-                <x-nav-item :label="__('nav.happypaws')" :route="route('paws.client')" :class="'link'"/>
-                <x-nav-item :label="__('nav.animals')" :route="route('animals.client')" :class="'link'"/>
+                <x-nav-item :label="__('nav.homepage')" :route="route('home.client')" :class="request()->routeIs('home.client') ? 'active' : 'link'"/>
+                <x-nav-item :label="__('nav.happypaws')" :route="route('paws.client')" :class="request()->routeIs('paws.client') ? 'active' : 'link'"/>
+                <x-nav-item :label="__('nav.animals')" :route="route('animals.client')" :class="request()->routeIs('animals.client') ? 'active' : 'link'"/>
                 <x-nav-item :label="__('nav.contact')" :route="route('animals.client')" :class="''" :aClass="'button-dark'"/>
             </ul>
         </nav>
