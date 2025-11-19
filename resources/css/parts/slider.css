@@ -1,0 +1,9 @@
+.slider-init-animal {
+    .slick-slide {
+        @apply mx-4;
+    }
+
+    .slick-list {
+        @apply -mx-4;
+    }
+}

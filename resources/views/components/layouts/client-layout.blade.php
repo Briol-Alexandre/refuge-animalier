@@ -9,7 +9,7 @@
         @vite(['resources/js/scripts/main.js'])
         <title>{{config('app.name')}}</title>
     </head>
-    <body class="font-poppins overflow-x-hidden]">
+    <body class="font-poppins overflow-x-hidden">
         <div class="fixed top-2 left-2 z-50 px-2 py-1 text-white text-sm font-bold rounded bg-black/70">
             <span class="block sm:hidden">XS ( < 640px )</span>
             <span class="hidden sm:block md:hidden">SM ( ≥ 640px )</span>

@@ -1,7 +1,7 @@
-<li class="px-4 slider-item">
-    <article
-        class="key-card bg-white shadow-basic rounded-btn flex flex-col items-center justify-center py-2.5 mt-5"
-        aria-labelledby="key-title-{{$title}}"
+<article aria-labelledby="key-title-{{$title}}" class="px-4 slider-item py-4 w-full">
+    <div
+        class="key-card bg-white shadow-basic rounded-btn flex flex-col items-center justify-center py-2.5 max-xs:mt-5"
+
     >
         <div class="{{$opacity}} w-14 h-14 flex items-center justify-center rounded-full">
             {{$slot}}
@@ -12,5 +12,5 @@
                 {{$title}}
             </h3>
         </div>
-    </article>
-</li>
+    </div>
+</article>

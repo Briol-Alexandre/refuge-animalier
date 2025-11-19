@@ -1,11 +1,11 @@
-<li class="slider-item-animal relative mx-4 mb-10 last:mb-0 h-80">
-    <article aria-labelledby="{{ $name }}-card" class="group relative h-full rounded-btn overflow-hidden">
+<article aria-labelledby="{{ $name }}-card" class="slider-item-animal relative h-80">
+    <div class="group relative h-full rounded-btn overflow-hidden">
         <a href="#" class="absolute-position z-20"></a>
         <div class="absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
                     transition-all duration-300 group-hover:bg-black/40"></div>
         <img src="{{ asset('assets/img/dog.png') }}"
              alt="Image de {{ $name }}"
-             class="w-full h-full object-cover">
+             class="w-full h-full object-cover object-top">
         <div class="animal-card-info relative z-10 p-3">
             <h3 id="{{ $name }}-card" class="font-bold font-atten text-xl text-main-yellow">
                 {{ $name }}
@@ -42,5 +42,5 @@
             </div>
         </div>
 
-    </article>
-</li>
+    </div>
+</article>
