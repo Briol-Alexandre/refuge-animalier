@@ -3,7 +3,7 @@
     <div class="{{$opacity}} w-8 h-8 xl:w-12 xl:h-12 flex items-center {{$padding ? "pt-1" : ""}} justify-center rounded-full">
         {{$slot}}
     </div>
-    <p class="flex flex-col justify-center-center text-xs xl:text-lg leading-1 h-fit">
+    <p class="flex flex-col justify-center-center text-xs xl:text-base leading-1 h-fit">
         <b class="{{$color}}">{{$num}}</b>
         {{$label}}
     </p>

@@ -2,9 +2,7 @@
     <h2 id="key-number" class="title col-start-2 col-end-7 text-center">
         Quelques chiffres clefs
     </h2>
-    <div class="col-start-2 col-end-7 relative">
-        <x-slider.slider-arrow-next :section_name="'key'"/>
-        <x-slider.slider-arrow-prev :section_name="'key'"/>
+    <div class="col-start-2 col-end-7 md:col-end-12 relative">
         <x-slider.slider-container/>
 
     </div>

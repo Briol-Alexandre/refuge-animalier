@@ -1,4 +1,4 @@
-@props(['class'=>null, 'route', 'label'])
+@props(['class'=>null, 'route', 'label', 'aClass'=>null])
 <li class="{{$class}}">
-    <a href="{{$route}}">{{$label}}</a>
+    <a href="{{$route}}" class="{{$aClass}}">{{$label}}</a>
 </li>

@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col items-center mt-2">
             <b class="bubble-number {{$color}}">{{$num}}</b>
-            <h3 class="text-sm" id="key-title-{{$title}}">
+            <h3 class="text-content" id="key-title-{{$title}}">
                 {{$title}}
             </h3>
         </div>

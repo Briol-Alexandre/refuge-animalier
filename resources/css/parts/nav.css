@@ -1,13 +1,26 @@
 .link {
-    @apply relative w-fit mx-auto;
+    @apply relative w-fit max-md:mx-auto;
+
+    &:after {
+        opacity: 0;
+        transform: translateY(4px);
+        transition: all 300ms ease-in-out 300ms;
+    }
+    &:before {
+        opacity: 0;
+        transform: translateY(4px);
+        transition: all 300ms ease-in-out;
+    }
 
     &:hover {
         &:after {
-            animation: pawAfterAppear 500ms ease-in-out forwards;
+            transform: translateY(0);
+            opacity: 1;
         }
 
         &:before {
-            animation: pawBeforeAppear 500ms ease-in-out forwards;
+            transform: translateY(0);
+            opacity: 1;
         }
     }
 }
@@ -66,8 +79,11 @@ header {
     @apply absolute top-0 left-0 w-full;
 }
 
-.nav-close {
-    @apply translate-x-full transition-transform duration-300;
+@media (max-width: 1024px) {
+
+    .nav-close {
+        @apply translate-x-full transition-transform duration-300;
+    }
 }
 
 .nav-open {
