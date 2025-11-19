@@ -1,6 +1,6 @@
 <section aria-labelledby="home-page-title" class="relative">
-    <x-svgs.bg-shape :blue="false" :class="'-top-92 -right-60 -z-10 '"/>
-    <x-svgs.bg-shape :blue="true" :class="'-z-20 top-16'"/>
+    <x-svgs.bg-shape :blue="false" :class="'-top-92 -right-60 -z-10 lg:-top-[500px] lg:scale-300'"/>
+    <x-svgs.bg-shape :blue="true" :class="'-z-20 top-16 right-0 lg:-right-40 lg:top-52 lg:scale-x-600 lg:scale-y-150'"/>
     <div class="grid-basic items-center">
         <div class="col-start-2 col-end-7 md:col-start-7 md:col-end-12">
             <x-header-image/>

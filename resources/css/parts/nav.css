@@ -45,6 +45,10 @@
     opacity: 0;
 }
 
+.active {
+
+}
+
 @keyframes pawBeforeAppear {
     0% {
         opacity: 0;

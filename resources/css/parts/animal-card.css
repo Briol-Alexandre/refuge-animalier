@@ -1,6 +1,6 @@
 .animal-card-info {
-    @apply absolute bottom-0 group-hover:top-20 left-0 px-2 flex flex-col gap-3;
+    @apply sm:absolute sm:bottom-0 sm:group-hover:top-20 sm:left-0 px-2 flex flex-col gap-3;
     h3 {
-        @apply text-center group-hover:transition-all;
+        @apply text-left sm:text-center group-hover:transition-all;
     }
 }

@@ -5,7 +5,7 @@
     }
 }
 .title {
-    @apply font-atten text-2xl font-bold;
+    @apply font-atten text-2xl lg:text-3xl lg:mb-4 font-bold;
 }
 
 .text-content {

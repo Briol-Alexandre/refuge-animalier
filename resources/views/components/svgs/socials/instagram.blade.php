@@ -5,7 +5,7 @@
     </g>
     <defs>
         <clipPath id="a">
-            <path fill="#fff" d="M0 0h20v20H0z"/>
+            <path d="M0 0h20v20H0z"/>
         </clipPath>
     </defs>
 </svg>

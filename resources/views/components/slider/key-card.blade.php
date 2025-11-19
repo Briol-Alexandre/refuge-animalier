@@ -1,4 +1,4 @@
-<article aria-labelledby="key-title-{{$title}}" class="px-4 slider-item py-4 w-full">
+<article aria-labelledby="key-title-{{$title}}" class="slider-item w-full">
     <div
         class="key-card bg-white shadow-basic rounded-btn flex flex-col items-center justify-center py-2.5 max-xs:mt-5"
 
