@@ -28,6 +28,8 @@
     --spacing-sectionPadding: 100px;
 
     /* RADIUS */
+
+    --radius-btn-mobile: 20px;
     --radius-btn: 40px;
     --radius-small: 15px;
 

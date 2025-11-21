@@ -1,13 +1,35 @@
 .big-title {
     @apply font-atten text-[28px] font-bold leading-8 text-center md:text-left lg:text-4xl xl:text-5xl xl:leading-none;
-    strong {
-        @apply text-main-yellow font-bold;
-    }
+
 }
+
+strong {
+    @apply text-main-yellow font-bold;
+}
+
 .title {
     @apply font-atten text-2xl lg:text-3xl lg:mb-4 font-bold;
 }
 
 .text-content {
     @apply text-base font-normal xl:text-lg;
+}
+
+.quote {
+    @apply md:flex md:flex-col md:items-center;
+    q {
+        @apply relative font-bold block mb-4 italic font-atten text-lg md:text-2xl text-center ;
+
+        .before {
+            @apply absolute text-softGray text-6xl lg:text-8xl lg:-left-12 italic -top-4 -left-8 font-atten font-extrabold;
+        }
+
+        .after {
+            @apply absolute text-softGray text-6xl lg:text-8xl lg:-right-12 italic -bottom-4 -right-8 rotate-180 font-atten font-extrabold;
+        }
+
+        cite {
+            @apply block lg:mx-auto;
+        }
+    }
 }

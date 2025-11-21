@@ -21,7 +21,9 @@
 
         <h1 class="sr-only">Les pattes heureuses</h1>
         <x-nav/>
-        <main class="mt-24 lg:mt-32">
+        <main class="mt-24 lg:mt-32 relative">
+            <x-svgs.bg-shape :blue="false" :class="'-top-92 -right-60 -z-10 lg:-top-[500px] lg:scale-300'"/>
+            <x-svgs.bg-shape :blue="true" :class="'-z-20 top-16 right-0 lg:-right-40 lg:top-52 lg:scale-x-600 lg:scale-y-150'"/>
             {{$slot}}
         </main>
         <footer class="bg-text grid-basic place-items-center gap-10 py-10">

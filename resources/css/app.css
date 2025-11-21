@@ -200,6 +200,17 @@
     section {
         @apply lg:mb-sectionPadding;
     }
+    .paws-items {
+        li {
+            ul {
+                list-style: disc;
+                li{
+                    @apply pb-2;
+                }
+            }
+        }
+    }
+
 }
 
 

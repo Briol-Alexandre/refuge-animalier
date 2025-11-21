@@ -1,5 +1,5 @@
 .link {
-    @apply relative w-fit max-md:mx-auto;
+    @apply relative w-fit max-lg:mx-auto;
 
     &:after {
         opacity: 0;
