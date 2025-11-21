@@ -23,5 +23,10 @@ return [
 <li>Offrir soins, nourriture et réconfort.</li>
 <li>Accompagner les adoptants avant et après l’adoption.</li>
 </ul>
-        '
+        ',
+    'quote' => 'J’ai fondé Les Pattes Heureuses avec la conviction que chaque animal mérite une chance. Voir un chien ou
+                un chat retrouver confiance et amour est notre plus belle récompense.',
+
+    'quote-author' => '— Élise, fondatrice du refuge'
+
 ];
