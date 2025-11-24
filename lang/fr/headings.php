@@ -9,6 +9,8 @@ return [
     'paws-list-title' => 'Liste pour en savoir plus sur nous',
     'our-mission' => 'Notre <strong>mission</strong>',
     'our-values' => 'Nos <strong>valeurs</strong>',
-    'our-actions' => 'Nos <strong>actions</strong>'
+    'our-actions' => 'Nos <strong>actions</strong>',
+    'header-paws' => 'Les <strong>Pattes heureuses</strong>, un refuge à Erps-Kwerps',
+    'header-animals' => 'Chaque animal mérite une <strong>seconde chance</strong>… Et si c’était avec <strong>vous</strong> ?'
 
 ];

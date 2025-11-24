@@ -27,6 +27,10 @@ return [
     'quote' => 'J’ai fondé Les Pattes Heureuses avec la conviction que chaque animal mérite une chance. Voir un chien ou
                 un chat retrouver confiance et amour est notre plus belle récompense.',
 
-    'quote-author' => '— Élise, fondatrice du refuge'
+    'quote-author' => '— Élise, fondatrice du refuge',
+    'content-header-paws' => 'Fondé en 2017, Les Pattes Heureuses, situé à Erps-Kwerps, est un refuge dédié au bien-être et à la
+            protection des animaux abandonnés ou maltraités. Chaque jour, notre équipe de bénévoles s’engage à
+            offrir à chaque compagnon une seconde chance, beaucoup d’amour, et un foyer où il pourra s’épanouir.',
+    'content-header-animals' => 'Nos refuges regorgent de petits cœurs en quête d’un foyer. Découvrez-les et écrivez ensemble un nouveau chapitre.'
 
 ];

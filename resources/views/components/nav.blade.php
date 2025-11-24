@@ -18,7 +18,7 @@
             <ul class="flex max-lg:flex-col max-lg:gap-huge justify-end gap-8 lg:items-center my-auto lg:text-sm xl:text-base">
                 <x-nav-item :label="__('nav.homepage')" :route="route('home.client')" :class="request()->routeIs('home.client') ? 'active' : 'link'"/>
                 <x-nav-item :label="__('nav.happypaws')" :route="route('paws.client')" :class="request()->routeIs('paws.client') ? 'active' : 'link'"/>
-                <x-nav-item :label="__('nav.animals')" :route="route('animals.client')" :class="request()->routeIs('animals.client') ? 'active' : 'link'"/>
+                <x-nav-item :label="__('nav.animals')" :route="route('animals.client')" :class="request()->routeIs('animals.client')||request()->routeIs('animals.client.show') ? 'active' : 'link'"/>
                 <x-nav-item :label="__('nav.contact')" :route="route('animals.client')" :class="''" :aClass="'button-dark'"/>
             </ul>
         </nav>

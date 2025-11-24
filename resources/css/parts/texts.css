@@ -1,5 +1,5 @@
 .big-title {
-    @apply font-atten text-[28px] font-bold leading-8 text-center md:text-left lg:text-4xl xl:text-5xl xl:leading-none;
+    @apply font-atten text-[28px] font-bold leading-8 text-text text-center md:text-left lg:text-4xl xl:text-5xl xl:leading-none;
 
 }
 
@@ -8,7 +8,7 @@ strong {
 }
 
 .title {
-    @apply font-atten text-2xl lg:text-3xl lg:mb-4 font-bold;
+    @apply font-atten text-2xl lg:text-3xl lg:mb-8 font-bold;
 }
 
 .text-content {

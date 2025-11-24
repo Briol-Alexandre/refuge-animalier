@@ -9,6 +9,7 @@
 @import "./parts/bubbles.css";
 @import "./parts/animal-card.css";
 @import "./parts/slider.css";
+@import "./parts/filters.css";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -210,7 +211,4 @@
             }
         }
     }
-
 }
-
-

@@ -12,6 +12,9 @@ Route::domain('lespattesheureuses.test')->group(function () {
     Route::get('/pattesheureuses', function () {
         return view('client.paws');
     })->name('paws.client');
+    Route::get('/animals/{animal}', function (){
+        return view('client.animals.show');
+    })->name('animals.client.show');
     Route::get('/animals', function () {
         return view('client.animals');
     })->name('animals.client');

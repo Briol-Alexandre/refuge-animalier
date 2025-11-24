@@ -35,4 +35,8 @@
 
     /* SHADOW */
     --shadow-basic: 0 0 10px rgba(0, 0, 0, .2);
+
+    /* ASPECT */
+    --aspect-mobile: calc(9 / 16);
+
 }

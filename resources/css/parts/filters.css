@@ -1,0 +1,26 @@
+.js-search {
+    @apply hidden;
+}
+.filters-container {
+    @apply flex-1;
+}
+.filters-container-js {
+    @apply shrink;
+}
+.filters-content {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 justify-between flex-1 gap-4;
+}
+.filters-content-js {
+    @apply grid grid-cols-2 gap-x-4 gap-y-2 bg-white border-2 border-main-yellow rounded-lg p-8 z-10;
+}
+
+dialog {
+    @apply rounded-lg fixed max-md:!top-1/2 max-md:!left-1/2 max-md:!-translate-x-1/2 max-md:!-translate-y-1/2 max-md:w-full;
+}
+
+.btn-open {
+    @apply hidden;
+}
+.close-form {
+    @apply hidden;
+}

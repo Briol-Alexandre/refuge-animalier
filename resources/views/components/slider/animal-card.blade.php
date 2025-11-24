@@ -1,6 +1,7 @@
+@props(['name', 'age', 'breed', 'desc', 'link' =>null])
 <article aria-labelledby="{{ $name }}-card" class="slider-item-animal relative h-fit last:mb-0 sm:h-80">
     <div class="group relative h-full rounded-btn overflow-hidden">
-        <a href="#" class="absolute-position z-20"></a>
+        <a href="{{$link}}" class="absolute-position z-20"></a>
         <div class="max-sm:hidden absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
                     transition-all duration-300 group-hover:bg-black/40"></div>
         <img src="{{ asset('assets/img/dog.png') }}"
