@@ -199,7 +199,7 @@
         @apply w-full h-full top-0 left-0 absolute;
     }
     section {
-        @apply lg:mb-sectionPadding;
+        @apply mb-11 lg:mb-sectionPadding;
     }
     .paws-items {
         li {

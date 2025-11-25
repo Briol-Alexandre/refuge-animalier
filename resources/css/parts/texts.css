@@ -12,7 +12,7 @@ strong {
 }
 
 .text-content {
-    @apply text-base font-normal xl:text-lg;
+    @apply text-base font-normal xl:text-lg text-text;
 }
 
 .quote {
