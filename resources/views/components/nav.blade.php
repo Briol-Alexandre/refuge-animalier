@@ -19,7 +19,7 @@
                 <x-nav-item :label="__('nav.homepage')" :route="route('home.client')" :class="request()->routeIs('home.client') ? 'active' : 'link'"/>
                 <x-nav-item :label="__('nav.happypaws')" :route="route('paws.client')" :class="request()->routeIs('paws.client') ? 'active' : 'link'"/>
                 <x-nav-item :label="__('nav.animals')" :route="route('animals.client')" :class="request()->routeIs('animals.client')||request()->routeIs('animals.client.show') ? 'active' : 'link'"/>
-                <x-nav-item :label="__('nav.contact')" :route="route('animals.client')" :class="''" :aClass="'button-dark'"/>
+                <x-nav-item :label="__('nav.contact')" :route="route('contact.client')" :class="''" :aClass="'button-dark'"/>
             </ul>
         </nav>
 

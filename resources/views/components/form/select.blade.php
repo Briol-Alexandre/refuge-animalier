@@ -1,5 +1,5 @@
-@props(['label', 'idName', 'options'])
-<div class="flex flex-col w-full">
+@props(['label', 'idName', 'options', 'class'=>null])
+<div class="flex flex-col w-full {{$class}}">
     <label for="{{$idName}}">
         {!! $label !!}
     </label>

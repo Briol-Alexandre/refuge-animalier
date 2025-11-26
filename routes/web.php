@@ -18,6 +18,9 @@ Route::domain('lespattesheureuses.test')->group(function () {
     Route::get('/animals', function () {
         return view('client.animals');
     })->name('animals.client');
+    Route::get('/contact', function (){
+        return view('client.contact');
+    })->name('contact.client');
 });
 
 
