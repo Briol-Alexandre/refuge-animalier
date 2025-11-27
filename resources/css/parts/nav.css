@@ -136,3 +136,7 @@ header {
 .burger-line {
     @apply w-5 h-[2px] rounded-full bg-text block transition-all;
 }
+
+.nav-link-active {
+    @apply bg-main-yellow-opacity/70 rounded-lg p-4 text-main-yellow font-black;
+}

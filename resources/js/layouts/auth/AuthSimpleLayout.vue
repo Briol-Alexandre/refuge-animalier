@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 import { Link } from '@inertiajs/vue3';
+import Logo from '@/components/svgs/Logo.vue';
 
 defineProps<{
     title?: string;
@@ -11,29 +11,20 @@ defineProps<{
 
 <template>
     <div
-        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
+        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-gray-50 p-6 md:p-10"
     >
-        <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
+        <div class="w-1/2">
+            <div class="flex flex-col gap-8 rounded-btn bg-white border border-gray-200 p-20">
                 <div class="flex flex-col items-center gap-4">
                     <Link
                         :href="home()"
                         class="flex flex-col items-center gap-2 font-medium"
                     >
-                        <div
-                            class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
-                        >
-                            <AppLogoIcon
-                                class="size-9 fill-current text-[var(--foreground)] dark:text-white"
-                            />
-                        </div>
+                            <Logo :classes="'w-150'"/>
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div class="space-y-2 text-center">
-                        <h1 class="text-xl font-medium">{{ title }}</h1>
-                        <p class="text-center text-sm text-muted-foreground">
-                            {{ description }}
-                        </p>
+                        <h1 class="title !mb-0">{{ title }}</h1>
                     </div>
                 </div>
                 <slot />
