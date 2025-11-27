@@ -28,12 +28,12 @@ const initials = userName
 </script>
 
 <template>
-    <Head :title="title" />
-    <div class="flex">
+    <div class="grid grid-cols-12 gap-4">
+        <Head :title="title" />
         <nav aria-labelledby="main-nav"
-             class="h-screen border-r-2 border-r-gray-100 px-3.5 flex flex-col justify-between items-center py-10">
+             class="col-start-1 col-end-3 h-screen border-r-2 border-r-gray-100 px-3.5 flex flex-col justify-between items-center py-10">
             <h2 id="main-nav" class="sr-only">Navigation principale</h2>
-            <Logo classes="w-52" />
+            <Logo classes="w-full" />
             <div class="flex flex-col gap-5 w-full">
                 <NavLink :active="{'nav-link-active': $page.component==='Dashboard'}" href="/dashboard"
                          title="Dashboard">
@@ -46,7 +46,8 @@ const initials = userName
                          title="Adoptions">
                     <Hearth :active="$page.component==='Adoptions'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Users'}" href="/users" title="Utilisateurs">
+                <NavLink :active="{'nav-link-active': $page.component==='Users'}" href="/users"
+                         title="Utilisateurs">
                     <User :active="$page.component==='Users'" />
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Notifications'}" href="/notifications"
@@ -58,13 +59,13 @@ const initials = userName
                     <Statistiques :active="$page.component==='Statistiques'" />
                 </NavLink>
             </div>
-            <div>
+            <div class="w-full">
                 <Link class="flex gap-2 p-4 items-center hover:bg-softGray/40 rounded-lg">
                     <span class="w-10 aspect-square bg-softGray rounded-full flex items-center justify-center">
-                        {{initials}}
+                        {{ initials }}
                     </span>
                     <p class="flex flex-col text-sm">
-                        {{$page.props.auth.user.name}}
+                        {{ $page.props.auth.user.name }}
                         <span class="text-[10px] text-gray-500">
                             {{ $page.props.auth.user.email }}
                         </span>
@@ -82,6 +83,6 @@ const initials = userName
             </div>
 
         </nav>
-        <slot />
+        <slot/>
     </div>
 </template>

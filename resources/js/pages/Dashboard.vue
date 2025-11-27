@@ -1,17 +1,31 @@
+<template>
+    <LoggedLayout title="Dashboard">
+        <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
+            <h1 class="title mt-14 col-start-2 col-span-full row-start-1">
+                Bienvenue {{ $page.props.auth.user.name }}
+            </h1>
+            <InfoCardContainer />
+            <NotificationContainer/>
+        </div>
+    </LoggedLayout>
+</template>
+
+
 <script>
-import { Head, Link } from '@inertiajs/vue3';
-import Heading from '@/components/Heading.vue';
-import Logo from '@/components/svgs/Logo.vue';
-import Dashboard from '@/components/svgs/Dashboard.vue';
-import Paw from '@/components/svgs/Paw.vue';
 import LoggedLayout from '@/layouts/LoggedLayout.vue';
+import InfoCardContainer from '@/components/widget/dashboard-page/InfoCardContainer.vue';
+import NotificationContainer from '@/components/widget/dashboard-page/NotificationContainer.vue';
+
 export default {
 
     name: '',
-    components: { LoggedLayout, Dashboard, Link, Logo, Heading, Head, Paw },
-    props: [],
-    computed: {
+    components: {
+        LoggedLayout,
+        InfoCardContainer,
+        NotificationContainer,
     },
+    props: [],
+    computed: {},
     data() {
         return {};
     },
@@ -19,12 +33,6 @@ export default {
     methods: {}
 };
 </script>
-
-<template>
-    <LoggedLayout title="Dashboard">
-        <h1>Dashboard</h1>
-    </LoggedLayout>
-</template>
 
 <style>
 
