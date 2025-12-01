@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute bottom-2 right-4 flex gap-2 items-center">
+    <div class="mt-auto flex gap-2 items-center">
         <div v-for="link in links" :key="link.label">
             <button
                 v-if="link.url"

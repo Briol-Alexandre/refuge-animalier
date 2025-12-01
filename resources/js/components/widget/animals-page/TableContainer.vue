@@ -1,14 +1,14 @@
 <template>
     <div
-        class="relative col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
-        <div class="flex justify-between relative">
+        class="col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
+        <div class="flex justify-between">
             <div>
-                <dialog ref="modal" class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-btn border border-softGray z-20">
-                    <input type="text">
-                </dialog>
+                <Modal :condition="isModalOpen" @close="openModal" index="z-30">
+                    <slot name="filters"></slot>
+                </Modal>
                 <button @click="openModal"
                         class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
-                    <Filters/>
+                    <Filters />
                     Filtres
                 </button>
 
@@ -21,38 +21,61 @@
             :cols="cols"
             :fields="fields"
             :rows="rows"
+            @row-click="openShowModal"
         />
-        <Pagination :links="paginationLinks"/>
-
+        <Pagination :links="paginationLinks" />
     </div>
+    <Teleport to="body">
+        <slot/>
+    </Teleport>
 </template>
 
 <script>
 import TableComponent from '@/components/TableComponent.vue';
 import Pagination from '@/components/Pagination.vue';
 import Filters from '@/components/svgs/Filters.vue';
+import InputLabel from '@/components/widget/form/InputLabel.vue';
+import Select from '@/components/widget/form/Select.vue';
+import Modal from '@/components/widget/Modal.vue';
+import Close from '@/components/svgs/Close.vue';
+import ImageAdd from '@/components/svgs/ImageAdd.vue';
+import TextareaLabel from '@/components/widget/form/TextareaLabel.vue';
+import AnimalCreateForm from '@/components/widget/form/AnimalCreateForm.vue';
+import { Button } from '@/components/ui/button/index.js';
+import AnimalShow from '@/components/Modals/AnimalShow.vue';
 
 export default {
     name: '',
-    components: {Pagination, TableComponent, Filters},
+    components: {
+        AnimalShow,
+        Button,
+        Close,
+        Pagination,
+        TableComponent,
+        Filters,
+        InputLabel,
+        Select,
+        Modal,
+        ImageAdd,
+        TextareaLabel,
+        AnimalCreateForm
+    },
     props: ['cols', 'fields', 'rows', 'paginationLinks'],
 
     data() {
         return {
+            isModalOpen: false,
+            isShowModalOpen: false,
+            selectedRow: null,
         };
     },
 
     methods: {
         openModal() {
-            const modal = this.$refs.modal;
-            modal.showModal();
-            modal.addEventListener('click', this.clickOutside)
+            this.isModalOpen = !this.isModalOpen;
         },
-        clickOutside(event) {
-            const modal = this.$refs.modal;
-            if (event.target === modal) {
-                modal.close();
-            }
+        openShowModal(row){
+            this.$emit('row-click', row)
         }
     }
 };

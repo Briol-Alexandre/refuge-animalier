@@ -1,14 +1,14 @@
 <template>
-    <table class="w-full rounded-xl overflow-hidden">
-        <thead class="bg-softGray/50 text-left">
-        <tr class="">
-            <th v-for="col in cols" class="px-2 py-4 border border-softGray">
+    <table class="w-full overflow-hidden">
+        <thead class="bg-softGray/50  text-left">
+        <tr class="rounded-xl">
+            <th v-for="col in cols" class="px-2 py-4  border border-softGray">
                 {{ col }}
             </th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(row, rIndex) in rows" :key="rIndex" class="even:bg-white odd:bg-gray-50">
+        <tr v-for="(row, index) in rows" :key="index" class="even:bg-white odd:bg-gray-50 hover:cursor-pointer" @click="$emit('row-click', row)">
             <td v-for="field in fields" :key="field" class="border border-softGray p-2">
                 <img v-if="field === 'image'" :src="row[field]" alt="Image"
                      class="w-14 h-14 object-cover rounded-full object-top mx-auto" />

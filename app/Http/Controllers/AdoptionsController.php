@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adoption;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +10,8 @@ class AdoptionsController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Adoptions');
+        $adoptions = Adoption::paginate(10);
+        return Inertia::render('Adoptions', ['adoptions' => $adoptions]);
     }
 
     public function create()
