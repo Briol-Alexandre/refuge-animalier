@@ -22,6 +22,7 @@ class StatistiquesController extends Controller
 
     public function show($id)
     {
+        dd('test');
     }
 
     public function edit($id)

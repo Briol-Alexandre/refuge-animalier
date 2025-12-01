@@ -9,6 +9,13 @@ import Notifications from '@/components/svgs/Notifications.vue';
 import Logout from '@/components/svgs/Logout.vue';
 import NavLink from '@/components/nav/NavLink.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
+import { index as DashboardIndex } from '@/actions/App/Http/Controllers/DashboardController';
+import { index as AnimalsIndex } from '@/actions/App/Http/Controllers/AnimalsController';
+import { index as AdoptionsIndex } from '@/actions/App/Http/Controllers/AdoptionsController';
+import { index as UsersIndex } from '@/actions/App/Http/Controllers/UsersController';
+import { index as NotificationsIndex } from '@/actions/App/Http/Controllers/NotificationsController';
+import { index as StatistiquesIndex } from '@/actions/App/Http/Controllers/StatistiquesController';
+
 
 defineProps<{
     title?: string;
@@ -35,26 +42,26 @@ const initials = userName
             <h2 id="main-nav" class="sr-only">Navigation principale</h2>
             <Logo classes="w-full" />
             <div class="flex flex-col gap-5 w-full">
-                <NavLink :active="{'nav-link-active': $page.component==='Dashboard'}" href="/dashboard"
+                <NavLink :active="{'nav-link-active': $page.component==='Dashboard'}" :href="DashboardIndex()"
                          title="Dashboard">
                     <Dashboard :active="$page.component==='Dashboard'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Animals'}" href="/animals" title="Animaux">
+                <NavLink :active="{'nav-link-active': $page.component==='Animals'}" :href="AnimalsIndex()" title="Animaux">
                     <Paw classes="w-6" :active="$page.component==='Animals'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Adoptions'}" href="/adoptions"
+                <NavLink :active="{'nav-link-active': $page.component==='Adoptions'}" :href="AdoptionsIndex()"
                          title="Adoptions">
                     <Hearth :active="$page.component==='Adoptions'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Users'}" href="/users"
+                <NavLink :active="{'nav-link-active': $page.component==='Users'}" :href="UsersIndex()"
                          title="Utilisateurs">
                     <User :active="$page.component==='Users'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Notifications'}" href="/notifications"
+                <NavLink :active="{'nav-link-active': $page.component==='Notifications'}" :href="NotificationsIndex()"
                          title="Notifications">
                     <Notifications :active="$page.component==='Notifications'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Statistiques'}" href="/statistiques"
+                <NavLink :active="{'nav-link-active': $page.component==='Statistiques'}" :href="StatistiquesIndex()"
                          title="Statistiques">
                     <Statistiques :active="$page.component==='Statistiques'" />
                 </NavLink>
@@ -66,7 +73,7 @@ const initials = userName
                     </span>
                     <p class="flex flex-col text-sm">
                         {{ $page.props.auth.user.name }}
-                        <span class="text-[10px] text-gray-500">
+                        <span class="text-[10px] text-gray-500 truncate max-w-24">
                             {{ $page.props.auth.user.email }}
                         </span>
                     </p>

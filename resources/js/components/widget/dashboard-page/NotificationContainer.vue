@@ -1,6 +1,6 @@
 <template>
     <section
-        class="col-start-2 col-end-8 row-start-3 row-span-full rounded-2xl border border-softGray p-6 flex flex-col gap-4 relative overflow-hidden"
+        class="col-start-2 col-end-8 row-start-3 row-span-5 rounded-2xl border border-softGray p-6 flex flex-col gap-4 relative overflow-hidden mb-0"
         aria-labelledby="notification-section">
         <h2 id="notification-section" class="font-atten font-medium text-2xl flex gap-2 items-center">
             <Notifications />

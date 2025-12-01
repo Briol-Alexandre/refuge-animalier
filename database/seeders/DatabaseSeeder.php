@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Animal;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,5 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Alexandre Briol',
             'email' => 'alexandre.briol@gmail.com',
         ]);
+
+        Animal::factory(10)->create();
     }
 }

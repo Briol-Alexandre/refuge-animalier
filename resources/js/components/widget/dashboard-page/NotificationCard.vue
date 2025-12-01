@@ -12,7 +12,7 @@
             </button>
             <button
                 class="group hover:cursor-pointer bg-main-red-opacity w-10 rounded-full flex items-center justify-center aspect-square relative">
-                <Cross />
+                <Cross/>
                 <span
                     class="hidden group-hover:inline absolute -top-8 left-1/2 -translate-x-1/2 text-sm p-1 bg-main-red rounded-md text-white">
                     Supprimer

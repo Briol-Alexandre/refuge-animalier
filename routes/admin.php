@@ -42,7 +42,9 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('statistiques.index');
 
-
+    Route::get('/statistiques/{statistique}', [StatistiquesController::class, 'show'])
+        ->middleware(['auth'])
+        ->name('statistiques.show');
 
 
     require __DIR__ . '/settings.php';
