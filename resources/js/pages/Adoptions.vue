@@ -12,13 +12,14 @@
             <TableContainer
                 :paginationLinks="adoptions.links"
                 :rows="adoptions.data"
-                :cols="['Nom de l‘adoptant', 'Nom de l‘animal']"
-                :fields="['adopter', 'animal']"
+                :cols="['Nom de l‘adoptant', 'Nom de l‘animal', 'Date de l‘adoption', 'Statut']"
+                :fields="['adopter', 'animal', 'adoption_date', 'status']"
                 @row-click="openShowModal">
 
                 <template v-slot:filters>
-                    pipi
+                    <AdoptionsFilter/>
                 </template>
+
                 <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
                     <AdoptionShow :adoption="selectedRow" />
                 </Modal>
@@ -27,7 +28,7 @@
 
             <Teleport to="body">
                 <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                    <AnimalCreateForm :open-modal="openCreateModal" />
+                    <AdoptionCreateForm :open-modal="openCreateModal" />
                 </Modal>
             </Teleport>
         </div>
@@ -46,10 +47,16 @@ import Modal from '@/components/widget/Modal.vue';
 import AnimalCreateForm from '@/components/widget/form/AnimalCreateForm.vue';
 import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import AdoptionShow from '@/components/Modals/AdoptionShow.vue';
+import InputLabel from '@/components/widget/form/InputLabel.vue';
+import Select from '@/components/widget/form/Select.vue';
+import AdoptionsFilter from '@/components/widget/form/AdoptionsFilter.vue';
+import AdoptionCreateForm from '@/components/widget/form/AdpotionCreateForm.vue';
+import { Button } from '@/components/ui/button/index.js';
 
 export default {
     name: '',
     components: {
+        Button, Select, InputLabel,
         AdoptionShow,
         AnimalShow,
         AnimalCreateForm, Modal,
@@ -59,7 +66,9 @@ export default {
         LoggedLayout,
         TableComponent,
         Pagination,
-        TableContainer
+        TableContainer,
+        AdoptionsFilter,
+        AdoptionCreateForm
     },
     props: ['adoptions'],
 

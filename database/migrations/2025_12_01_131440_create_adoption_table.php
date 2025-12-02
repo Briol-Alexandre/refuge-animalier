@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('animal');
             $table->string('adopter');
+            $table->date('adoption_date');
+            $table->string('status');
             $table->timestamps();
         });
     }

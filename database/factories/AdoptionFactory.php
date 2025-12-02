@@ -15,6 +15,8 @@ class AdoptionFactory extends Factory
         return [
             'animal' => $this->faker->word(),
             'adopter' => $this->faker->word(),
+            'adoption_date'=> $this->faker->dateTime(),
+            'status'=>$this->faker->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

@@ -16,58 +16,7 @@
                 :fields="['image', 'name', 'specie', 'status']"
                 @row-click="openShowModal">
                 <template v-slot:filters>
-                    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-                        <p class="title col-span-full !mb-0">
-                            Filtres
-                        </p>
-                        <Select v-model="specie" id-name="specie" label="Type d‘animal" @change="addElModal">
-                            <option value="">--Choisir une espèce--</option>
-                            <option value="dog">Chien</option>
-                            <option value="cat">Chat</option>
-                        </Select>
-
-                        <Select v-model="breed" id-name="breed" label="Race de l‘animal" @change="addElModal">
-                            <option value="">--Choisir une race--</option>
-                            <option value="golden">Golden</option>
-                            <option value="chihuahua">Chihuahua</option>
-                        </Select>
-
-                        <Select v-model="coat" id-name="coat" label="Pelage de l‘animal" @change="addElModal">
-                            <option value="">--Choisir un pelage--</option>
-                            <option value="golden">Noir</option>
-                            <option value="chihuahua">Blanc</option>
-                        </Select>
-
-                        <InputLabel id-name="date" type="date" placeholder="DD/MM/AAAA">
-                            Date de naissance de l'animal
-                        </InputLabel>
-
-                        <Select id-name="sexe" label="Sexe de l‘animal">
-                            <option value="">--Choisir un sexe--</option>
-                            <option value="male">Mâle</option>
-                            <option value="female">Femelle</option>
-                        </Select>
-
-                        <Select v-model="vaccine" id-name="vaccine" label="Vaccins" @change="addElModal">
-                            <option value="">--Choisir une option--</option>
-                            <option value="uptodate">À jour</option>
-                            <option value="todo">À faire</option>
-                        </Select>
-
-                        <Select v-model="animalStatus" id-name="status" label="Statut" @change="addElModal">
-                            <option value="">--Choisir un statut--</option>
-                            <option value="available">Disponible</option>
-                            <option value="cure">En soins</option>
-                        </Select>
-                        <div class="flex items-center col-span-full justify-end gap-4">
-                            <button>
-                                Réinitialiser
-                            </button>
-                            <button class="button-light mb-0">
-                                Appliquer
-                            </button>
-                        </div>
-                    </div>
+                    <AnimalsFilter/>
                 </template>
 
                 <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
@@ -98,6 +47,7 @@ import AnimalCreateForm from '@/components/widget/form/AnimalCreateForm.vue';
 import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import InputLabel from '@/components/widget/form/InputLabel.vue';
 import Select from '@/components/widget/form/Select.vue';
+import AnimalsFilter from '@/components/widget/form/AnimalsFilter.vue';
 import { Button } from '@/components/ui/button/index.js';
 
 export default {
@@ -112,7 +62,8 @@ export default {
         LoggedLayout,
         TableComponent,
         Pagination,
-        TableContainer
+        TableContainer,
+        AnimalsFilter
     },
     props: ['animals'],
 
