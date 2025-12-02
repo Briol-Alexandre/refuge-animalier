@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-3 gap-2">
-        <img :src="animal.image" :alt="`Photo de ${animal.name}`" class="w-full h-full object-cover rounded-full mt-2" />
+        <img :src="animal.image" :alt="`Photo de ${animal.name}`" class="w-full h-full object-cover mt-2" />
         <div class="col-span-2">
             <div class="mb-2 flex gap-4 items-center">
                 <h2 class="text-2xl font-atten font-black">{{ animal.name }}</h2>

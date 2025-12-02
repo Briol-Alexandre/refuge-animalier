@@ -8,11 +8,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(row, index) in rows" :key="index" class="even:bg-white odd:bg-gray-50 hover:cursor-pointer" @click="$emit('row-click', row)">
+        <tr v-for="(row, index) in rows" :key="index" class="even:bg-white odd:bg-gray-50 hover:cursor-pointer"
+            @click="$emit('row-click', row)">
             <td v-for="field in fields" :key="field" class="border border-softGray p-2">
-                <img v-if="field === 'image'" :src="row[field]" alt="Image"
+                <img v-if="['image','avatar'].includes(field)" :src="row[field]" alt="Image"
                      class="w-14 h-14 object-cover rounded-full object-top mx-auto" />
-                <span v-else>{{ row[field] }}</span>
+                <span
+                    v-else-if="Array.isArray(row[field])" v-for="tableRow in row[field]"
+                    class="text-xs bg-main-blue-opacity rounded-full px-1 py-px ml-1">
+                    {{ tableRow.name }}
+                </span>
+
+                <span v-else>
+                    {{ row[field] }}
+                </span>
             </td>
         </tr>
         </tbody>
@@ -20,6 +29,7 @@
 </template>
 
 <script>
+
 export default {
     name: '',
     props: {

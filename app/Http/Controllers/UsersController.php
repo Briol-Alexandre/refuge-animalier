@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
+use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +11,14 @@ class UsersController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Users');
+        $volunteers = Volunteer::paginate(6)->load('permissions');
+        $volunteers_link = Volunteer::paginate(6);
+        $permissions =  Permission::all();
+        return Inertia::render('Users', [
+            'volunteers' => $volunteers,
+            'permissions' => $permissions,
+            'volunteers_link'=>$volunteers_link
+        ]);
     }
 
     public function create()

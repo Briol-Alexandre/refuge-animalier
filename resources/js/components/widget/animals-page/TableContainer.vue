@@ -1,11 +1,13 @@
 <template>
     <div
-        class="col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
+        class="relative col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
         <div class="flex justify-between">
             <div>
-                <Modal :condition="isModalOpen" @close="openModal" index="z-30">
-                    <slot name="filters"></slot>
-                </Modal>
+                <Teleport to="body">
+                    <Modal :condition="isModalOpen" @close="openModal" index="z-30">
+                        <slot name="filters"></slot>
+                    </Modal>
+                </Teleport>
                 <button @click="openModal"
                         class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
                     <Filters />
@@ -26,7 +28,7 @@
         <Pagination :links="paginationLinks" />
     </div>
     <Teleport to="body">
-        <slot/>
+        <slot />
     </Teleport>
 </template>
 
@@ -66,7 +68,7 @@ export default {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
-            selectedRow: null,
+            selectedRow: null
         };
     },
 
@@ -74,8 +76,8 @@ export default {
         openModal() {
             this.isModalOpen = !this.isModalOpen;
         },
-        openShowModal(row){
-            this.$emit('row-click', row)
+        openShowModal(row) {
+            this.$emit('row-click', row);
         }
     }
 };

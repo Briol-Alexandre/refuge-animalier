@@ -1,5 +1,5 @@
 <template>
-    <LoggedLayout title="Animaux">
+    <LoggedLayout title="Adoptions">
         <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
             <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
                 <h1 class="title !mb-0">
