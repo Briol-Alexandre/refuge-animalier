@@ -80,7 +80,7 @@
         </div>
     </form>
     <Teleport to="body">
-        <Modal :condition="modalToOpen === 'specie'" @close="modalToOpen = ''" index="z-30">
+        <Modal :condition="modalToOpen === 'specie'" @close="modalToOpen = ''" index="z-30" modal-classes="max-w-[500px]">
             Modal Espèce
         </Modal>
         <Modal :condition="modalToOpen === 'breed'" @close="modalToOpen = ''" index="z-30">

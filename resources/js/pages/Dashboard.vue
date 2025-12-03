@@ -4,9 +4,9 @@
             <h1 class="title mt-14 col-start-2 col-span-full row-start-1">
                 Bienvenue {{ $page.props.auth.user.name }}
             </h1>
-            <InfoCardContainer />
+            <InfoCardContainer :datas="datas" />
             <NotificationContainer />
-            <StatistiquesContainer/>
+            <StatistiquesContainer />
         </div>
     </LoggedLayout>
 </template>
@@ -20,17 +20,17 @@ import StatistiquesContainer from '@/components/widget/dashboard-page/Statistiqu
 import Statistiques from '@/components/svgs/Statistiques.vue';
 import Download from '@/components/svgs/Download.vue';
 import { router } from '@inertiajs/vue3';
-import { show } from '@/actions/App/Http/Controllers/StatistiquesController'
+import { show } from '@/actions/App/Http/Controllers/StatistiquesController';
+import Hearth from '@/components/svgs/Hearth.vue';
+import Paw from '@/components/svgs/Paw.vue';
 
 export default {
 
     name: '',
-    methods: {
-        router() {
-            return router
-        }
-    },
+    methods: {},
     components: {
+        Hearth,
+        Paw,
         LoggedLayout,
         InfoCardContainer,
         NotificationContainer,
@@ -38,15 +38,58 @@ export default {
         Statistiques,
         Download
     },
-    props: [],
+    props: ['animals', 'availables','adoptions', 'volunteers', 'cures'],
     computed: {
         show() {
-            return show
+            return show;
         }
     },
     data() {
-        return {};
-    },
+        return {
+            datas: [
+                {
+                    model: this.adoptions,
+                    color: 'text-main-red',
+                    colorOpacity : 'bg-main-red-opacity',
+                    title:'Animaux adoptés',
+                    gridPos: 'col-start-2 col-end-4 row-start-2 row-span-1',
+                    svg: 'hearth',
+                },
+                {
+                    model: this.availables,
+                    color: 'text-main-yellow',
+                    colorOpacity : 'bg-main-yellow-opacity',
+                    title:'Animaux disponibles',
+                    gridPos: 'col-start-4 col-end-6 row-start-2 row-span-1',
+                    svg: 'paw',
+                },
+                {
+                    model: this.volunteers,
+                    color: 'text-main-green',
+                    colorOpacity : 'bg-main-green-opacity',
+                    title:'Bénévoles',
+                    gridPos: 'col-start-6 col-end-8 row-start-2 row-span-1',
+                    svg: 'user',
+                },
+                {
+                    model: this.animals,
+                    color: 'text-main-blue',
+                    colorOpacity : 'bg-main-blue-opacity',
+                    title:'Animaux recueillis',
+                    gridPos: 'col-start-8 col-end-10 row-start-2 row-span-',
+                    svg: 'hand',
+                },
+                {
+                    model: this.cures,
+                    color: 'text-main-lightBlue',
+                    colorOpacity : 'bg-main-lightBlue-opacity',
+                    title:'Animaux en soin',
+                    gridPos: 'col-start-8 col-end-10 row-start-3 row-span-1',
+                    svg: 'vaccine',
+                },
+            ]
+        };
+    }
 };
 </script>
 

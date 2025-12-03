@@ -3,10 +3,10 @@
          v-if="condition" >
         <div class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-2xl shadow-sm p-10 w-3/4" :class="modalClasses">
 
-        <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer">
-            <Close/>
-        </button>
-        <slot />
+            <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer">
+                <Close />
+            </button>
+            <slot />
         </div>
     </div>
 </template>
