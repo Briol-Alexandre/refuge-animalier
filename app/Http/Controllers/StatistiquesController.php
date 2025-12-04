@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adoption;
+use App\Models\Animal;
+use App\Models\Notifications;
+use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +13,19 @@ class StatistiquesController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Statistiques');
+        $animals = Animal::all();
+        $available_animals = Animal::where('status', '=', 'available');
+        $cure_animals = Animal::where('status', '=', 'cure');
+        $adoptions = Adoption::where('status' ,'=', 'adopted');
+        $volunteers = Volunteer::all();
+        return Inertia::render('Statistiques',
+            [
+                'animals' => $animals,
+                'available' =>$available_animals,
+                'cures' =>$cure_animals,
+                'adoptions' => $adoptions,
+                'volunteers' => $volunteers,
+            ]);
     }
 
     public function create()

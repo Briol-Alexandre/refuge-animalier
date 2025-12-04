@@ -7,7 +7,7 @@
                 </h1>
             </div>
             <section aria-labelledby="emergency"
-                     class="col-start-2 col-span-8 bg-main-red-opacity rounded-2xl row-start-2 row-span-2 !mb-0 p-4">
+                     class="col-start-2 col-span-8 bg-main-red-opacity rounded-2xl row-start-2 row-span-2 !mb-0 p-4 border">
                 <div class="flex justify-between mb-4">
                     <div class="flex items-center gap-2 font-atten">
                         <span class=" font-black text-2xl">!</span>
@@ -61,7 +61,7 @@
                 </div>
             </section>
             <section aria-labelledby="notification"
-                     class="col-start-2 col-span-8 bg-softGray/40 rounded-2xl row-start-4 row-span-4 !mb-0 p-4">
+                     class="col-start-2 col-span-8 bg-softGray/40 rounded-2xl row-start-4 row-span-4 !mb-0 p-4 border">
                 <div class="flex justify-between mb-4">
                     <div class="flex items-center gap-2 font-atten">
                         <Notifications />

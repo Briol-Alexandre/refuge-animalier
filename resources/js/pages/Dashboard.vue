@@ -19,7 +19,6 @@ import NotificationContainer from '@/components/widget/dashboard-page/Notificati
 import StatistiquesContainer from '@/components/widget/dashboard-page/StatistiquesContainer.vue';
 import Statistiques from '@/components/svgs/Statistiques.vue';
 import Download from '@/components/svgs/Download.vue';
-import { router } from '@inertiajs/vue3';
 import { show } from '@/actions/App/Http/Controllers/StatistiquesController';
 import Hearth from '@/components/svgs/Hearth.vue';
 import Paw from '@/components/svgs/Paw.vue';
@@ -38,7 +37,7 @@ export default {
         Statistiques,
         Download
     },
-    props: ['animals', 'availables','adoptions', 'volunteers', 'cures', 'notifications', 'urgents'],
+    props: ['animals', 'available','adoptions', 'volunteers', 'cures', 'notifications', 'urgents'],
     computed: {
         show() {
             return show;
@@ -56,7 +55,7 @@ export default {
                     svg: 'hearth',
                 },
                 {
-                    model: this.availables,
+                    model: this.available,
                     color: 'text-main-yellow',
                     colorOpacity : 'bg-main-yellow-opacity',
                     title:'Animaux disponibles',

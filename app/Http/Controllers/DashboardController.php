@@ -23,7 +23,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard',
             [
                 'animals' => $animals,
-                'availables' =>$available_animals,
+                'available' =>$available_animals,
                 'cures' =>$cure_animals,
                 'adoptions' => $adoptions,
                 'volunteers' => $volunteers,
