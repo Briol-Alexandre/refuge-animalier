@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Adoption;
 use App\Models\Animal;
+use App\Models\Notifications;
 use App\Models\Permission;
 use App\Models\PermissionVolunteer;
 use App\Models\User;
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
         Animal::factory(10)->create();
         Adoption::factory(10)->create();
+        Notifications::factory(10)->create();
         $permissions = Permission::factory(10)->create();
         $volunteers = Volunteer::factory(10)->create();
 

@@ -1,13 +1,9 @@
 <template>
+    <p class="font-bold">{{title}}</p>
     <ul class="flex flex-col gap-4">
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
-        <NotificationCard title="Texte de notification" />
+        <li v-for="notification in notifications" class="p-2 border border-softGray rounded-lg flex justify-between items-center">
+            <NotificationCard :title="notification.title" :date="dateFormat(notification.created_at)" :notif="notification"/>
+        </li>
     </ul>
 </template>
 
@@ -17,7 +13,7 @@ import NotificationCard from '@/components/widget/dashboard-page/NotificationCar
 export default {
   name: "",
     components: { NotificationCard },
-  props: [],
+  props: ['notifications', 'title'],
 
   data() {
     return {
@@ -26,7 +22,10 @@ export default {
   },
 
   methods: {
-
+      dateFormat(date) {
+          date = new Date(date);
+          return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
+      }
   }
 }
 </script>

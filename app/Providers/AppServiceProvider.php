@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Notifications;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
                     'user' => auth()->user(),
                 ];
             },
+            'notificationCount' => fn() => Notifications::where('read', false)->count(),
         ]);
     }
 }

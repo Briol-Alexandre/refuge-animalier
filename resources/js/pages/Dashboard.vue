@@ -5,7 +5,7 @@
                 Bienvenue {{ $page.props.auth.user.name }}
             </h1>
             <InfoCardContainer :datas="datas" />
-            <NotificationContainer />
+            <NotificationContainer :notifications="notifications" :urgents="urgents"/>
             <StatistiquesContainer />
         </div>
     </LoggedLayout>
@@ -38,7 +38,7 @@ export default {
         Statistiques,
         Download
     },
-    props: ['animals', 'availables','adoptions', 'volunteers', 'cures'],
+    props: ['animals', 'availables','adoptions', 'volunteers', 'cures', 'notifications', 'urgents'],
     computed: {
         show() {
             return show;

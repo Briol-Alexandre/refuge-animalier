@@ -3,7 +3,7 @@
          v-if="condition" >
         <div class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-2xl shadow-sm p-10 w-3/4" :class="modalClasses">
 
-            <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer">
+            <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer" :class="closeBtnClasses">
                 <Close />
             </button>
             <slot />
@@ -17,7 +17,7 @@ import Close from '@/components/svgs/Close.vue';
 export default {
     name: '',
     components: { Close },
-    props: ['condition', 'index', 'modalClasses'],
+    props: ['condition', 'index', 'modalClasses', 'closeBtnClasses'],
 
     data() {
         return {};

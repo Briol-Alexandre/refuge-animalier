@@ -15,6 +15,7 @@ import { index as AdoptionsIndex } from '@/actions/App/Http/Controllers/Adoption
 import { index as UsersIndex } from '@/actions/App/Http/Controllers/UsersController';
 import { index as NotificationsIndex } from '@/actions/App/Http/Controllers/NotificationsController';
 import { index as StatistiquesIndex } from '@/actions/App/Http/Controllers/StatistiquesController';
+import { edit } from '@/actions/App/Http/Controllers/Settings/ProfileController'
 
 
 defineProps<{
@@ -58,8 +59,9 @@ const initials = userName
                     <User :active="$page.component==='Users'" />
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Notifications'}" :href="NotificationsIndex()"
-                         title="Notifications">
-                    <Notifications :active="$page.component==='Notifications'" />
+                         title="Notifications" class="relative">
+                    <Notifications :active="$page.component==='Notifications'"/>
+                    <div class=" absolute top-2 left-6 text-xs flex items-center text-center justify-center w-4 font-poppins font-normal aspect-square bg-main-red text-white rounded-full">{{ $page.props.notificationCount }}</div>
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Statistiques'}" :href="StatistiquesIndex()"
                          title="Statistiques">
@@ -67,7 +69,7 @@ const initials = userName
                 </NavLink>
             </div>
             <div class="w-full">
-                <Link class="flex gap-2 p-4 items-center hover:bg-softGray/40 rounded-lg">
+                <Link :href="edit()" class="flex gap-2 p-4 items-center hover:bg-softGray/40 rounded-lg">
                     <span class="w-10 aspect-square bg-softGray rounded-full flex items-center justify-center">
                         {{ initials }}
                     </span>

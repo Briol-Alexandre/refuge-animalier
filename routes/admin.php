@@ -38,6 +38,13 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('notifications.index');
 
+    Route::put('/notifications/{notification}', [NotificationsController::class, 'update'])
+        ->middleware('auth')
+        ->name('notifications.update');
+    Route::delete('/notifications/{notification}', [NotificationsController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('notifications.destroy');
+
     Route::get('/statistiques', [StatistiquesController::class, 'index'])
         ->middleware(['auth'])
         ->name('statistiques.index');
