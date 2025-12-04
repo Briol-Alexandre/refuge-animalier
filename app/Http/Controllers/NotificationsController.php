@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notifications;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +11,14 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Notifications');
+        $urgents = Notifications::where('urgent', true)->get();
+        $notifications = Notifications::where('urgent', false)->get();
+        return Inertia::render('Notifications',
+            [
+                'notifications' => $notifications,
+                'urgents' => $urgents
+            ]
+        );
     }
 
     public function create()
@@ -28,11 +37,25 @@ class NotificationsController extends Controller
     {
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Notifications $notification)
     {
+        $validated = $request->validate([
+            'read' => 'required|boolean',
+            'urgent' => 'required|boolean'
+        ]);
+
+
+        $notification->update([
+            'read' => $validated['read'],
+            'urgent' =>  $validated['urgent']
+        ]);
+        return back();
     }
 
-    public function destroy($id)
+
+    public function destroy(Notifications $notification)
     {
+        $notification->delete();
+        return back();
     }
 }

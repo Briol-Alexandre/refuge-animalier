@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { type BreadcrumbItem } from '@/types';
+import LoggedLayout from '@/layouts/LoggedLayout.vue';
 
 interface Props {
     mustVerifyEmail: boolean;
@@ -33,7 +34,7 @@ const user = page.props.auth.user;
 </script>
 
 <template>
-    <AppLayout :breadcrumbs="breadcrumbItems">
+    <LoggedLayout title="Profile">
         <Head title="Profile settings" />
 
         <SettingsLayout>
@@ -124,5 +125,5 @@ const user = page.props.auth.user;
 
             <DeleteUser />
         </SettingsLayout>
-    </AppLayout>
+    </LoggedLayout>
 </template>
