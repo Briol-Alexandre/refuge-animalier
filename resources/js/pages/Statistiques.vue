@@ -34,10 +34,12 @@
                         <User v-if="data.svg === 'user'" color="#47FF56" />
                         <Vaccine v-if="data.svg === 'vaccine'" color="#00D4FF" />
                     </InfoCard>
-                    <div class="col-start-1 col-end-4 row-start-2 row-end-7 bg-white rounded-2xl">
-                        <!--Graphique-->
+                    <div class="col-start-1 col-end-4 row-start-2 row-end-6 bg-white rounded-2xl p-4">
+                        <p>Animaux adopté</p>
+                        <canvas id="chart" class="w-full h-full"></canvas>
                     </div>
-                    <div class="col-start-4 col-end-5 row-start-3 row-end-7 bg-white rounded-2xl">
+
+                    <div class="col-start-4 col-end-5 row-start-3 row-end-6 bg-white rounded-2xl">
                         <!--Exportation des stats-->
                     </div>
 
@@ -58,6 +60,7 @@ import Paw from '@/components/svgs/Paw.vue';
 import Hand from '@/components/svgs/Hand.vue';
 import Hearth from '@/components/svgs/Hearth.vue';
 import User from '@/components/svgs/User.vue';
+import Chart from 'chart.js/auto';
 
 export default {
     name: '',
@@ -66,9 +69,13 @@ export default {
         LoggedLayout,
         Filters,
         PDF,
-        InfoCard
+        InfoCard,
+        Chart
     },
     props: ['animals', 'available','adoptions', 'volunteers', 'cures'],
+    mounted() {
+        this.chartInitialize();
+    },
     data() {
         return {
             datas: [
@@ -101,7 +108,7 @@ export default {
                     color: 'text-main-blue',
                     colorOpacity : 'bg-main-blue-opacity',
                     title:'Animaux recueillis',
-                    gridPos: 'row-start-1 row-span-',
+                    gridPos: 'row-start-1 row-span-1',
                     svg: 'hand',
                 },
                 {
@@ -112,6 +119,15 @@ export default {
                     gridPos: 'col-start-4 col-span-1 row-start-2 row-span-1',
                     svg: 'vaccine',
                 },
+            ],
+            chartData: [
+                { year: 2010, count: 138 },
+                { year: 2011, count: 100 },
+                { year: 2012, count: 46 },
+                { year: 2013, count: 25 },
+                { year: 2014, count: 22 },
+                { year: 2015, count: 30 },
+                { year: 2016, count: 28 },
             ]
         };
     },
@@ -119,11 +135,36 @@ export default {
     methods: {
         toCamelCase(string) {
             const tokens = string.split(/[_\s]+/).filter(Boolean);
-            return [
-                tokens[0],
-                ...tokens.slice(1)?.map(word => [word[0].toUpperCase(), word.slice(1)])
-            ].flat(1).join('');
+            return tokens[0] + tokens.slice(1).map(word => word[0].toUpperCase() + word.slice(1)).join('');
+        },
+        chartInitialize() {
+            new Chart(
+                document.getElementById('chart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: this.chartData.map(row => row.year),
+                        datasets: [
+                            {
+                                label: 'Acquisitions by year',
+                                data: this.chartData.map(row => row.count),
+                                backgroundColor: '#4F46E5'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        }
+                    }
+                }
+            );
         }
+
+
     }
 };
 </script>

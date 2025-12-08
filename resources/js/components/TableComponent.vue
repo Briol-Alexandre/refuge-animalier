@@ -19,6 +19,10 @@
                     {{ tableRow.name }}
                 </span>
 
+                <span v-else-if="typeof row[field] === 'object'">
+                    {{row[field].name}}
+                </span>
+
                 <span v-else>
                     {{ row[field] }}
                 </span>

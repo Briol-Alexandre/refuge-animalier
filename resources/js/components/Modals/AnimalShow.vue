@@ -4,7 +4,7 @@
         <div class="col-span-2">
             <div class="mb-2 flex gap-4 items-center">
                 <h2 class="text-2xl font-atten font-black">{{ animal.name }}</h2>
-                <span class="text-sm">{{animal.status}}</span>
+                <span class="text-sm">{{ animal.status }}</span>
             </div>
             <dl class="flex flex-col gap-2">
                 <div class="flex gap-2">
@@ -12,12 +12,26 @@
                     <dd>3 mois</dd>
                 </div>
                 <div class="flex gap-2">
+                    <dt class="font-bold">Espèce&nbsp;:</dt>
+                    <dd>{{animal.specie.name}}</dd>
+                </div>
+                <div class="flex gap-2">
+                    <dt class="font-bold">Race&nbsp;:</dt>
+                    <dd>{{animal.breed.name}}</dd>
+                </div>
+                <div class="flex gap-2">
                     <dt class="font-bold">Sexe&nbsp;:</dt>
-                    <dd>Mâle</dd>
+                    <dd>{{ animal.sexe }}</dd>
                 </div>
                 <div class="flex gap-2">
                     <dt class="font-bold">Pelage&nbsp;:</dt>
-                    <dd>Noir</dd>
+                    <dd class="flex flex-col">
+                        <ul class="list-disc list-inside">
+                            <li v-for="coat in animal.coat">
+                                {{ coat.name }}
+                            </li>
+                        </ul>
+                    </dd>
                 </div>
                 <div class="flex gap-2">
                     <dt class="font-bold">Vaccins&nbsp;:</dt>
@@ -36,9 +50,9 @@
         </div>
         <div class="col-span-full">
             <p class="font-bold">Description</p>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-                ea rebum. Stet clita kasd gubergren, no sea takimata</p>
+            <p>
+                {{animal.desc}}
+            </p>
         </div>
     </div>
 </template>

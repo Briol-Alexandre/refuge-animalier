@@ -1,5 +1,5 @@
 <template>
-    <form action="" method="post" class="grid grid-cols-6 gap-x-4 gap-y-2">
+    <form action="" method="post" class="grid grid-cols-6 gap-x-4 gap-y-2" @submit="handleSubmit">
         <p class="col-span-full title">
             Créer la fiche d'un animal
         </p>
@@ -106,6 +106,7 @@ import ImageAdd from '@/components/svgs/ImageAdd.vue';
 import {Button} from '@/components/ui/button/index.js';
 import Modal from '@/components/widget/Modal.vue';
 import { nextTick } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 
 export default {
     name: '',
@@ -155,6 +156,10 @@ export default {
                     this.status = '';
                 })
             }
+        },
+        handleSubmit() {
+            const form = useForm();
+            console.log(form);
         }
     }
 };

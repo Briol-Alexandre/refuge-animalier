@@ -14,17 +14,17 @@ class DashboardController extends Controller
     public function index()
     {
         $animals = Animal::all();
-        $available_animals = Animal::where('status', '=', 'available');
-        $cure_animals = Animal::where('status', '=', 'cure');
-        $adoptions = Adoption::where('status' ,'=', 'adopted');
+        $available_animals = Animal::where('status', '=', 'available')->get();
+        $cure_animals = Animal::where('status', '=', 'in_cure')->get();
+        $adoptions = Animal::where('status', '=', 'adopted')->get();
         $volunteers = Volunteer::all();
         $notifications = Notifications::where('urgent', false)->where('read', false)->get();
         $urgents = Notifications::where('urgent', true)->where('read', false)->get();
         return Inertia::render('Dashboard',
             [
                 'animals' => $animals,
-                'available' =>$available_animals,
-                'cures' =>$cure_animals,
+                'available' => $available_animals,
+                'cures' => $cure_animals,
                 'adoptions' => $adoptions,
                 'volunteers' => $volunteers,
                 'notifications' => $notifications,

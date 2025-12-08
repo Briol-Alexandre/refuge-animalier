@@ -16,13 +16,13 @@
 
             </div>
 
-            <input type="search" name="search" id="search"
-                   class="bg-white p-1 border rounded-lg border-main-yellow" placeholder="Rechercher…">
+            <input type="search" name="search" id="search" v-model="search"
+                   class="bg-white p-1 border rounded-lg border-main-yellow" placeholder="Rechercher par le nom…">
         </div>
         <TableComponent
             :cols="cols"
             :fields="fields"
-            :rows="rows"
+            :rows="filteredRows"
             @row-click="openShowModal"
         />
         <Pagination :links="paginationLinks" />
@@ -64,11 +64,22 @@ export default {
     },
     props: ['cols', 'fields', 'rows', 'paginationLinks'],
 
+    computed: {
+        filteredRows() {
+            if (!this.search) return this.rows;
+
+            const searchTerm = this.search.toLowerCase();
+
+            return this.rows.filter(row => row.name.toLowerCase().includes(searchTerm));
+        }
+    },
+
     data() {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
-            selectedRow: null
+            selectedRow: null,
+            search: ''
         };
     },
 

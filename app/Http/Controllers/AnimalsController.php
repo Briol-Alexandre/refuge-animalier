@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Models\Animal;
+use App\Models\Breed;
+use App\Models\Coat;
+use App\Models\Species;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -10,9 +14,21 @@ class AnimalsController extends Controller
 {
     public function index()
     {
-        $animals = Animal::paginate(6);
+        $animals = Animal::with('breed')
+            ->with('coat')
+            ->with('specie')
+            ->paginate(6);
+        $breeds = Breed::all();
+        $species = Species::all();
+        $coats = Coat::all();
+        $status = Status::values();
+
         return Inertia::render('Animals', [
-            'animals' => $animals
+            'animals' => $animals,
+            'coats' => $coats,
+            'breeds' => $breeds,
+            'species' => $species,
+            'status' => $status,
         ]);
     }
 
