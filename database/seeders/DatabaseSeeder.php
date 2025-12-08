@@ -4,10 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Adoption;
 use App\Models\Animal;
+use App\Models\Breed;
+use App\Models\Coat;
 use App\Models\Notifications;
 use App\Models\Permission;
 use App\Models\PermissionVolunteer;
+use App\Models\Species;
 use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Volunteer;
 use Illuminate\Database\Seeder;
@@ -26,11 +30,75 @@ class DatabaseSeeder extends Seeder
             'email' => 'alexandre.briol@gmail.com',
         ]);
 
-        Animal::factory(10)->create();
+        $species = [
+            'Dog' => [
+
+                'Husky',
+                'Chihuahua',
+                'Golden Retriever',
+                'Berger Australien',
+                'Cocker'
+
+            ],
+            'Cat' => [
+
+                'Persan',
+                'Siamois',
+                'Maine Coon',
+                'Sphinx'
+
+            ],
+
+        ];
+
+        $coatNames = [
+            'Blanc',
+            'Noir',
+            'Doré',
+            'Tâché',
+            'Tricolore',
+            'Brun',
+        ];
+
         Adoption::factory(10)->create();
         Notifications::factory(10)->create();
         $permissions = Permission::factory(10)->create();
         $volunteers = Volunteer::factory(10)->create();
+
+        $coats = collect();
+        foreach ($coatNames as $coatName) {
+            $coats->push(Coat::create([
+                'name' => $coatName,
+            ]));
+        }
+
+        $seedingBreeds = [];
+        foreach ($species as $specie => $breeds) {
+            $specie = Species::create([
+                'name' => $specie
+            ]);
+
+            foreach ($breeds as $breed) {
+                $breed = Breed::create([
+                    'name' => $breed,
+                    'specie_id' => $specie->id,
+                ]);
+
+                $seedingBreeds[] = $breed->id;
+            }
+        }
+
+        for ($i = 0; $i < 20; $i++) {
+            $animal = Animal::factory()->create([
+                'breed_id' => $seedingBreeds[array_rand($seedingBreeds)],
+            ]);
+
+
+            $animal->coat()->attach(
+                $coats->random(rand(1, 4))->pluck('id')->toArray()
+            );
+        }
+
 
         foreach ($volunteers as $volunteer) {
             $volunteer->permissions()->attach(

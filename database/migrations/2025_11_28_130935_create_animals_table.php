@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +15,12 @@ return new class extends Migration
         Schema::create('animals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('specie');
-            $table->string('image');
-            $table->string('status');
+            $table->foreignId('breed_id')->constrained();
+            $table->enum('sexe', ['male', 'female']);
+            $table->date('age');
+            $table->string('desc');
+            $table->enum('status', Status::cases());
+            $table->json('images');
             $table->timestamps();
         });
     }

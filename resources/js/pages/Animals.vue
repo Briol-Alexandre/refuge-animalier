@@ -13,10 +13,10 @@
                 :paginationLinks="animals.links"
                 :rows="animals.data"
                 :cols="['Image', 'Nom', 'Espèce', 'Statut']"
-                :fields="['image', 'name', 'specie', 'status']"
+                :fields="['image', 'name', 'breed', 'status']"
                 @row-click="openShowModal">
                 <template v-slot:filters>
-                    <AnimalsFilter/>
+                    <AnimalsFilter :species="species" :breeds="breeds" :coats="coats" :status="status"/>
                 </template>
 
                 <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
@@ -65,7 +65,7 @@ export default {
         TableContainer,
         AnimalsFilter
     },
-    props: ['animals'],
+    props: ['animals', 'coats', 'breeds', 'species', 'status'],
 
     data() {
         return {
