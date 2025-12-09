@@ -2,18 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\Species;
+use App\Models\Vaccine;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class SpeciesFactory extends Factory
+class VaccineFactory extends Factory
 {
-    protected $model = Species::class;
+    protected $model = Vaccine::class;
 
     public function definition(): array
     {
         return [
             'name' => $this->faker->name(),
+            'specie_id' => $this->faker->randomNumber(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

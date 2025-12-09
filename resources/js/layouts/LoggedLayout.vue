@@ -6,6 +6,7 @@ import Hearth from '@/components/svgs/Hearth.vue';
 import User from '@/components/svgs/User.vue';
 import Statistiques from '@/components/svgs/Statistiques.vue';
 import Notifications from '@/components/svgs/Notifications.vue';
+import Database from '@/components/svgs/Database.vue';
 import Logout from '@/components/svgs/Logout.vue';
 import NavLink from '@/components/nav/NavLink.vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
@@ -15,7 +16,9 @@ import { index as AdoptionsIndex } from '@/actions/App/Http/Controllers/Adoption
 import { index as UsersIndex } from '@/actions/App/Http/Controllers/UsersController';
 import { index as NotificationsIndex } from '@/actions/App/Http/Controllers/NotificationsController';
 import { index as StatistiquesIndex } from '@/actions/App/Http/Controllers/StatistiquesController';
+import { index as DatabaseIndex } from '@/actions/App/Http/Controllers/DatabaseController';
 import { edit } from '@/actions/App/Http/Controllers/Settings/ProfileController'
+import Toaster from '@/components/Toaster.vue';
 
 
 defineProps<{
@@ -67,6 +70,10 @@ const initials = userName
                          title="Statistiques">
                     <Statistiques :active="$page.component==='Statistiques'" />
                 </NavLink>
+                <NavLink :active="{'nav-link-active': $page.component==='Database'}" :href="DatabaseIndex()"
+                         title="Base de données">
+                    <Database :active="$page.component==='Database'" />
+                </NavLink>
             </div>
             <div class="w-full">
                 <Link :href="edit()" class="flex gap-2 p-4 items-center hover:bg-softGray/40 rounded-lg">
@@ -93,5 +100,6 @@ const initials = userName
 
         </nav>
         <slot/>
+        <Toaster/>
     </div>
 </template>

@@ -5,6 +5,7 @@
         </Label>
         <select
         :id="idName"
+        :name="idName"
         class="p-2 bg-white border-2 border-main-yellow rounded-lg"
         :value="modelValue"
         @change="updateValue($event)"

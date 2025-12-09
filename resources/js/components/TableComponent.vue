@@ -16,15 +16,15 @@
                 <span
                     v-else-if="Array.isArray(row[field])" v-for="tableRow in row[field]"
                     class="text-xs bg-main-blue-opacity rounded-full px-1 py-px ml-1">
-                    {{ tableRow.name }}
+                    {{ tableRow.name ?? 'Inconnu' }}
                 </span>
 
                 <span v-else-if="typeof row[field] === 'object'">
-                    {{row[field].name}}
+                    {{row[field]?.name ?? 'Inconnu'}}
                 </span>
 
                 <span v-else>
-                    {{ row[field] }}
+                    {{ row[field] ?? 'inconnu' }}
                 </span>
             </td>
         </tr>
