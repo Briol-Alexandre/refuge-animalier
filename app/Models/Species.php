@@ -19,4 +19,9 @@ class Species extends Model
         return $this->hasMany(Breed::class, 'specie_id');
     }
 
+    public function vaccine():HasMany
+    {
+        return $this->hasMany(Vaccine::class, 'specie_id');
+    }
+
 }

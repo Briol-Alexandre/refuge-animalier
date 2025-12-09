@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\AdoptionsController;
 use App\Http\Controllers\AnimalsController;
+use App\Http\Controllers\BreedsController;
+use App\Http\Controllers\CoatsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\StatistiquesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VaccinesController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -38,6 +43,10 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('notifications.index');
 
+    Route::get('/database', [DatabaseController::class, 'index'])
+        ->middleware(['auth'])
+        ->name('database.index');
+
     Route::put('/notifications/{notification}', [NotificationsController::class, 'update'])
         ->middleware('auth')
         ->name('notifications.update');
@@ -52,6 +61,55 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
     Route::get('/statistiques/{statistique}', [StatistiquesController::class, 'show'])
         ->middleware(['auth'])
         ->name('statistiques.show');
+
+    Route::post('/species', [SpeciesController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('species.store');
+
+    Route::patch('/species/{specie}', [SpeciesController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('species.update');
+
+    Route::delete('/species/{specie}', [SpeciesController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('species.destroy');
+
+    Route::post('/breeds', [BreedsController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('breeds.store');
+
+    Route::patch('/breeds/{breed}', [BreedsController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('breeds.update');
+
+    Route::delete('/breeds/{breed}', [BreedsController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('breeds.destroy');
+
+
+    Route::post('/coats', [CoatsController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('coat.store');
+
+    Route::patch('/coats/{coat}', [CoatsController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('coats.update');
+
+    Route::delete('/coats/{coat}', [CoatsController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('coats.destroy');
+
+    Route::post('/vaccines', [VaccinesController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('vaccine.store');
+
+    Route::patch('/vaccines/{vaccine}', [VaccinesController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('vaccines.update');
+
+    Route::delete('/vaccines/{vaccine}', [VaccinesController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('vaccines.destroy');
 
 
     require __DIR__ . '/settings.php';

@@ -13,6 +13,7 @@ use App\Models\Species;
 use App\Models\User;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Vaccine;
 use App\Models\Volunteer;
 use Illuminate\Database\Seeder;
 
@@ -48,7 +49,19 @@ class DatabaseSeeder extends Seeder
                 'Sphinx'
 
             ],
+        ];
 
+        $species_vaccines = [
+            'Dog' => [
+                'CHPPi',
+                'Rage',
+                'Toux du chenil',
+            ],
+            'Cat' => [
+                'Typhus',
+                'Coryza',
+                'Leucose féline'
+            ]
         ];
 
         $coatNames = [
@@ -88,6 +101,18 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        $seedingVaccines = [];
+        foreach ($species_vaccines as $species_vaccine => $vaccines) {
+            $specie = Species::where('name', '=', $species_vaccine)->first();
+
+            foreach ($vaccines as $vaccine) {
+                $vaccine = Vaccine::create([
+                    'name' => $vaccine,
+                    'specie_id' => $specie->id,
+                ]);
+            }
+        }
+
         for ($i = 0; $i < 20; $i++) {
             $animal = Animal::factory()->create([
                 'breed_id' => $seedingBreeds[array_rand($seedingBreeds)],
@@ -97,6 +122,8 @@ class DatabaseSeeder extends Seeder
             $animal->coat()->attach(
                 $coats->random(rand(1, 4))->pluck('id')->toArray()
             );
+
+            //TODO: Ask how to link the vaccines to an animal
         }
 
 

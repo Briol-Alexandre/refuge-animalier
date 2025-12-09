@@ -27,7 +27,7 @@
 
             <Teleport to="body">
                 <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                    <AnimalCreateForm :open-modal="openCreateModal" />
+                    <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats"/>
                 </Modal>
             </Teleport>
         </div>
