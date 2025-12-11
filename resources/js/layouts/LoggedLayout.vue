@@ -91,7 +91,7 @@ const initials = userName
                     :href="'/logout'"
                     method="post"
                     as="button"
-                    class="p-4 hover:bg-main-red-opacity rounded-lg text-main-red flex gap-2 w-full"
+                    class="p-4 hover:bg-main-red-opacity rounded-lg text-main-red flex gap-2 w-full hover:cursor-pointer"
                 >
                     <Logout />
                     Déconnexion

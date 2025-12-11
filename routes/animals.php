@@ -1,0 +1,22 @@
+<?php
+
+use App\Http\Controllers\AnimalsController;
+
+return [
+    Route::get('/animals', [AnimalsController::class, 'index'])
+        ->middleware(['auth'])
+        ->name('animals.index'),
+
+    Route::post('/animals', [AnimalsController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('animals.store'),
+
+    Route::post('/animals/{animal}', [AnimalsController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('animals.update'),
+
+    Route::put('/animals/{animal}/status', [AnimalsController::class, 'updateStatus'])
+        ->middleware(['auth'])
+        ->name('animals.status-update'),
+
+];
