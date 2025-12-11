@@ -18,5 +18,8 @@ return [
     Route::put('/animals/{animal}/status', [AnimalsController::class, 'updateStatus'])
         ->middleware(['auth'])
         ->name('animals.status-update'),
+    Route::delete('/animals/{animal}', [AnimalsController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('animals.destroy'),
 
 ];

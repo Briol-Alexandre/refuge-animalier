@@ -117,6 +117,9 @@ class AnimalsController extends Controller
 
     public function destroy($id)
     {
+        $animal = Animal::findOrFail($id);
+
+        $animal->delete();
     }
 
     public function updateStatus(Animal $animal, Request $request)

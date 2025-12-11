@@ -20,7 +20,7 @@
                 </template>
 
                 <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                    <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines" @updated="toggleShowModal"/>
+                    <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines" @updated="toggleShowModal" @deleted="toggleShowModal"/>
                 </Modal>
 
             </TableContainer>

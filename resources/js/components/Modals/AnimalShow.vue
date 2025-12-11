@@ -61,9 +61,29 @@
             <button class="button-light" @click="openEditModal">
                 Modifier la fiche
             </button>
+            <!-- TODO: MAKE THIS BUTTON ONLY ACCESSIBLE TO THE ADMIN -->
+            <button class="button-light" @click="handleDeleteModal">
+                Supprimer la fiche
+            </button>
         </div>
     </div>
     <Teleport to="body">
+        <Modal
+            @close="handleDeleteModal"
+            :condition="isDeleteModalOpen"
+            index="z-30"
+            modal-classes="w-fit"
+            close-btn-classes="!top-5 !right-5"
+        >
+            <p>Voulez-vous vraiment supprimer : </p>
+            <p class="font-bold">{{ this.animal?.name }}</p>
+            <div class="flex justify-between gap-2 mt-6">
+                <button class="underline hover:cursor-pointer" @click="handleArchiveModal">Annuler</button>
+                <button class="text-red-600 underline hover:cursor-pointer" @click="handleDelete">
+                    Supprimer
+                </button>
+            </div>
+        </Modal>
         <Modal
             @close="handleArchiveModal"
             :condition="isArchiveModalOpen"
@@ -108,6 +128,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { useStatusStore } from '@/stores/statusStore.js';
 import { updateStatus } from '@/actions/App/Http/Controllers/AnimalsController';
+import { destroy } from '@/actions/App/Http/Controllers/AnimalsController';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import Modal from '@/components/widget/Modal.vue';
 import { Button } from '@/components/ui/button/index.js';
@@ -138,12 +159,17 @@ export default {
             statusAnimal: useForm({
                 'status': null
             }),
+            deleteForm: useForm({
+                'id': this.animal.id,
+            }),
             isModalOpen: false,
+            isDeleteModalOpen: false,
         };
     },
 
     methods: {
         updateStatus,
+        destroy,
         calculateAge(date) {
             const animalBirth = new Date(date);
             const today = new Date();
@@ -186,6 +212,21 @@ export default {
                 }
             });
         },
+        handleDeleteModal () {
+            this.isDeleteModalOpen = !this.isDeleteModalOpen;
+        },
+
+        handleDelete() {
+            this.deleteForm.delete(destroy(this.animal.id), {
+                onSuccess: () => {
+                    this.toast.success({ text: 'Animal supprimé avec succès !' });
+                    this.$emit('deleted');
+                },
+                onError: ()=>{
+                    this.toast.error({ text: 'Une erreur s‘est produite lors de la manipulation'});
+                }
+            })
+        }
 
 
     }
