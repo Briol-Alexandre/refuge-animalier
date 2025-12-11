@@ -115,7 +115,7 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             $animal = Animal::factory()->create([
-                'breed_id' => $seedingBreeds[array_rand($seedingBreeds)],
+                'breed_id' => Breed::inRandomOrder()->first()->id,
             ]);
 
 
@@ -123,7 +123,17 @@ class DatabaseSeeder extends Seeder
                 $coats->random(rand(1, 4))->pluck('id')->toArray()
             );
 
-            //TODO: Ask how to link the vaccines to an animal
+            $compatibleVaccines = $animal->breed->specie->vaccine;
+
+
+            $animal->vaccines()->attach(
+                $compatibleVaccines
+                    ->random(rand(0, $compatibleVaccines->count()))
+                    ->pluck('id')
+                    ->toArray()
+            );
+
+
         }
 
 

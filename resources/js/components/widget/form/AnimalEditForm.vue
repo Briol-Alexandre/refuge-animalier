@@ -31,6 +31,8 @@
                 <input id="name" type="text" v-model="formAnimal.name"
                        class="p-2 bg-white border-2 border-main-yellow rounded-lg" placeholder="Ex. Moka">
                 <InputError :message="formAnimal.errors.name" />
+
+                <p @click="console.log(animal)">test</p>
             </div>
 
             <Select
@@ -117,7 +119,8 @@
                 <div @click.self="isVaccineModalOpen = !isVaccineModalOpen"
                      class="p-2 bg-white border-2 border-main-yellow rounded-lg relative hover:cursor-pointer">
                     <span
-                        v-if="formAnimal.vaccines.length === 0" @click.self="this.isVaccineModalOpen = !this.isVaccineModalOpen">--&nbsp;Choisir des vaccins&nbsp;--</span>
+                        v-if="formAnimal.vaccines.length === 0"
+                        @click.self="this.isVaccineModalOpen = !this.isVaccineModalOpen">--&nbsp;Choisir des vaccins&nbsp;--</span>
                     <span v-else
                           v-for="vaccine in selectedVaccines"
                           :key="vaccine.id"
@@ -152,7 +155,6 @@
                 </div>
             </div>
 
-
             <Select
                 :modelValue="formAnimal.status"
                 @update:modelValue="handleStatusChange"
@@ -171,7 +173,7 @@
                 </label>
                 <textarea id="desc" v-model="formAnimal.desc"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez la description…" />
+                          placeholder="Écrivez la description…"></textarea>
                 <InputError :message="formAnimal.errors.desc" />
             </div>
             <div class="flex flex-col h-full">
@@ -180,7 +182,7 @@
                 </label>
                 <textarea id="desc" v-model="formAnimal.note"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez une note…" />
+                          placeholder="Écrivez une note…" ></textarea>
                 <InputError :message="formAnimal.errors.note" />
             </div>
 
@@ -195,7 +197,6 @@
             </button>
         </div>
     </form>
-
     <Teleport to="body">
         <Modal :condition="modalToOpen === 'specie'" @close="modalToOpen = ''" index="z-30"
                modal-classes="max-w-[500px]">
@@ -254,39 +255,27 @@
 </template>
 
 <script>
-import InputLabel from '@/components/widget/form/InputLabel.vue';
-import TextareaLabel from '@/components/widget/form/TextareaLabel.vue';
-import Select from '@/components/widget/form/Select.vue';
-import ImageAdd from '@/components/svgs/ImageAdd.vue';
-import Close from '@/components/svgs/Close.vue';
-import { Button } from '@/components/ui/button/index.js';
-import Modal from '@/components/widget/Modal.vue';
-import { Form, useForm, usePage } from '@inertiajs/vue3';
-import { store as species_store } from '@/actions/App/Http/Controllers/SpeciesController';
-import { store as breeds_store } from '@/actions/App/Http/Controllers/BreedsController';
-import { store as coats_store } from '@/actions/App/Http/Controllers/CoatsController';
-import { store as animal_store } from '@/actions/App/Http/Controllers/AnimalsController';
-import { useToasterStore } from '@/stores/useToasterStore';
 import InputError from '@/components/InputError.vue';
-import Input from '../../ui/input/Input.vue';
+import { Button } from '@/components/ui/button/index.js';
+import Select from '@/components/widget/form/Select.vue';
+import Close from '@/components/svgs/Close.vue';
+import ImageAdd from '@/components/svgs/ImageAdd.vue';
+import { useForm, usePage } from '@inertiajs/vue3';
+import { store as species_store } from '@/actions/App/Http/Controllers/SpeciesController.js';
+import { store as breeds_store } from '@/actions/App/Http/Controllers/BreedsController.js';
+import { store as coats_store } from '@/actions/App/Http/Controllers/CoatsController.js';
+import { store as animal_store } from '@/actions/App/Http/Controllers/AnimalsController.js';
+import { update as animal_update } from '@/actions/App/Http/Controllers/AnimalsController.js';
+import { useToasterStore } from '@/stores/useToasterStore.js';
 import { useStatusStore } from '@/stores/statusStore.js';
+import Input from '../../ui/input/Input.vue';
+import Modal from '@/components/widget/Modal.vue';
 
 export default {
     name: '',
-    components: {
-        Input,
-        InputError,
-        Form,
-        Modal,
-        Button,
-        ImageAdd,
-        Select,
-        TextareaLabel,
-        InputLabel,
-        useToasterStore,
-        Close
-    },
-    props: ['openModal', 'species', 'breeds', 'coats', 'vaccines'],
+    components: { Modal, Input, ImageAdd, Close, Select, Button, InputError },
+    props: ['animal', 'species', 'breeds', 'coats', 'vaccines'],
+
     data() {
         return {
             modalToOpen: '',
@@ -314,6 +303,25 @@ export default {
         };
     },
 
+    mounted() {
+        if (this.animal) {
+            this.formAnimal.name = this.animal.name || '';
+            this.formAnimal.specie_id = this.animal.specie.id || '';
+            this.formAnimal.breed_id = this.animal.breed_id || '';
+            this.formAnimal.sexe = this.animal.sexe || '';
+            this.formAnimal.age = this.animal.age || '';
+            this.formAnimal.desc = this.animal.desc || '';
+            this.formAnimal.status = this.animal.status || '';
+            this.formAnimal.vaccines = this.animal.vaccines
+                ? this.animal.vaccines.map(v => v.id)
+                : [];
+            this.formAnimal.note = this.animal.note || '';
+            this.formAnimal.coat_id = this.animal.coat
+                ? this.animal.coat.map(c => c.id)
+                : [];
+        }
+    },
+
 
     computed: {
         filteredBreeds() {
@@ -330,12 +338,15 @@ export default {
         selectedVaccines() {
             return this.vaccines.filter(v => this.formAnimal.vaccines.includes(v.id));
         }
+
     },
+
     methods: {
         species_store,
         breeds_store,
         coats_store,
         animal_store,
+        animal_update,
 
         handleSpecieChange(value) {
             if (value === 'add-specie') {
@@ -364,9 +375,9 @@ export default {
         handleVaccineChange(value) {
             if (value === 'add-vaccine') {
                 this.modalToOpen = 'vaccine';
-                this.formAnimal.vaccine_ids = [];
+                this.formAnimal.vaccine = '';
             } else {
-                this.formAnimal.vaccine_ids = value;
+                this.formAnimal.vaccine = value;
             }
         },
         handleStatusChange(value) {
@@ -384,10 +395,11 @@ export default {
 
 
         handleSubmit() {
-            this.formAnimal.post(animal_store(), {
+            this.formAnimal.post(animal_update(this.animal.id), {
+
                 onSuccess: () => {
-                    this.toast.success({ text: 'Animal créé avec succès !' });
-                    this.formAnimal.reset();
+                    this.toast.success({ text: 'Animal modifié avec succès !' });
+                    this.$emit('updated');
                 },
                 onError: () => {
                     this.toast.success({ text: 'Une erreur est apparue lors de la création' });
@@ -434,3 +446,7 @@ export default {
     }
 };
 </script>
+
+<style>
+
+</style>

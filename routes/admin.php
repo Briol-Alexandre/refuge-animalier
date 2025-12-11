@@ -27,9 +27,7 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->name('dashboard');
 
 
-    Route::get('/animals', [AnimalsController::class, 'index'])
-        ->middleware(['auth'])
-        ->name('animals.index');
+        include 'animals.php';
 
     Route::get('/adoptions', [AdoptionsController::class, 'index'])
         ->middleware(['auth'])
@@ -50,6 +48,7 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
     Route::put('/notifications/{notification}', [NotificationsController::class, 'update'])
         ->middleware('auth')
         ->name('notifications.update');
+
     Route::delete('/notifications/{notification}', [NotificationsController::class, 'destroy'])
         ->middleware('auth')
         ->name('notifications.destroy');

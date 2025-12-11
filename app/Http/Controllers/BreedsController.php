@@ -19,7 +19,7 @@ class BreedsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'   => 'required|unique:breeds,name|min:5',
+            'name'   => 'required|unique:breeds,name|min:3',
             'specie_id' => 'required|exists:species,id',
         ]);
         $breed = Breed::create($validated);
@@ -38,7 +38,7 @@ class BreedsController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' =>'required|min:5',
+            'name' =>'required|min:2',
             'specie_id' => 'required|exists:species,id',
         ]);
 

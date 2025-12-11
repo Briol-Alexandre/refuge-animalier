@@ -20,14 +20,14 @@
                 </template>
 
                 <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                    <AnimalShow :animal="selectedRow" />
+                    <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines" @updated="toggleShowModal" @deleted="toggleShowModal"/>
                 </Modal>
 
             </TableContainer>
 
             <Teleport to="body">
                 <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                    <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats"/>
+                    <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines"/>
                 </Modal>
             </Teleport>
         </div>
@@ -65,7 +65,7 @@ export default {
         TableContainer,
         AnimalsFilter
     },
-    props: ['animals', 'coats', 'breeds', 'species', 'status'],
+    props: ['animals', 'coats', 'breeds', 'species', 'status', 'vaccines'],
 
     data() {
         return {
@@ -84,7 +84,6 @@ export default {
         },
         openShowModal(row) {
             this.selectedRow = row;
-            console.log(this.selectedRow);
             this.isShowModalOpen = true;
         }
     }

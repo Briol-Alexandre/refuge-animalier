@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
@@ -44,5 +45,10 @@ class Animal extends Model
     public function coat(): BelongsToMany
     {
         return $this->belongsToMany(Coat::class, 'animal_coat', 'animal_id', 'coat_id');
+    }
+
+    public function vaccines(): BelongsToMany
+    {
+        return $this->belongsToMany(Vaccine::class, 'animal_vaccine', 'animal_id', 'vaccine_id');
     }
 }
