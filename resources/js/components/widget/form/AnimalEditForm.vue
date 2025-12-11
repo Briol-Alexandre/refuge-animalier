@@ -193,7 +193,7 @@
                 Annuler
             </button>
             <button type="submit" class="button-light w-fit">
-                Créer la fiche
+                Modifier la fiche
             </button>
         </div>
     </form>
@@ -395,14 +395,14 @@ export default {
 
 
         handleSubmit() {
+            this.formAnimal._method = 'PUT'
             this.formAnimal.post(animal_update(this.animal.id), {
-
                 onSuccess: () => {
-                    this.toast.success({ text: 'Animal modifié avec succès !' });
+                    this.toast.success({text: 'Animal modifié avec succès !'});
                     this.$emit('updated');
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
                 }
             });
         },
