@@ -9,6 +9,7 @@ use App\Models\Coat;
 use App\Models\Species;
 use App\Models\Vaccine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AnimalsController extends Controller
@@ -48,13 +49,21 @@ class AnimalsController extends Controller
             'age' => 'required',
             'desc' => 'max:255',
             'status' => 'required',
-            'images' => 'file:png|nullable',
+            'images' => 'array',
+            'images.*' => 'image|max:2048',
         ]);
 
         $coats = $request['coat_id'];
-
-
         $vaccines = $request['vaccines'];
+
+        $images =$validated['images'];
+
+        /*if ($images) {
+            foreach ($images as $image) {
+                $new_original_file_name = uniqid().'.'.config('image.image_type');
+                $full_path_to_original = Storage::s
+            }
+        }*/
 
 
         $animal = Animal::create($validated);
