@@ -1,5 +1,4 @@
 <template>
-    <LoggedLayout title="Dashboard">
         <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
             <h1 class="title mt-14 col-start-2 col-span-full row-start-1">
                 Bienvenue {{ $page.props.auth.user.name }}
@@ -8,7 +7,6 @@
             <NotificationContainer :notifications="notifications" :urgents="urgents"/>
             <StatistiquesContainer />
         </div>
-    </LoggedLayout>
 </template>
 
 

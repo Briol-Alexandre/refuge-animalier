@@ -18,6 +18,7 @@ class DatabaseController extends Controller
         $vaccines = Vaccine::all()->load('species');
         return Inertia::render('Database',
             [
+                'title' => 'Base de données',
                 'species' => $species,
                 'vaccines' => $vaccines,
                 'breeds' => $breeds,

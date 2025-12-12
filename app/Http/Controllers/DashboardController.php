@@ -22,6 +22,7 @@ class DashboardController extends Controller
         $urgents = Notifications::where('urgent', true)->where('read', false)->get();
         return Inertia::render('Dashboard',
             [
+                'title' =>'Dashboard',
                 'animals' => $animals,
                 'available' => $available_animals,
                 'cures' => $cure_animals,

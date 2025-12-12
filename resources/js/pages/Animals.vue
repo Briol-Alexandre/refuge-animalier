@@ -1,5 +1,4 @@
 <template>
-    <LoggedLayout title="Animaux">
         <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
             <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
                 <h1 class="title !mb-0">
@@ -13,7 +12,7 @@
                 :paginationLinks="animals.links"
                 :rows="animals.data"
                 :cols="['Image', 'Nom', 'Espèce', 'Statut']"
-                :fields="['image', 'name', 'breed', 'status']"
+                :fields="['images', 'name', 'breed', 'status']"
                 @row-click="openShowModal">
                 <template v-slot:filters>
                     <AnimalsFilter :species="species" :breeds="breeds" :coats="coats" :status="status"/>
@@ -31,7 +30,6 @@
                 </Modal>
             </Teleport>
         </div>
-    </LoggedLayout>
 </template>
 
 <script>
@@ -65,7 +63,7 @@ export default {
         TableContainer,
         AnimalsFilter
     },
-    props: ['animals', 'coats', 'breeds', 'species', 'status', 'vaccines'],
+    props: ['animals', 'coats', 'breeds', 'species', 'status', 'vaccines', 'title'],
 
     data() {
         return {

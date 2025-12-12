@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Status;
+use App\Jobs\ProcessUploadedAnimalImage;
 use App\Models\Animal;
 use App\Models\Breed;
 use App\Models\Coat;
@@ -27,6 +28,7 @@ class AnimalsController extends Controller
         $status = Status::values();
         $vaccines = Vaccine::all();
         return Inertia::render('Animals', [
+            'title' => 'Animaux',
             'animals' => $animals,
             'coats' => $coats,
             'breeds' => $breeds,
@@ -56,15 +58,30 @@ class AnimalsController extends Controller
         $coats = $request['coat_id'];
         $vaccines = $request['vaccines'];
 
-        $images =$validated['images'];
+        $images = $validated['images'];
+        $new_images = [];
 
-        /*if ($images) {
+        if ($images) {
             foreach ($images as $image) {
-                $new_original_file_name = uniqid().'.'.config('image.image_type');
-                $full_path_to_original = Storage::s
+                $new_original_file_name = uniqid() . '.' . config('image.image_type');
+                $full_path_to_original = Storage::putFileAs(
+                    config('image.original_path'),
+                    $image,
+                    $new_original_file_name
+                );
+                if ($full_path_to_original) {
+                    $image = $new_original_file_name;
+                    ProcessUploadedAnimalImage::dispatch($full_path_to_original, $new_original_file_name);
+                } else {
+                    $image = '';
+                }
+                $image = $full_path_to_original;
+                $new_images[$image] = $image;
             }
-        }*/
+        }
+        $validated['images'] = collect($new_images);
 
+        $validated['images']->toJson();
 
         $animal = Animal::create($validated);
         if ($vaccines) {

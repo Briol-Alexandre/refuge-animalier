@@ -1,14 +1,26 @@
 <template>
-    <div @keydown.esc="closeModal" @click.self="closeModal" tabindex="0" class="absolute w-screen h-screen bg-softGray/30 backdrop-blur-xs top-0 left-0 " :class="index"
-         v-if="condition" >
-        <div class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-2xl shadow-sm p-10 w-3/4" :class="modalClasses">
+    <Transition
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        enter-active-class="transition-opacity duration-300"
+        leave-active-class="transition-opacity duration-200"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+    >
+        <div @keydown.esc="closeModal" @click.self="closeModal" tabindex="0"
+             class="absolute w-screen h-screen bg-softGray/30 backdrop-blur-xs top-0 left-0 " :class="index"
+             v-if="condition">
+            <div class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-2xl shadow-sm p-10 w-3/4"
+                 :class="modalClasses">
 
-            <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer" :class="closeBtnClasses">
-                <Close />
-            </button>
-            <slot />
+                <button @click="closeModal" class="absolute right-10 top-10 hover:cursor-pointer"
+                        :class="closeBtnClasses">
+                    <Close />
+                </button>
+                <slot />
+            </div>
         </div>
-    </div>
+    </Transition>
 </template>
 
 <script>
@@ -26,7 +38,7 @@ export default {
     methods: {
         closeModal() {
             this.$emit('close');
-        },
+        }
     }
 };
 </script>

@@ -1,6 +1,32 @@
 <template>
     <div class="grid grid-cols-3 gap-2">
-        <img :src="animal.image" :alt="`Photo de ${animal.name}`" class="w-full h-full object-cover mt-2" />
+        <div class="flex flex-col gap-2">
+            <img
+                v-if="getImagesSrc(animal.images).length === 1"
+                :src="getImagesSrc(animal.images)[0]"
+                :alt="'Image de ' + animal.name"
+                class="w-full h-full object-cover rounded"
+            >
+            <div v-else-if="getImagesSrc(animal.images).length > 1" class="h-full flex flex-col gap-2">
+                <img
+                    :src="getImagesSrc(animal.images)[0]"
+                    :alt="'Image de ' + animal.name"
+                    class="w-full h-[80%] object-cover rounded"
+                >
+                <div class="grid grid-cols-3 gap-1 h-[20%]">
+                    <img
+                        v-for="imageSrc in getImagesSrc(animal.images).slice(1)"
+                        :src="imageSrc"
+                        :alt="`Photo alternative de ${animal.name}`"
+                        class="w-full h-full object-cover rounded"
+                    />
+                </div>
+            </div>
+            <div v-else
+                 class="w-full h-48 bg-gray-200 rounded flex items-center justify-center">
+                <span class="text-gray-400">Aucune image</span>
+            </div>
+        </div>
         <div class="col-span-2">
             <div class="mb-2 flex gap-4 items-center">
                 <h2 class="text-2xl font-atten font-black">{{ animal.name }}</h2>
@@ -113,25 +139,25 @@
                     <option value="">--Choisir un status--</option>
                     <option v-for="status in statusList" :value="status">{{ status }}</option>
                 </Select>
-                <InputError :message="statusAnimal.errors.status" />
+                <InputError :message="statusAnimal.errors.status"/>
                 <button type="submit" class="button-light ml-auto">Changer</button>
             </form>
         </Modal>
         <Modal :condition="isModalOpen" @close="openEditModal" index="z-30" modal-classes="">
             <AnimalEditForm :open-modal="openEditModal" :species="species" :breeds="breeds" :coats="coats"
-                              :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal"/>
+                            :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal"/>
         </Modal>
     </Teleport>
 </template>
 
 <script>
-import { useForm } from '@inertiajs/vue3';
-import { useStatusStore } from '@/stores/statusStore.js';
-import { updateStatus } from '@/actions/App/Http/Controllers/AnimalsController';
-import { destroy } from '@/actions/App/Http/Controllers/AnimalsController';
-import { useToasterStore } from '@/stores/useToasterStore.js';
+import {useForm} from '@inertiajs/vue3';
+import {useStatusStore} from '@/stores/statusStore.js';
+import {updateStatus} from '@/actions/App/Http/Controllers/AnimalsController';
+import {destroy} from '@/actions/App/Http/Controllers/AnimalsController';
+import {useToasterStore} from '@/stores/useToasterStore.js';
 import Modal from '@/components/widget/Modal.vue';
-import { Button } from '@/components/ui/button/index.js';
+import {Button} from '@/components/ui/button/index.js';
 import Select from '@/components/widget/form/Select.vue';
 import InputError from '@/components/InputError.vue';
 import AnimalCreateForm from '@/components/widget/form/AnimalCreateForm.vue';
@@ -160,10 +186,10 @@ export default {
                 'status': null
             }),
             deleteForm: useForm({
-                'id': this.animal.id,
+                'id': this.animal.id
             }),
             isModalOpen: false,
-            isDeleteModalOpen: false,
+            isDeleteModalOpen: false
         };
     },
 
@@ -206,29 +232,34 @@ export default {
             this.statusAnimal.put(updateStatus(this.animal.id), {
                 onSuccess: () => {
                     this.animal.status = this.statusAnimal.status;
-                    this.toast.success({ text: 'Statut mis à jour avec succès !' });
+                    this.toast.success({text: 'Statut mis à jour avec succès !'});
                     this.isArchiveModalOpen = false;
                     this.isChangeStatusModalOpen = false;
                 }
             });
         },
-        handleDeleteModal () {
+        handleDeleteModal() {
             this.isDeleteModalOpen = !this.isDeleteModalOpen;
         },
 
         handleDelete() {
             this.deleteForm.delete(destroy(this.animal.id), {
                 onSuccess: () => {
-                    this.toast.success({ text: 'Animal supprimé avec succès !' });
+                    this.toast.success({text: 'Animal supprimé avec succès !'});
                     this.$emit('deleted');
                 },
-                onError: ()=>{
-                    this.toast.error({ text: 'Une erreur s‘est produite lors de la manipulation'});
+                onError: () => {
+                    this.toast.error({text: 'Une erreur s‘est produite lors de la manipulation'});
                 }
-            })
+            });
+        },
+        getImagesSrc(imageData) {
+            if (!imageData) return [];
+            const parsed = typeof imageData === 'string'
+                ? JSON.parse(imageData)
+                : imageData;
+            return Object.keys(parsed);
         }
-
-
     }
 
 };
