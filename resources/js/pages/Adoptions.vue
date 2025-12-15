@@ -12,7 +12,7 @@
             :paginationLinks="adoptions.links"
             :rows="adoptions.data"
             :cols="['Nom de l‘adoptant', 'Nom de l‘animal', 'Date de l‘adoption', 'Statut']"
-            :fields="['adopter', 'animal', 'adoption_date', 'status']"
+            :fields="['adopter_id', 'animal_id', 'adoption_date', 'status']"
             @row-click="openShowModal">
 
             <template v-slot:filters>

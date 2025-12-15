@@ -1,7 +1,7 @@
 <template>
     <form class="grid grid-cols-6 gap-x-4 gap-y-2" @submit.prevent="handleSubmit">
         <p class="col-span-full title">
-            Créer la fiche d'un animal
+            Modifier la fiche de {{ animal.name }}
         </p>
 
         <div class="col-span-2 h-full">
@@ -195,13 +195,22 @@
                 <InputError :message="formAnimal.errors.desc" />
             </div>
             <div class="flex flex-col h-full">
-                <label for="desc">
-                    Notes <small>seuls vous et les bénévoles la verront</small>
-                </label>
-                <textarea id="desc" v-model="formAnimal.note"
-                          class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez une note…"></textarea>
-                <InputError :message="formAnimal.errors.note" />
+                <div class="flex justify-between">
+                    <p>
+                        Notes
+                    </p>
+                    <p class="underline hover:cursor-pointer hover:no-underline" @click="handleCreateNoteModal">
+                        + Ajouter une note
+                    </p>
+                </div>
+                <ul class="list-disc list-inside">
+                    <li v-for="note in localNotes"
+                        :key="note.id"
+                        @click="handleNoteModal(note)"
+                        class="underline hover:cursor-pointer hover:no-underline w-fit">
+                        {{ note.title }}
+                    </li>
+                </ul>
             </div>
 
         </div>
@@ -265,9 +274,71 @@
         <Modal :condition="modalToOpen === 'vaccine'" @close="modalToOpen = ''" index="z-30">
             Modal Vaccin
         </Modal>
+        <Modal :condition="isNoteModalOpen" @close="handleNoteModal" index="z-30" modal-classes="max-w-[500px]">
+            <form @submit.prevent="handleSubmitUpdateNote">
+                <p class="title">Modifier la note</p>
+                <div class="flex flex-col">
+                    <label for="note-title">Titre de la note</label>
+                    <input
+                        type="text"
+                        id="note-title"
+                        v-model="formNote.title"
+                        class="p-2 bg-white border-2 border-main-yellow rounded-lg"
+                    >
+                    <InputError :message="formNote.errors.title" />
+                </div>
 
-        <Modal :condition="modalToOpen === 'status'" @close="modalToOpen = ''" index="z-30">
-            Modal Statut
+                <div class="flex flex-col">
+                    <label for="note-content">Contenu de la note</label>
+                    <textarea
+                        id="note-content"
+                        v-model="formNote.content"
+                        class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
+                    ></textarea>
+                    <InputError :message="formNote.errors.content" />
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" @click="deleteNote" class="underline">
+                        Supprimer
+                    </button>
+                    <button type="submit" class="button-light">
+                        Modifier
+                    </button>
+                </div>
+            </form>
+        </Modal>
+        <Modal :condition="isCreateNoteModalOpen" @close="handleCreateNoteModal" index="z-30" modal-classes="max-w-[500px]">
+            <form @submit.prevent="handleSubmitNote">
+                <p class="title">Créer une note</p>
+                <div class="flex flex-col">
+                    <label for="note-title">Titre de la note</label>
+                    <input
+                        type="text"
+                        id="note-title"
+                        v-model="formNoteCreate.title"
+                        class="p-2 bg-white border-2 border-main-yellow rounded-lg"
+                    >
+                    <InputError :message="formNoteCreate.errors.title" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="note-content">Contenu de la note</label>
+                    <textarea
+                        id="note-content"
+                        v-model="formNoteCreate.content"
+                        class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
+                    ></textarea>
+                    <InputError :message="formNoteCreate.errors.content" />
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" @click="handleNoteModal()" class="underline">
+                        Annuler
+                    </button>
+                    <button type="submit" class="button-light">
+                        Créer
+                    </button>
+                </div>
+            </form>
         </Modal>
     </Teleport>
 </template>
@@ -283,7 +354,10 @@ import { store as species_store } from '@/actions/App/Http/Controllers/SpeciesCo
 import { store as breeds_store } from '@/actions/App/Http/Controllers/BreedsController.js';
 import { store as coats_store } from '@/actions/App/Http/Controllers/CoatsController.js';
 import { store as animal_store } from '@/actions/App/Http/Controllers/AnimalsController.js';
+import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
 import { update as animal_update } from '@/actions/App/Http/Controllers/AnimalsController.js';
+import { update as note_update } from '@/actions/App/Http/Controllers/NotesController.js';
+import { destroy as note_delete } from '@/actions/App/Http/Controllers/NotesController.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import { useStatusStore } from '@/stores/statusStore.js';
 import Input from '../../ui/input/Input.vue';
@@ -311,13 +385,30 @@ export default {
                 status: '',
                 images: '',
                 vaccines: [],
-                note: '',
+                note: {
+                    title: '',
+                    content: ''
+                },
                 coat_id: []
             }),
             isCoatModalOpen: false,
             isVaccineModalOpen: false,
             page: usePage(),
-            statusList: useStatusStore().statusList
+            statusList: useStatusStore().statusList,
+            formNote: useForm({
+                id: null,
+                title: '',
+                content: ''
+            }),
+            formNoteCreate: useForm({
+                animal_id: null,
+                title: '',
+                content: '',
+            }),
+            isNoteModalOpen: false,
+            noteToShow: '',
+            isCreateNoteModalOpen: false,
+            localNotes: []
         };
     },
 
@@ -333,12 +424,16 @@ export default {
             this.formAnimal.vaccines = this.animal.vaccines
                 ? this.animal.vaccines.map(v => v.id)
                 : [];
-            this.formAnimal.note = this.animal.note || '';
+            this.formAnimal.note = {
+                title: this.noteToShow.title,
+                content: this.noteToShow.content
+            };
             this.formAnimal.coat_id = this.animal.coat
                 ? this.animal.coat.map(c => c.id)
                 : [];
             this.formAnimal.images = this.animal.images || null;
         }
+        this.localNotes = [...this.animal.notes];
     },
 
 
@@ -366,6 +461,9 @@ export default {
         coats_store,
         animal_store,
         animal_update,
+        note_update,
+        note_store,
+        note_delete,
 
         handleSpecieChange(value) {
             if (value === 'add-specie') {
@@ -411,8 +509,9 @@ export default {
             const files = event.target.files;
             this.formAnimal.images = Array.from(files);
         },
-
-
+        handleCreateNoteModal() {
+            this.isCreateNoteModalOpen = !this.isCreateNoteModalOpen;
+        },
         handleSubmit() {
             this.formAnimal._method = 'PUT';
             this.formAnimal.post(animal_update(this.animal.id), {
@@ -458,7 +557,7 @@ export default {
                     this.formCoat.reset();
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.error({ text: 'Une erreur est apparue lors de la création' });
                 }
             });
         },
@@ -468,6 +567,70 @@ export default {
                 ? JSON.parse(imageData)
                 : imageData;
             return Object.keys(parsed);
+        },
+        handleNoteModal(note = null) {
+            this.isNoteModalOpen = !this.isNoteModalOpen;
+
+            if (note) {
+                this.formNote.id = note.id;
+                this.formNote.title = note.title || '';
+                this.formNote.content = note.content || '';
+            } else {
+                this.formNote.reset();
+                this.formNote.id = null;
+            }
+        },
+        handleSubmitUpdateNote() {
+            this.formNote.put(note_update(this.formNote.id), {
+                onSuccess: () => {
+                    this.toast.success({ text: 'Note mise à jour' });
+                    this.isNoteModalOpen = false;
+                    const noteIndex = this.animal.notes.findIndex(
+                        note => note.id === this.formNote.id
+                    );
+
+                    if (noteIndex !== -1) {
+                        this.animal.notes[noteIndex] = {
+                            ...this.animal.notes[noteIndex],
+                            title: this.formNote.title,
+                            content: this.formNote.content
+                        };
+                    }
+                },
+                onError: () => {
+                    this.toast.error({ text: 'Une erreur est apparue lors de la modification' });
+                }
+            });
+        },
+        handleSubmitNote() {
+            this.formNoteCreate.animal_id = this.animal.id;
+            this.formNoteCreate.post(note_store(), {
+                onSuccess:() =>{
+                    this.toast.success({text: 'Note créée'});
+                    this.isCreateNoteModalOpen = false;
+
+                    const tempNote = {
+                        title: this.formNoteCreate.title,
+                        content: this.formNoteCreate.content,
+                    };
+
+                    this.animal.notes.push(tempNote);
+
+                    this.formNoteCreate.reset();
+                },
+                onError:() =>{
+                    this.toast.error({text: 'Une erreur est apparue lors de la création' });
+                }
+            })
+        },
+        deleteNote() {
+            this.formNote.delete(note_delete(this.formNote.id), {
+                onSuccess: () => {
+                    this.toast.success({text: 'Note suprimée avec succes'});
+                    this.isNoteModalOpen = false;
+                    this.animal.notes = this.animal.notes.filter(note => note.id !== this.formNote.id);
+                },
+            })
         }
     }
 };

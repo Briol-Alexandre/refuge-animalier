@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AdoptionStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('adoption', function (Blueprint $table) {
             $table->id();
-            $table->string('animal');
-            $table->string('adopter');
+            $table->foreignId('animal_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('adopter_id')->constrained()->cascadeOnDelete();
             $table->date('adoption_date');
-            $table->string('status');
+            $table->enum('status', AdoptionStatus::cases());
             $table->timestamps();
         });
     }

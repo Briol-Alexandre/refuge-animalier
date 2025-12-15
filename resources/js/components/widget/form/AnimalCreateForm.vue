@@ -11,23 +11,24 @@
                         <ImageAdd fill-color="#ECECEC" />
                         Ajouter une ou <span class="block">plusieurs photos</span>
                     </div>
-                    <div v-else class="absolute top-0 left-0 w-full h-full border-none object-cover grid grid-rows-[80%_20%] gap-2">
+                    <div v-else
+                         class="absolute top-0 left-0 w-full h-full border-none object-cover grid grid-rows-[80%_20%] gap-2">
                         <img
                             v-if="previewImages.length > 0"
                             :src="previewImages[0]"
                             class="w-full h-full object-cover col-span-full"
-                         alt=""/>
+                            alt="" />
                         <div class="grid grid-cols-3 gap-2 w-full h-full">
                             <img
                                 v-for="(img, index) in previewImages.slice(1)"
                                 :key="index"
                                 :src="img"
                                 class="w-full h-full object-cover"
-                             alt=""/>
+                                alt="" />
                         </div>
                     </div>
 
-                <InputError :message="formAnimal.errors.images" />
+                    <InputError :message="formAnimal.errors.images" class="absolute bottom-0"/>
                 </label>
                 <input
                     id="images"
@@ -192,10 +193,15 @@
                 <InputError :message="formAnimal.errors.desc" />
             </div>
             <div class="flex flex-col h-full">
-                <label for="desc">
+                <p>
                     Notes <small>seuls vous et les bénévoles la verront</small>
-                </label>
-                <textarea id="desc" v-model="formAnimal.note"
+                </p>
+                <label for="note['title']">Titre de la note</label>
+                <input type="text" id="note['title']" v-model="formAnimal.note['title']"
+                       class="p-2 bg-white border-2 border-main-yellow rounded-lg">
+
+                <label for="note['content']">Contenu de la note</label>
+                <textarea id="note['content']" v-model="formAnimal.note['content']"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
                           placeholder="Écrivez une note…" />
                 <InputError :message="formAnimal.errors.note" />
@@ -322,7 +328,10 @@ export default {
                 status: '',
                 images: '',
                 vaccines: [],
-                note: '',
+                note: {
+                    title: '',
+                    content: ''
+                },
                 coat_id: []
             }),
             isCoatModalOpen: false,
@@ -410,6 +419,7 @@ export default {
                 onSuccess: () => {
                     this.toast.success({ text: 'Animal créé avec succès !' });
                     this.formAnimal.reset();
+                    this.$emit('closeModal');
                 },
                 onError: () => {
                     this.toast.success({ text: 'Une erreur est apparue lors de la création' });

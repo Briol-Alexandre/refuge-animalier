@@ -6,6 +6,7 @@ use App\Http\Controllers\BreedsController;
 use App\Http\Controllers\CoatsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseController;
+use App\Http\Controllers\NotesController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\StatistiquesController;
@@ -28,6 +29,19 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
 
 
         include 'animals.php';
+
+    Route::post('/notes', [NotesController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('notes.store');
+
+    Route::put('/notes/{note}', [NotesController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('notes.update');
+
+    Route::delete('/notes/{note}', [NotesController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('notes.destroy');
+
 
     Route::get('/adoptions', [AdoptionsController::class, 'index'])
         ->middleware(['auth'])

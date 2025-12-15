@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Animal extends Model
 {
@@ -50,5 +51,15 @@ class Animal extends Model
     public function vaccines(): BelongsToMany
     {
         return $this->belongsToMany(Vaccine::class, 'animal_vaccine', 'animal_id', 'vaccine_id');
+    }
+
+    public function adoption() :HasOne
+    {
+        return $this->hasOne(Adoption::class);
+    }
+
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(Note::class, 'notable');
     }
 }
