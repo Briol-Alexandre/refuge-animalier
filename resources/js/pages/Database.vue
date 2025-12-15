@@ -1,20 +1,18 @@
 <template>
-    <LoggedLayout title="Base de données">
-        <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
-            <h1 class="title mt-14 col-start-2 col-span-full row-start-1">
-                Base de donées
-            </h1>
-            <div
-                class="p-4 col-start-2 col-end-10 border rounded-2xl row-span-6 grid grid-cols-2 grid-rows-2 gap-4 bg-softGray/40">
-                <BreedSection :breeds="breeds" :species="species"/>
-                <SpeciesSection :species="species"/>
-                <CoatsSection :coats="coats"/>
-                <VaccinesSection :vaccines="vaccines" :species="species"/>
-            </div>
-
-
+    <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
+        <h1 class="title mt-14 col-start-2 col-span-full row-start-1">
+            {{ title }}
+        </h1>
+        <div
+            class="p-4 col-start-2 col-end-10 border rounded-2xl row-span-6 grid grid-cols-2 grid-rows-2 gap-4 bg-softGray/40">
+            <BreedSection :breeds="breeds" :species="species" />
+            <SpeciesSection :species="species" />
+            <CoatsSection :coats="coats" />
+            <VaccinesSection :vaccines="vaccines" :species="species" />
         </div>
-    </LoggedLayout>
+
+
+    </div>
 </template>
 
 <script>
@@ -52,15 +50,13 @@ export default {
         CoatsSection,
         VaccinesSection
     },
-    props: ['breeds', 'species', 'coats', 'vaccines'],
+    props: ['breeds', 'species', 'coats', 'vaccines', 'title'],
 
     data() {
-        return {
-        };
+        return {};
     },
 
-    methods: {
-    }
+    methods: {}
 };
 </script>
 

@@ -5,7 +5,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
-import { createPinia } from "pinia";
+import { createPinia } from 'pinia';
+import LoggedLayout from '@/layouts/LoggedLayout.vue';
 
 const pinia = createPinia();
 
@@ -13,11 +14,21 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) =>
-        resolvePageComponent(
+    resolve: async (name) => {
+        console.log(name);
+        const page = await resolvePageComponent(
             `./pages/${name}.vue`,
-            import.meta.glob<DefineComponent>('./pages/**/*.vue'),
-        ),
+            import.meta.glob<DefineComponent>('./pages/**/*.vue')
+        );
+
+        const pagesWithoutLayout = ['auth/Login', 'auth/ForgotPassword'];
+
+        if (!pagesWithoutLayout.includes(name) && !page.default.layout) {
+            page.default.layout = LoggedLayout;
+        }
+
+        return page;
+    },
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
@@ -25,8 +36,8 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
-    },
+        color: '#4B5563'
+    }
 });
 
 // This will set light / dark mode on page load...

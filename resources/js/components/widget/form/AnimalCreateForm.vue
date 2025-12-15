@@ -6,11 +6,28 @@
 
         <div class="col-span-2 h-full">
             <div class="flex flex-col h-full">
-                <label for="images" class="w-full h-full bg-softGray/50 flex items-center justify-center">
-                    <div class="text-center flex flex-col items-center">
+                <label for="images" class="relative w-full h-full flex items-center justify-center">
+                    <div v-if="previewImages.length === 0" class="text-center flex flex-col items-center">
                         <ImageAdd fill-color="#ECECEC" />
                         Ajouter une ou <span class="block">plusieurs photos</span>
                     </div>
+                    <div v-else class="absolute top-0 left-0 w-full h-full border-none object-cover grid grid-rows-[80%_20%] gap-2">
+                        <img
+                            v-if="previewImages.length > 0"
+                            :src="previewImages[0]"
+                            class="w-full h-full object-cover col-span-full"
+                         alt=""/>
+                        <div class="grid grid-cols-3 gap-2 w-full h-full">
+                            <img
+                                v-for="(img, index) in previewImages.slice(1)"
+                                :key="index"
+                                :src="img"
+                                class="w-full h-full object-cover"
+                             alt=""/>
+                        </div>
+                    </div>
+
+                <InputError :message="formAnimal.errors.images" />
                 </label>
                 <input
                     id="images"
@@ -19,7 +36,6 @@
                     @change="handleFiles($event)"
                     class="hidden"
                 />
-                <InputError :message="formAnimal.errors.images" />
             </div>
         </div>
 
@@ -117,7 +133,8 @@
                 <div @click.self="isVaccineModalOpen = !isVaccineModalOpen"
                      class="p-2 bg-white border-2 border-main-yellow rounded-lg relative hover:cursor-pointer">
                     <span
-                        v-if="formAnimal.vaccines.length === 0" @click.self="this.isVaccineModalOpen = !this.isVaccineModalOpen">--&nbsp;Choisir des vaccins&nbsp;--</span>
+                        v-if="formAnimal.vaccines.length === 0"
+                        @click.self="this.isVaccineModalOpen = !this.isVaccineModalOpen">--&nbsp;Choisir des vaccins&nbsp;--</span>
                     <span v-else
                           v-for="vaccine in selectedVaccines"
                           :key="vaccine.id"
@@ -291,6 +308,7 @@ export default {
         return {
             modalToOpen: '',
             toast: useToasterStore(),
+            previewImages: [],
             formBreed: useForm({ name: '', specie_id: '' }),
             formSpecie: useForm({ name: '' }),
             formCoat: useForm({ name: '' }),
@@ -310,6 +328,7 @@ export default {
             isCoatModalOpen: false,
             isVaccineModalOpen: false,
             page: usePage(),
+            files: [],
             statusList: useStatusStore().statusList
         };
     },
@@ -378,8 +397,11 @@ export default {
             }
         },
         handleFiles(event) {
-            const files = event.target.files;
-            this.formAnimal.images = files.length > 1 ? Array.from(files) : files[0];
+            const files = Array.from(event.target.files);
+            this.files = files;
+
+            this.formAnimal.images = files;
+            this.previewImages = files.map(file => URL.createObjectURL(file));
         },
 
 
@@ -391,6 +413,7 @@ export default {
                 },
                 onError: () => {
                     this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    console.log(this.formAnimal.errors);
                 }
             });
         },

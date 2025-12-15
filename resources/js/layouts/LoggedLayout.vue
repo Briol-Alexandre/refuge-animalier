@@ -17,7 +17,7 @@ import { index as UsersIndex } from '@/actions/App/Http/Controllers/UsersControl
 import { index as NotificationsIndex } from '@/actions/App/Http/Controllers/NotificationsController';
 import { index as StatistiquesIndex } from '@/actions/App/Http/Controllers/StatistiquesController';
 import { index as DatabaseIndex } from '@/actions/App/Http/Controllers/DatabaseController';
-import { edit } from '@/actions/App/Http/Controllers/Settings/ProfileController'
+import { edit } from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import Toaster from '@/components/Toaster.vue';
 
 
@@ -50,7 +50,8 @@ const initials = userName
                          title="Dashboard">
                     <Dashboard :active="$page.component==='Dashboard'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Animals'}" :href="AnimalsIndex()" title="Animaux">
+                <NavLink :active="{'nav-link-active': $page.component==='Animals'}" :href="AnimalsIndex()"
+                         title="Animaux">
                     <Paw classes="w-6" :active="$page.component==='Animals'" />
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Adoptions'}" :href="AdoptionsIndex()"
@@ -63,8 +64,11 @@ const initials = userName
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Notifications'}" :href="NotificationsIndex()"
                          title="Notifications" class="relative">
-                    <Notifications :active="$page.component==='Notifications'"/>
-                    <div class=" absolute top-2 left-6 text-xs flex items-center text-center justify-center w-4 font-poppins font-normal aspect-square bg-main-red text-white rounded-full">{{ $page.props.notificationCount }}</div>
+                    <Notifications :active="$page.component==='Notifications'" />
+                    <div
+                        class=" absolute top-2 left-6 text-xs flex items-center text-center justify-center w-4 font-poppins font-normal aspect-square bg-main-red text-white rounded-full">
+                        {{ $page.props.notificationCount }}
+                    </div>
                 </NavLink>
                 <NavLink :active="{'nav-link-active': $page.component==='Statistiques'}" :href="StatistiquesIndex()"
                          title="Statistiques">
@@ -99,7 +103,7 @@ const initials = userName
             </div>
 
         </nav>
-        <slot/>
-        <Toaster/>
+        <slot />
+        <Toaster />
     </div>
 </template>
