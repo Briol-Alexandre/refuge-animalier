@@ -116,13 +116,15 @@ class AnimalsController extends Controller
             'age' => 'required',
             'desc' => 'max:255',
             'status' => 'required',
-            'images' => 'array|nullable',
-            'images.*' => 'image|max:2048',
         ]);
 
         $animal = Animal::findOrFail($id);
 
         if ($request->hasFile('images')) {
+            $request->validate([
+                'images' => 'array',
+                'images.*' => 'image|max:2048',
+            ]);
             $images = $request->file('images');
             $images = is_array($images) ? $images : [$images];
             $new_images = [];
