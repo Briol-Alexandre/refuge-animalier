@@ -116,11 +116,32 @@ class AnimalsController extends Controller
             'age' => 'required',
             'desc' => 'max:255',
             'status' => 'required',
-            'images' => 'file:png|nullable',
+            'images' => 'array|nullable',
+            'images.*' => 'image|max:2048',
         ]);
 
         $animal = Animal::findOrFail($id);
 
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            $images = is_array($images) ? $images : [$images];
+            $new_images = [];
+            foreach ($images as $image) {
+                $new_original_file_name = uniqid() . '.' . config('image.image_type');
+                $full_path_to_original = Storage::putFileAs(
+                    config('image.original_path'),
+                    $image,
+                    $new_original_file_name
+                );
+                if ($full_path_to_original) {
+                    ProcessUploadedAnimalImage::dispatch($full_path_to_original, $new_original_file_name);
+                    $new_images[$full_path_to_original] = $full_path_to_original;
+                }
+            }
+            $validated['images'] = json_encode($new_images);
+        } else {
+            $validated['images'] = $animal->images;
+        }
         $animal->update($validated);
 
         $coats = $request['coat_id'];
@@ -136,6 +157,7 @@ class AnimalsController extends Controller
                 $animal->coat()->sync($coat);
             }
         }
+
 
         return back();
 

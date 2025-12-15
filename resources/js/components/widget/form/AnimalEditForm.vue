@@ -6,11 +6,29 @@
 
         <div class="col-span-2 h-full">
             <div class="flex flex-col h-full">
-                <label for="images" class="w-full h-full bg-softGray/50 flex items-center justify-center">
-                    <div class="text-center flex flex-col items-center">
+                <label for="images" class="relative w-full h-full flex items-center justify-center">
+                    <div v-if="getImagesSrc(animal.images).length === 0" class="text-center flex flex-col items-center">
                         <ImageAdd fill-color="#ECECEC" />
                         Ajouter une ou <span class="block">plusieurs photos</span>
                     </div>
+                    <div v-else
+                         class="absolute top-0 left-0 w-full h-full border-none object-cover grid grid-rows-[80%_20%] gap-2">
+                        <img
+                            v-if="getImagesSrc(animal.images).length > 0"
+                            :src="getImagesSrc(animal.images)[0]"
+                            class="w-full h-full object-cover col-span-full"
+                            alt="" />
+                        <div class="grid grid-cols-3 gap-2 w-full h-full">
+                            <img
+                                v-for="(img, index) in getImagesSrc(animal.images).slice(1)"
+                                :key="index"
+                                :src="img"
+                                class="w-full h-full object-cover"
+                                alt="" />
+                        </div>
+                    </div>
+
+                    <InputError :message="formAnimal.errors.images" />
                 </label>
                 <input
                     id="images"
@@ -182,7 +200,7 @@
                 </label>
                 <textarea id="desc" v-model="formAnimal.note"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez une note…" ></textarea>
+                          placeholder="Écrivez une note…"></textarea>
                 <InputError :message="formAnimal.errors.note" />
             </div>
 
@@ -319,6 +337,7 @@ export default {
             this.formAnimal.coat_id = this.animal.coat
                 ? this.animal.coat.map(c => c.id)
                 : [];
+            this.formAnimal.images = this.animal.images || null;
         }
     },
 
@@ -390,19 +409,19 @@ export default {
         },
         handleFiles(event) {
             const files = event.target.files;
-            this.formAnimal.images = files.length > 1 ? Array.from(files) : files[0];
+            this.formAnimal.images = Array.from(files);
         },
 
 
         handleSubmit() {
-            this.formAnimal._method = 'PUT'
+            this.formAnimal._method = 'PUT';
             this.formAnimal.post(animal_update(this.animal.id), {
                 onSuccess: () => {
-                    this.toast.success({text: 'Animal modifié avec succès !'});
+                    this.toast.success({ text: 'Animal modifié avec succès !' });
                     this.$emit('updated');
                 },
                 onError: () => {
-                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
+                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
                 }
             });
         },
@@ -442,6 +461,13 @@ export default {
                     this.toast.success({ text: 'Une erreur est apparue lors de la création' });
                 }
             });
+        },
+        getImagesSrc(imageData) {
+            if (!imageData) return [];
+            const parsed = typeof imageData === 'string'
+                ? JSON.parse(imageData)
+                : imageData;
+            return Object.keys(parsed);
         }
     }
 };

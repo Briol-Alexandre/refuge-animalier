@@ -14,17 +14,24 @@ class AnimalFactory extends Factory
 {
     protected $model = Animal::class;
 
-
     public function definition(): array
     {
         $arrayValues = ['male', 'female'];
+        $images = [
+            'assets/img/dogs/dog1.png',
+            'assets/img/dogs/dog2.png',
+            'assets/img/dogs/dog3.png',
+        ];
+        $selectedImage = $this->faker->randomElement($images);
+        $imageJson = [$selectedImage => []];
+
         return [
             'name' => $this->faker->name(),
             'sexe' => $this->faker->randomElement(Sexe::values()),
             'age' => Carbon::now(),
             'desc' => $this->faker->sentence('40'),
             'status' => $this->faker->randomElement(Status::values()),
-            'images' => $this->faker->word(),
+            'images' => json_encode($imageJson),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
