@@ -3,16 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Adoption;
+use App\Models\Adopter;
 use App\Models\Animal;
 use App\Models\Breed;
 use App\Models\Coat;
 use App\Models\Notifications;
 use App\Models\Permission;
-use App\Models\PermissionVolunteer;
 use App\Models\Species;
 use App\Models\User;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Vaccine;
 use App\Models\Volunteer;
 use Illuminate\Database\Seeder;
@@ -24,34 +22,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Alexandre Briol',
             'email' => 'alexandre.briol@gmail.com',
         ]);
 
-        $species = [
+        $speciesData = [
             'Dog' => [
-
                 'Husky',
                 'Chihuahua',
                 'Golden Retriever',
                 'Berger Australien',
                 'Cocker'
-
             ],
             'Cat' => [
-
                 'Persan',
                 'Siamois',
                 'Maine Coon',
                 'Sphinx'
-
             ],
         ];
 
-        $species_vaccines = [
+        $speciesVaccines = [
             'Dog' => [
                 'CHPPi',
                 'Rage',
@@ -73,11 +65,6 @@ class DatabaseSeeder extends Seeder
             'Brun',
         ];
 
-        Adoption::factory(10)->create();
-        Notifications::factory(10)->create();
-        $permissions = Permission::factory(10)->create();
-        $volunteers = Volunteer::factory(10)->create();
-
         $coats = collect();
         foreach ($coatNames as $coatName) {
             $coats->push(Coat::create([
@@ -85,39 +72,46 @@ class DatabaseSeeder extends Seeder
             ]));
         }
 
-        $seedingBreeds = [];
-        foreach ($species as $specie => $breeds) {
-            $specie = Species::create([
-                'name' => $specie
+        foreach ($speciesData as $specieName => $breedNames) {
+            $speciesModel = Species::create([
+                'name' => $specieName
             ]);
 
-            foreach ($breeds as $breed) {
-                $breed = Breed::create([
-                    'name' => $breed,
-                    'specie_id' => $specie->id,
-                ]);
-
-                $seedingBreeds[] = $breed->id;
-            }
-        }
-
-        $seedingVaccines = [];
-        foreach ($species_vaccines as $species_vaccine => $vaccines) {
-            $specie = Species::where('name', '=', $species_vaccine)->first();
-
-            foreach ($vaccines as $vaccine) {
-                $vaccine = Vaccine::create([
-                    'name' => $vaccine,
-                    'specie_id' => $specie->id,
+            foreach ($breedNames as $breedName) {
+                Breed::create([
+                    'name' => $breedName,
+                    'specie_id' => $speciesModel->id,
                 ]);
             }
         }
 
+        foreach ($speciesVaccines as $specieName => $vaccineNames) {
+            $speciesModel = Species::where('name', $specieName)->first();
+
+            foreach ($vaccineNames as $vaccineName) {
+                Vaccine::create([
+                    'name' => $vaccineName,
+                    'specie_id' => $speciesModel->id,
+                ]);
+            }
+        }
+
+        $permissions = Permission::factory(10)->create();
+        $volunteers = Volunteer::factory(10)->create();
+
+        foreach ($volunteers as $volunteer) {
+            $volunteer->permissions()->attach(
+                $permissions->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        }
+
+        $adopters = Adopter::factory(10)->create();
+
+        $animals = collect();
         for ($i = 0; $i < 20; $i++) {
             $animal = Animal::factory()->create([
                 'breed_id' => Breed::inRandomOrder()->first()->id,
             ]);
-
 
             $animal->coat()->attach(
                 $coats->random(rand(1, 4))->pluck('id')->toArray()
@@ -125,22 +119,25 @@ class DatabaseSeeder extends Seeder
 
             $compatibleVaccines = $animal->breed->specie->vaccine;
 
+            if ($compatibleVaccines->count() > 0) {
+                $animal->vaccines()->attach(
+                    $compatibleVaccines
+                        ->random(rand(0, $compatibleVaccines->count()))
+                        ->pluck('id')
+                        ->toArray()
+                );
+            }
 
-            $animal->vaccines()->attach(
-                $compatibleVaccines
-                    ->random(rand(0, $compatibleVaccines->count()))
-                    ->pluck('id')
-                    ->toArray()
-            );
-
-
+            $animals->push($animal);
         }
 
-
-        foreach ($volunteers as $volunteer) {
-            $volunteer->permissions()->attach(
-                $permissions->random(rand(1, 3))->pluck('id')->toArray()
-            );
+        for ($i = 0; $i < 10; $i++) {
+            Adoption::factory()->create([
+                'animal_id' => $animals->random()->id,
+                'adopter_id' => $adopters->random()->id,
+            ]);
         }
+
+        Notifications::factory(10)->create();
     }
 }

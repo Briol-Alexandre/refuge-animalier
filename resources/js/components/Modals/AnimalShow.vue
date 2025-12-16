@@ -67,10 +67,7 @@
             <div class="mt-2">
                 <p class="font-bold">Notes</p>
                 <ul class="list-disc list-inside">
-                    <li><a href="">Note</a></li>
-                    <li><a href="">Note</a></li>
-                    <li><a href="">Note</a></li>
-                    <li><a href="">Note</a></li>
+                    <li v-for="note in animal.notes" @click="handleNoteModal(note)" class="underline hover:cursor-pointer hover:no-underline w-fit">{{note.title}}</li>
                 </ul>
             </div>
         </div>
@@ -147,6 +144,10 @@
             <AnimalEditForm :open-modal="openEditModal" :species="species" :breeds="breeds" :coats="coats"
                             :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal"/>
         </Modal>
+        <Modal :condition="isNoteModalOpen" @close="handleNoteModal" index="z-30" modal-classes="max-w-[500px]">
+            <p class="title">{{this.noteToShow.title}}</p>
+            <p>{{this.noteToShow.content}}</p>
+        </Modal>
     </Teleport>
 </template>
 
@@ -189,7 +190,9 @@ export default {
                 'id': this.animal.id
             }),
             isModalOpen: false,
-            isDeleteModalOpen: false
+            isDeleteModalOpen: false,
+            isNoteModalOpen: false,
+            noteToShow: null,
         };
     },
 
@@ -224,6 +227,10 @@ export default {
         },
         openEditModal() {
             this.isModalOpen = !this.isModalOpen;
+        },
+        handleNoteModal(note) {
+            this.isNoteModalOpen = !this.isNoteModalOpen;
+            this.noteToShow = note;
         },
         handleChangeStatusModal() {
             this.isChangeStatusModalOpen = !this.isChangeStatusModalOpen;

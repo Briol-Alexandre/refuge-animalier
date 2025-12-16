@@ -34,8 +34,6 @@ class AnimalFactory extends Factory
             'images' => json_encode($imageJson),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'breed_id' => Breed::factory(),
         ];
     }
 }

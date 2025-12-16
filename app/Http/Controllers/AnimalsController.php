@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Status;
+use App\Enums\AdoptionStatus;
 use App\Jobs\ProcessUploadedAnimalImage;
 use App\Models\Animal;
 use App\Models\Breed;
 use App\Models\Coat;
+use App\Models\Note;
 use App\Models\Species;
 use App\Models\Vaccine;
 use Illuminate\Http\Request;
@@ -21,11 +22,12 @@ class AnimalsController extends Controller
             ->with('coat')
             ->with('specie')
             ->with('vaccines')
+            ->with('notes')
             ->paginate(6);
         $breeds = Breed::all();
         $species = Species::all();
         $coats = Coat::all();
-        $status = Status::values();
+        $status = AdoptionStatus::values();
         $vaccines = Vaccine::all();
         return Inertia::render('Animals', [
             'title' => 'Animaux',
@@ -53,6 +55,8 @@ class AnimalsController extends Controller
             'status' => 'required',
             'images' => 'array',
             'images.*' => 'image|max:2048',
+            'note' => 'array',
+            'note.*' =>'string',
         ]);
 
         $coats = $request['coat_id'];
@@ -93,6 +97,13 @@ class AnimalsController extends Controller
             foreach ($coats as $coat) {
                 $animal->coat()->attach($coat);
             }
+        }
+        $note = $request['note'];
+        if ($note) {
+            $animal->notes()->create([
+                'title' => $note['title'],
+                'content' => $note['content'],
+            ]);
         }
 
         return back();
