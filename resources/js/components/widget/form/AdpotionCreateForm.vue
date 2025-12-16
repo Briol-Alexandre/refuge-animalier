@@ -1,151 +1,104 @@
 <template>
-    <form action="" method="post" class="grid grid-cols-2 gap-x-4 gap-y-2">
+    <form class="grid grid-cols-2 gap-x-4 gap-y-2" @submit.prevent="handleSubmit">
         <p class="col-span-full title">
             Créer la fiche d'une adoption
         </p>
+        <div class="flex flex-col">
+            <label for="animal">Choisir un animal</label>
+            <multiselect id="animal" :options="animals" track-by="name" label="name" v-model="formAdoption.animal_id"
+                         placeholder="Choisir un animal">
+            </multiselect>
+            <InputError :message="formAdoption.errors.animal_id"></InputError>
 
-        <Select v-model="animal" id-name="animal" label="Choisir l'animal" @change="addElModal">
-            <option value="">--Choisir une espèce--</option>
-            <option value="add-specie">+ Ajouter une espèce</option>
-            <option value="dog">Chien</option>
-            <option value="cat">Chat</option>
-        </Select>
-
-        <Select v-model="breed" id-name="breed" label="Race de l‘animal" @change="addElModal">
-            <option value="">--Choisir une race--</option>
-            <option value="add-breed">+ Ajouter une race</option>
-            <option value="golden">Golden</option>
-            <option value="chihuahua">Chihuahua</option>
-        </Select>
-
-        <Select v-model="coat" id-name="coat" label="Pelage de l‘animal" @change="addElModal">
-            <option value="">--Choisir un pelage--</option>
-            <option value="add-coat">+ Ajouter un pelage</option>
-            <option value="golden">Noir</option>
-            <option value="chihuahua">Blanc</option>
-        </Select>
-
-        <InputLabel id-name="date" type="date" placeholder="DD/MM/AAAA">
-            Date de naissance de l'animal
-        </InputLabel>
-
-        <Select id-name="sexe" label="Sexe de l‘animal">
-            <option value="">--Choisir un sexe--</option>
-            <option value="male">Mâle</option>
-            <option value="female">Femelle</option>
-        </Select>
-
-        <Select v-model="vaccine" id-name="vaccine" label="Vaccins" @change="addElModal">
-            <option value="">--Choisir une option--</option>
-            <option value="add-vaccine">+ Ajouter une option</option>
-            <option value="uptodate">À jour</option>
-            <option value="todo">À faire</option>
-        </Select>
-
-        <Select v-model="animalStatus" id-name="status" label="Statut" @change="addElModal">
-            <option value="">--Choisir un statut--</option>
-            <option value="add-status">+ Ajouter une statut</option>
-            <option value="available">Disponible</option>
-            <option value="cure">En soins</option>
-        </Select>
-        <div class="col-span-full grid grid-cols-2 gap-x-4">
-            <TextareaLabel id-name="description" placeholder="Écrivez la description…" input-class="min-h-32">
-                Description de l'animal
-            </TextareaLabel>
-            <TextareaLabel id-name="note" placeholder="Écrivez la note…" input-class="min-h-32">
-                Note de l'animal <small>seuls vous et les bénévoles la verront</small>
-            </TextareaLabel>
         </div>
-        <div class="col-span-full flex justify-between items-center">
-            <button class="underline hover:cursor-pointer" @click="openModal">
-                Annuler
-            </button>
-            <button type="submit" class="button-light w-fit">
-                Créer la fiche
+        <div class="flex flex-col">
+            <label for="adopter">Choisir un adoptant</label>
+            <multiselect id="adopter" :options="adopters" track-by="name" label="name" v-model="formAdoption.adopter_id"
+                         placeholder="Choisir un adoptant">
+                <template #singleLabel="{ option }">
+                    <span>{{ option.name }}</span>
+                </template>
+
+                <template #option="{ option }">
+                    <div>
+                        <strong class="!text-black">{{ option.name }}</strong>
+                        <div class="text-sm text-gray-600">{{ option.email }}</div>
+                    </div>
+                </template>
+            </multiselect>
+            <InputError :message="formAdoption.errors.adopter_id"></InputError>
+
+        </div>
+        <div>
+            <label for="date">
+                Date de l'adoption <small>laissez vide si pas cloturé</small>
+            </label>
+            <input type="date" v-model="formAdoption.adoption_date" class="p-2 bg-white border-2 border-main-yellow rounded-lg w-full">
+            <InputError :message="formAdoption.errors.adoption_date"></InputError>
+
+        </div>
+        <div>
+            <Select
+                v-model="formAdoption.status"
+                id-name="status"
+                label="Statut de l'adoption"
+            >
+                <option value="">--Choisir un statut--</option>
+                <option v-for="statu in status" :value="statu">{{ statu }}</option>
+            </Select>
+            <InputError :message="formAdoption.errors.status"></InputError>
+        </div>
+        <div class="col-span-full">
+            <button class="button-light">
+                Créer
             </button>
         </div>
     </form>
-    <Teleport to="body">
-        <Modal :condition="modalToOpen === 'specie'" @close="modalToOpen = ''" index="z-30">
-            Modal Espèce
-        </Modal>
-        <Modal :condition="modalToOpen === 'breed'" @close="modalToOpen = ''" index="z-30">
-            Modal Race
-        </Modal>
-        <Modal :condition="modalToOpen === 'coat'" @close="modalToOpen = ''" index="z-30">
-            Modal Pelage
-        </Modal>
-        <Modal :condition="modalToOpen === 'vaccine'" @close="modalToOpen = ''" index="z-30">
-            Modal Vaccin
-        </Modal>
-        <Modal :condition="modalToOpen === 'status'" @close="modalToOpen = ''" index="z-30">
-            Modal Statut
-        </Modal>
-    </Teleport>
 </template>
 
 <script>
-import InputLabel from '@/components/widget/form/InputLabel.vue';
-import TextareaLabel from '@/components/widget/form/TextareaLabel.vue';
 import Select from '@/components/widget/form/Select.vue';
-import ImageAdd from '@/components/svgs/ImageAdd.vue';
-import { Button } from '@/components/ui/button/index.js';
+import Multiselect from 'vue-multiselect';
 import Modal from '@/components/widget/Modal.vue';
-import { nextTick } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import {store as adoption_store} from '@/actions/App/Http/Controllers/AdoptionsController.js';
+import { useToasterStore } from '@/stores/useToasterStore';
+import InputError from '@/components/InputError.vue';
+
 
 export default {
     name: '',
-    components: { Modal, Button, ImageAdd, Select, TextareaLabel, InputLabel },
-    props: ['openModal'],
+    components: { InputError, Modal, Select, Multiselect },
+    props: ['openModal', 'animals', 'adopters', 'status'],
 
     data() {
         return {
-            specie: '',
-            breed: '',
-            coat: '',
-            vaccine: '',
-            animalStatus: '',
-            modalToOpen: ''
+            modalToOpen: '',
+            formAdoption: useForm({
+                animal_id: '',
+                adopter_id: '',
+                status: '',
+                adoption_date: ''
+            }),
+            toast: useToasterStore(),
         };
     },
 
     methods: {
-        addElModal() {
-            if (this.specie === 'add-specie') {
-                this.modalToOpen = 'specie';
-                nextTick(() => {
-                    this.specie = '';
-                });
-            }
-            if (this.breed === 'add-breed') {
-                this.modalToOpen = 'breed';
-                nextTick(() => {
-                    this.breed = '';
-                });
-            }
-            if (this.coat === 'add-coat') {
-                this.modalToOpen = 'coat';
-                nextTick(() => {
-                    this.coat = '';
-                });
-            }
-            if (this.vaccine === 'add-vaccine') {
-                this.modalToOpen = 'vaccine';
-                nextTick(() => {
-                    this.vaccine = '';
-                });
-            }
-            if (this.animalStatus === 'add-status') {
-                this.modalToOpen = 'status';
-                nextTick(() => {
-                    this.status = '';
-                });
-            }
+        adoption_store,
+        handleSubmit() {
+            this.formAdoption.post(adoption_store(), {
+                onSuccess: () =>{
+                    this.toast.success({text: 'Adoption créée avec succès'})
+                }
+            })
         }
     }
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 
 </style>

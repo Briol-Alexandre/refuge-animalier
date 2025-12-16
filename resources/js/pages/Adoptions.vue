@@ -2,7 +2,7 @@
     <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
         <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
             <h1 class="title !mb-0">
-                Liste des adoptions
+                {{ title }}
             </h1>
             <button class="button-light z-10" @click="openCreateModal">
                 Ajouter une adoption
@@ -27,7 +27,7 @@
 
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                <AdoptionCreateForm :open-modal="openCreateModal" />
+                <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters" :status="status"/>
             </Modal>
         </Teleport>
     </div>
@@ -68,7 +68,7 @@ export default {
         AdoptionsFilter,
         AdoptionCreateForm
     },
-    props: ['adoptions'],
+    props: ['adoptions', 'title', 'animals', 'adopters', 'status'],
 
     data() {
         return {
