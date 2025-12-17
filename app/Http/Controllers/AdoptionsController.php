@@ -76,6 +76,19 @@ class AdoptionsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'animal_id' => 'exists:animals,id',
+            'adopter_id' => 'exists:adopters,id',
+            'adoption_date' => 'nullable|date',
+            'status' => 'required',
+        ]);
+
+        // TODO: CHANGE THE CURRENT LINKED ANIMAL'S STATUS BACK TO AVAILABLE
+        $adoption = Adoption::findOrFail($id);
+
+        $adoption->update($validated);
+
+        $adoption->save();
     }
 
     public function destroy($id)

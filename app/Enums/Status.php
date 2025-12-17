@@ -5,6 +5,8 @@ namespace App\Enums;
 enum Status: string
 {
     case AVAILABLE = 'available';
+
+    case IN_ADOPTION = 'in_adoption';
     case ADOPTED = 'adopted';
     case PENDING = 'pending';
     case ARCHIVED = 'archived';
@@ -20,6 +22,7 @@ enum Status: string
         return match ($this) {
             self::AVAILABLE => 'Disponible',
             self::ADOPTED => 'Adopté',
+            self::IN_ADOPTION => 'En cours d‘adoption',
             self::PENDING => 'En attente',
             self::ARCHIVED => 'Archivé',
             self::IN_CURE => 'En soins',

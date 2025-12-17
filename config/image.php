@@ -3,6 +3,7 @@
 return [
     'image_type' => 'jpg',
     'sizes' => [
+        'xsmall' => ['width' => '60', 'height' => '60'],
         'small' => ['width' => '300', 'height' => '300'],
         'medium' => ['width' => '600', 'height' => '600'],
         'large' => ['width' => '900', 'height' => '900'],

@@ -4,14 +4,6 @@
             Créer la fiche d'une adoption
         </p>
         <div class="flex flex-col">
-            <label for="animal">Choisir un animal</label>
-            <multiselect id="animal" :options="animals" track-by="name" label="name" v-model="formAdoption.animal_id"
-                         placeholder="Choisir un animal">
-            </multiselect>
-            <InputError :message="formAdoption.errors.animal_id"></InputError>
-
-        </div>
-        <div class="flex flex-col">
             <label for="adopter">Choisir un adoptant</label>
             <multiselect id="adopter" :options="adopters" track-by="name" label="name" v-model="formAdoption.adopter_id"
                          placeholder="Choisir un adoptant">
@@ -27,6 +19,13 @@
                 </template>
             </multiselect>
             <InputError :message="formAdoption.errors.adopter_id"></InputError>
+        </div>
+        <div class="flex flex-col">
+            <label for="animal">Choisir un animal</label>
+            <multiselect id="animal" :options="filteredAnimals" track-by="name" label="name" v-model="formAdoption.animal_id"
+                         placeholder="Choisir un animal">
+            </multiselect>
+            <InputError :message="formAdoption.errors.animal_id"></InputError>
 
         </div>
         <div>
@@ -49,7 +48,7 @@
             </Select>
             <InputError :message="formAdoption.errors.status"></InputError>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 col-span-full">
             <p class="font-bold">Notes</p>
             <div>
                 <label for="title">
@@ -58,7 +57,7 @@
                 <input type="text" id="title" v-model="formAdoption.note['title']" placeholder="Titre"
                        class="p-2 bg-white border-2 border-main-yellow rounded-lg w-full">
             </div>
-            <div>
+            <div class="flex flex-col">
                 <label for="note['content']">Contenu de la note</label>
                 <textarea id="note['content']" v-model="formAdoption.note['content']"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
@@ -104,6 +103,15 @@ export default {
             }),
             toast: useToasterStore()
         };
+    },
+
+    computed: {
+        filteredAnimals(animals) {
+            return this.animals.filter((animal) => {
+                    return animal.status === 'available';
+                }
+            );
+        }
     },
 
     methods: {

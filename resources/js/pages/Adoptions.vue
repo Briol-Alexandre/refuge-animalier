@@ -21,17 +21,19 @@
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
                 <AdoptionShow :adoption="selectedRow" :animal="getAnimal(selectedRow.animal_id)"
-                              :adopter="getAdopter(selectedRow.adopter_id)" />
+                              :adopter="getAdopter(selectedRow.adopter_id)" :animals="animals" :adopters="adopters" :status="status" :adoptions="adoptions" @updated="toggleShowModal"/>
             </Modal>
 
         </TableContainer>
 
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                <AdoptionCreateForm :open-modal="openCreateModal" :animals="filteredAnimals" :adopters="adopters"
+                <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters"
                                     :status="status" />
             </Modal>
         </Teleport>
+        <p @click="console.log(adoptions)">test</p>
+
     </div>
 </template>
 
@@ -89,12 +91,6 @@ export default {
                 adoption_date: this.dateFormat(adoption.adoption_date)
             }));
         },
-        filteredAnimals(animals) {
-            return this.animals.filter((animal) => {
-                    return animal.status === 'available';
-                }
-            );
-        }
     },
 
     methods: {
@@ -115,8 +111,8 @@ export default {
             return this.adopters.find(adopter => adopter.id === adopterId);
         },
         dateFormat(date) {
-            date = new Date(date);
-            return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+            let splitedDate = date.split('T');
+            return splitedDate[0];
         }
     }
 };

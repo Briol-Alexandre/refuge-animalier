@@ -58,7 +58,7 @@
         </div>
         <div class="col-span-full flex justify-center gap-4">
             <button class="button-dark">Archiver la fiche</button>
-            <button class="button-light">Modifier la fiche</button>
+            <button class="button-light" @click="handleEditModal">Modifier la fiche</button>
         </div>
     </div>
     <Teleport to="body">
@@ -99,6 +99,9 @@
                 </div>
             </form>
         </Modal>
+        <Modal :condition="isEditModalOpened" @close="handleEditModal" index="z-30">
+            <AdoptionEditForm :adoption="adoption" :animals="animals" :adopters="adopters" :status="status" :adoptions="adoptions" @closeEditModal="handleEditModal" @updated="$emit('updated'); this.isEditModalOpened=false"/>
+        </Modal>
     </Teleport>
 </template>
 
@@ -111,15 +114,17 @@ import Input from '../ui/input/Input.vue';
 import { Button } from '@/components/ui/button/index.js';
 import { useForm } from '@inertiajs/vue3';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
+import AdoptionEditForm from '@/components/widget/form/AdoptionEditForm.vue';
 
 export default {
     name: 'AdoptionShow',
-    props: ['adoption', 'animal', 'adopter'],
+    props: ['adoption', 'animal', 'adopter', 'adopters', 'animals', 'status', 'adoptions'],
     components: {
         Button, Input, InputError,
         Modal,
         InputLabel,
-        TextareaLabel
+        TextareaLabel,
+        AdoptionEditForm
     },
 
     data() {
@@ -133,15 +138,20 @@ export default {
                 title: '',
                 content: '',
             }),
+            isEditModalOpened: false,
+
         };
     },
     computed: {
         visibleNotes() {
             return this.showAll ? this.adoption.notes : this.adoption.notes.slice(0, 3);
-        }
+        },
     },
 
     methods: {
+        handleEditModal() {
+            this.isEditModalOpened = !this.isEditModalOpened;
+        },
         showMore() {
             this.showAll = !this.showAll;
         },
@@ -165,6 +175,11 @@ export default {
                 }
             })
         },
+        async loadAdoption() {
+            // Recharge les données depuis l'API
+            const response = await axios.get(adoption_show(this.adoptionId));
+            this.adoption = response.data;
+        }
     }
 };
 </script>
