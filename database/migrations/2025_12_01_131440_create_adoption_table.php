@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('adopter_id')->constrained()->cascadeOnDelete();
             $table->date('adoption_date')->nullable();
             $table->enum('status', AdoptionStatus::cases());
+            $table->string('contact_message')->nullable();
             $table->timestamps();
         });
     }

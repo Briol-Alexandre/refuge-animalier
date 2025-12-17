@@ -33,7 +33,8 @@
             <label for="date">
                 Date de l'adoption <small>laissez vide si pas cloturé</small>
             </label>
-            <input type="date" v-model="formAdoption.adoption_date" class="p-2 bg-white border-2 border-main-yellow rounded-lg w-full">
+            <input type="date" v-model="formAdoption.adoption_date"
+                   class="p-2 bg-white border-2 border-main-yellow rounded-lg w-full">
             <InputError :message="formAdoption.errors.adoption_date"></InputError>
 
         </div>
@@ -48,6 +49,23 @@
             </Select>
             <InputError :message="formAdoption.errors.status"></InputError>
         </div>
+        <div class="mt-4">
+            <p class="font-bold">Notes</p>
+            <div>
+                <label for="title">
+                    Titre de la note
+                </label>
+                <input type="text" id="title" v-model="formAdoption.note['title']" placeholder="Titre"
+                       class="p-2 bg-white border-2 border-main-yellow rounded-lg w-full">
+            </div>
+            <div>
+                <label for="note['content']">Contenu de la note</label>
+                <textarea id="note['content']" v-model="formAdoption.note['content']"
+                          class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
+                          placeholder="Écrivez une note…" />
+            </div>
+            <InputError :message="formAdoption.errors.note"></InputError>
+        </div>
         <div class="col-span-full">
             <button class="button-light">
                 Créer
@@ -61,7 +79,7 @@ import Select from '@/components/widget/form/Select.vue';
 import Multiselect from 'vue-multiselect';
 import Modal from '@/components/widget/Modal.vue';
 import { useForm } from '@inertiajs/vue3';
-import {store as adoption_store} from '@/actions/App/Http/Controllers/AdoptionsController.js';
+import { store as adoption_store } from '@/actions/App/Http/Controllers/AdoptionsController.js';
 import { useToasterStore } from '@/stores/useToasterStore';
 import InputError from '@/components/InputError.vue';
 
@@ -78,9 +96,13 @@ export default {
                 animal_id: '',
                 adopter_id: '',
                 status: '',
-                adoption_date: ''
+                adoption_date: '',
+                note: {
+                    title: '',
+                    content: ''
+                }
             }),
-            toast: useToasterStore(),
+            toast: useToasterStore()
         };
     },
 
@@ -88,10 +110,10 @@ export default {
         adoption_store,
         handleSubmit() {
             this.formAdoption.post(adoption_store(), {
-                onSuccess: () =>{
-                    this.toast.success({text: 'Adoption créée avec succès'})
+                onSuccess: () => {
+                    this.toast.success({ text: 'Adoption créée avec succès' });
                 }
-            })
+            });
         }
     }
 };

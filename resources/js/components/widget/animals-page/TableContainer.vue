@@ -70,7 +70,11 @@ export default {
 
             const searchTerm = this.search.toLowerCase();
 
-            return this.rows.filter(row => row.name.toLowerCase().includes(searchTerm));
+            return this.rows.filter(row =>
+                Object.values(row).some(value =>
+                    String(value).toLowerCase().includes(searchTerm)
+                )
+            );
         }
     },
 

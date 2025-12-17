@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adoption;
 use App\Models\Animal;
 use App\Models\Note;
 use Illuminate\Http\Request;
@@ -25,13 +26,18 @@ class NotesController extends Controller
             'content' => 'string|min:3|max:255'
         ]);
 
-        $animal = Animal::findOrFail($request['animal_id']);
+        if ($request['animal_id']) {
+            $animal = Animal::findOrFail($request['animal_id']);
+            $note = $animal->notes()->create($validated);
+        }
 
-        $note = $animal->notes()->create($validated);
+        if ($request['adoption_id']) {
+            $adoption = Adoption::findOrFail($request['adoption_id']);
+            $note = $adoption->notes()->create($validated);
+        }
 
-        return back()->with([
-            'animal' => $animal->load('notes')
-        ]);
+
+        return back();
     }
 
     public function show($id)

@@ -1,5 +1,5 @@
 <template>
-    <table class="w-full overflow-hidden">
+    <table class="hidden md:table w-full overflow-hidden">
         <thead class="bg-softGray/50 text-left">
         <tr class="rounded-xl">
             <th v-for="col in cols" :key="col" class="px-2 py-4 border border-softGray">
@@ -13,29 +13,65 @@
             @click="$emit('row-click', row)">
             <td v-for="field in fields" :key="field" class="border border-softGray p-2">
                 <span v-if="['images', 'avatar', 'image'].includes(field)">
-                        <img :src="getImageSrc(row[field])"
-                             alt="Image"
-                             class="w-14 h-14 object-cover rounded-full object-top mx-auto" />
-                    </span>
+                    <img :src="getImageSrc(row[field])"
+                         alt="Image"
+                         class="w-14 h-14 object-cover rounded-full object-top mx-auto" />
+                </span>
 
                 <span v-else-if="Array.isArray(row[field])">
-                        <span v-for="(tableRow, i) in row[field]" :key="i"
-                              class="text-xs bg-main-blue-opacity rounded-full px-1 py-px ml-1">
-                            {{ tableRow.name ?? 'Inconnu' }}
-                        </span>
+                    <span v-for="(tableRow, i) in row[field]" :key="i"
+                          class="text-xs bg-main-blue-opacity rounded-full px-1 py-px ml-1">
+                        {{ tableRow.name ?? 'Inconnu' }}
                     </span>
+                </span>
 
                 <span v-else-if="typeof row[field] === 'object' && row[field] !== null">
-                        {{ row[field]?.name ?? 'Inconnu' }}
-                    </span>
+                    {{ row[field]?.name ?? 'Inconnu' }}
+                </span>
 
                 <span v-else>
-                        {{ row[field] ?? 'inconnu' }}
-                    </span>
+                    {{ row[field] ?? 'inconnu' }}
+                </span>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <div class="md:hidden flex flex-col gap-4">
+        <div v-for="(row, index) in rows" :key="index"
+             class="bg-white rounded-lg p-4 shadow-sm border border-softGray hover:shadow-md transition-shadow cursor-pointer"
+             @click="$emit('row-click', row)">
+
+            <div v-for="(field, fieldIndex) in fields" :key="field" class="mb-3 last:mb-0">
+                <!-- Label de la colonne -->
+                <div class="text-xs text-gray-500 font-medium mb-1">
+                    {{ cols[fieldIndex] }}
+                </div>
+
+                <!-- Contenu -->
+                <div v-if="['images', 'avatar', 'image'].includes(field)" class="flex justify-center">
+                    <img :src="getImageSrc(row[field])"
+                         alt="Image"
+                         class="w-20 h-20 object-cover rounded-full object-top" />
+                </div>
+
+                <div v-else-if="Array.isArray(row[field])" class="flex flex-wrap gap-1">
+                    <span v-for="(tableRow, i) in row[field]" :key="i"
+                          class="text-xs bg-main-blue-opacity rounded-full px-2 py-1">
+                        {{ tableRow.name ?? 'Inconnu' }}
+                    </span>
+                </div>
+
+                <div v-else-if="typeof row[field] === 'object' && row[field] !== null" class="text-sm">
+                    {{ row[field]?.name ?? 'Inconnu' }}
+                </div>
+
+                <div v-else class="text-sm">
+                    {{ row[field] ?? 'inconnu' }}
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>

@@ -18,11 +18,9 @@ class AdoptionFactory extends Factory
         return [
             'adoption_date' => Carbon::now(),
             'status' => $this->faker->randomElement(AdoptionStatus::values()),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-
             'animal_id' => Animal::inRandomOrder()->first()?->id ?? Animal::factory(),
             'adopter_id' => Adopter::factory(),
+            'contact_message' => $this->faker->sentence(20),
         ];
     }
 }

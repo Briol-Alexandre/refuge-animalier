@@ -10,9 +10,9 @@
         </div>
         <TableContainer
             :paginationLinks="adoptions.links"
-            :rows="adoptions.data"
+            :rows="formattedAdoptions"
             :cols="['Nom de l‘adoptant', 'Nom de l‘animal', 'Date de l‘adoption', 'Statut']"
-            :fields="['adopter_id', 'animal_id', 'adoption_date', 'status']"
+            :fields="['adopter_name', 'animal_name', 'adoption_date', 'status']"
             @row-click="openShowModal">
 
             <template v-slot:filters>
@@ -20,14 +20,16 @@
             </template>
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <AdoptionShow :adoption="selectedRow" />
+                <AdoptionShow :adoption="selectedRow" :animal="getAnimal(selectedRow.animal_id)"
+                              :adopter="getAdopter(selectedRow.adopter_id)" />
             </Modal>
 
         </TableContainer>
 
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters" :status="status"/>
+                <AdoptionCreateForm :open-modal="openCreateModal" :animals="filteredAnimals" :adopters="adopters"
+                                    :status="status" />
             </Modal>
         </Teleport>
     </div>
@@ -78,6 +80,23 @@ export default {
         };
     },
 
+    computed: {
+        formattedAdoptions() {
+            return this.adoptions.data.map(adoption => ({
+                ...adoption,
+                animal_name: this.getAnimal(adoption.animal_id)?.name || 'N/A',
+                adopter_name: this.getAdopter(adoption.adopter_id)?.name || 'N/A',
+                adoption_date: this.dateFormat(adoption.adoption_date)
+            }));
+        },
+        filteredAnimals(animals) {
+            return this.animals.filter((animal) => {
+                    return animal.status === 'available';
+                }
+            );
+        }
+    },
+
     methods: {
         openCreateModal() {
             this.isModalOpen = !this.isModalOpen;
@@ -87,8 +106,17 @@ export default {
         },
         openShowModal(row) {
             this.selectedRow = row;
-            console.log(this.selectedRow);
             this.isShowModalOpen = true;
+        },
+        getAnimal(animalId) {
+            return this.animals.find(animal => animal.id === animalId);
+        },
+        getAdopter(adopterId) {
+            return this.adopters.find(adopter => adopter.id === adopterId);
+        },
+        dateFormat(date) {
+            date = new Date(date);
+            return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
         }
     }
 };

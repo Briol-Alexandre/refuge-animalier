@@ -608,14 +608,6 @@ export default {
                 onSuccess:() =>{
                     this.toast.success({text: 'Note créée'});
                     this.isCreateNoteModalOpen = false;
-
-                    const tempNote = {
-                        title: this.formNoteCreate.title,
-                        content: this.formNoteCreate.content,
-                    };
-
-                    this.animal.notes.push(tempNote);
-
                     this.formNoteCreate.reset();
                 },
                 onError:() =>{

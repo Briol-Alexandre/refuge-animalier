@@ -67,7 +67,9 @@
             <div class="mt-2">
                 <p class="font-bold">Notes</p>
                 <ul class="list-disc list-inside">
-                    <li v-for="note in animal.notes" @click="handleNoteModal(note)" class="underline hover:cursor-pointer hover:no-underline w-fit">{{note.title}}</li>
+                    <li v-for="note in animal.notes" @click="handleNoteModal(note)"
+                        class="underline hover:cursor-pointer hover:no-underline w-fit">{{ note.title }}
+                    </li>
                 </ul>
             </div>
         </div>
@@ -136,29 +138,29 @@
                     <option value="">--Choisir un status--</option>
                     <option v-for="status in statusList" :value="status">{{ status }}</option>
                 </Select>
-                <InputError :message="statusAnimal.errors.status"/>
+                <InputError :message="statusAnimal.errors.status" />
                 <button type="submit" class="button-light ml-auto">Changer</button>
             </form>
         </Modal>
         <Modal :condition="isModalOpen" @close="openEditModal" index="z-30" modal-classes="">
             <AnimalEditForm :open-modal="openEditModal" :species="species" :breeds="breeds" :coats="coats"
-                            :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal"/>
+                            :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal" />
         </Modal>
         <Modal :condition="isNoteModalOpen" @close="handleNoteModal" index="z-30" modal-classes="max-w-[500px]">
-            <p class="title">{{this.noteToShow.title}}</p>
-            <p>{{this.noteToShow.content}}</p>
+            <p class="title">{{ this.noteToShow.title }}</p>
+            <p>{{ this.noteToShow.content }}</p>
         </Modal>
     </Teleport>
 </template>
 
 <script>
-import {useForm} from '@inertiajs/vue3';
-import {useStatusStore} from '@/stores/statusStore.js';
-import {updateStatus} from '@/actions/App/Http/Controllers/AnimalsController';
-import {destroy} from '@/actions/App/Http/Controllers/AnimalsController';
-import {useToasterStore} from '@/stores/useToasterStore.js';
+import { useForm } from '@inertiajs/vue3';
+import { useStatusStore } from '@/stores/statusStore.js';
+import { updateStatus } from '@/actions/App/Http/Controllers/AnimalsController';
+import { destroy } from '@/actions/App/Http/Controllers/AnimalsController';
+import { useToasterStore } from '@/stores/useToasterStore.js';
 import Modal from '@/components/widget/Modal.vue';
-import {Button} from '@/components/ui/button/index.js';
+import { Button } from '@/components/ui/button/index.js';
 import Select from '@/components/widget/form/Select.vue';
 import InputError from '@/components/InputError.vue';
 import AnimalCreateForm from '@/components/widget/form/AnimalCreateForm.vue';
@@ -192,7 +194,7 @@ export default {
             isModalOpen: false,
             isDeleteModalOpen: false,
             isNoteModalOpen: false,
-            noteToShow: null,
+            noteToShow: null
         };
     },
 
@@ -215,10 +217,12 @@ export default {
 
             let month = today.getMonth() - animalBirth.getMonth();
 
-            if (month <= 1) {
-                month = 'Moins d‘un mois';
-            } else {
-                month = month + ' mois';
+            if (!age) {
+                if (month <= 1 && age < 1) {
+                    month = 'Moins d‘un mois';
+                } else {
+                    month = month + ' mois';
+                }
             }
             return `${age}  ${month}`;
         },
@@ -239,7 +243,7 @@ export default {
             this.statusAnimal.put(updateStatus(this.animal.id), {
                 onSuccess: () => {
                     this.animal.status = this.statusAnimal.status;
-                    this.toast.success({text: 'Statut mis à jour avec succès !'});
+                    this.toast.success({ text: 'Statut mis à jour avec succès !' });
                     this.isArchiveModalOpen = false;
                     this.isChangeStatusModalOpen = false;
                 }
@@ -252,11 +256,11 @@ export default {
         handleDelete() {
             this.deleteForm.delete(destroy(this.animal.id), {
                 onSuccess: () => {
-                    this.toast.success({text: 'Animal supprimé avec succès !'});
+                    this.toast.success({ text: 'Animal supprimé avec succès !' });
                     this.$emit('deleted');
                 },
                 onError: () => {
-                    this.toast.error({text: 'Une erreur s‘est produite lors de la manipulation'});
+                    this.toast.error({ text: 'Une erreur s‘est produite lors de la manipulation' });
                 }
             });
         },

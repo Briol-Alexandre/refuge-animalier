@@ -19,6 +19,7 @@ class Adoption extends Model
         'adopter_id',
         'adoption_date',
         'status',
+        'contact_message'
     ];
 
     public function animal(): BelongsTo
@@ -33,7 +34,7 @@ class Adoption extends Model
 
     public function notes() :MorphMany
     {
-        return $this->morphMany(Not::class, 'notable');
+        return $this->morphMany(Note::class, 'notable');
     }
 
     protected function casts(): array

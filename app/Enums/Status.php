@@ -14,4 +14,15 @@ enum Status: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function label ()
+    {
+        return match ($this) {
+            self::AVAILABLE => 'Disponible',
+            self::ADOPTED => 'Adopté',
+            self::PENDING => 'En attente',
+            self::ARCHIVED => 'Archivé',
+            self::IN_CURE => 'En soins',
+        };
+    }
 }

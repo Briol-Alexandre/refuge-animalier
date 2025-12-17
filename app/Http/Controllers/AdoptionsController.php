@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AdoptionStatus;
+use App\Enums\Status;
 use App\Models\Adopter;
 use App\Models\Adoption;
 use App\Models\Animal;
@@ -13,7 +14,7 @@ class AdoptionsController extends Controller
 {
     public function index()
     {
-        $adoptions = Adoption::paginate(10);
+        $adoptions = Adoption::with('notes')->paginate(10);
         $animals = Animal::all();
         $adopters = Adopter::all();
         $status = AdoptionStatus::cases();
@@ -45,9 +46,20 @@ class AdoptionsController extends Controller
             'adopter_id' => 'exists:adopters,id',
             'adoption_date' => 'nullable|date',
             'status' => 'required',
+            'note' => 'array',
+            'note.*' =>'string',
         ]);
 
-        Adoption::create($validated);
+        $adoption = Adoption::create($validated);
+
+        $note = $request['note'];
+        if ($note) {
+            $adoption->notes()->create([
+                'title' => $note['title'],
+                'content' => $note['content'],
+            ]);
+        }
+
 
         return back();
 
