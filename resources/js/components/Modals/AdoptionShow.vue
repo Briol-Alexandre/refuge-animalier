@@ -151,7 +151,6 @@ import { Button } from '@/components/ui/button/index.js';
 import { useForm } from '@inertiajs/vue3';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
 import { updateStatus } from '@/actions/App/Http/Controllers/AdoptionsController';
-import { useStatusStore } from '@/stores/statusStore.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import AdoptionEditForm from '@/components/widget/form/AdoptionEditForm.vue';
 
