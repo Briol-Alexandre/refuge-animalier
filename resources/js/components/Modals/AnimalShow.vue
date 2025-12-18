@@ -155,7 +155,6 @@
 
 <script>
 import { useForm } from '@inertiajs/vue3';
-import { useStatusStore } from '@/stores/statusStore.js';
 import { updateStatus } from '@/actions/App/Http/Controllers/AnimalsController';
 import { destroy } from '@/actions/App/Http/Controllers/AnimalsController';
 import { useToasterStore } from '@/stores/useToasterStore.js';

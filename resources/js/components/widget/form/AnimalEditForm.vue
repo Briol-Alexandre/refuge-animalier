@@ -359,7 +359,6 @@ import { update as animal_update } from '@/actions/App/Http/Controllers/AnimalsC
 import { update as note_update } from '@/actions/App/Http/Controllers/NotesController.js';
 import { destroy as note_delete } from '@/actions/App/Http/Controllers/NotesController.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
-import { useStatusStore } from '@/stores/statusStore.js';
 import Input from '../../ui/input/Input.vue';
 import Modal from '@/components/widget/Modal.vue';
 
