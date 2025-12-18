@@ -120,6 +120,7 @@ export default {
             this.formAdoption.post(adoption_store(), {
                 onSuccess: () => {
                     this.toast.success({ text: 'Adoption créée avec succès' });
+                    this.$emit('created');
                 }
             });
         }

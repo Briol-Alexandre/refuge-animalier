@@ -36,7 +36,7 @@
 
         <Select id-name="status" label="Statut" v-model="filters.status">
             <option value="">--Choisir un statut--</option>
-            <option v-for="statu in status" :value="statu.toLowerCase()">{{ statu }}</option>
+            <option v-for="statu in status" :value="statu.value.toLowerCase()">{{ statu.label }}</option>
         </Select>
         <div class="flex items-center col-span-full justify-end gap-4">
             <button class="underline hover:cursor-pointer" @click="resetAllFields">

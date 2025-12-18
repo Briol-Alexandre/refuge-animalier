@@ -14,10 +14,13 @@ class AdoptionsController extends Controller
 {
     public function index()
     {
-        $adoptions = Adoption::with('notes')->paginate(10);
+        $adoptions = Adoption::with('notes')->orderBy('adoption_date', 'asc')->paginate(10);
         $animals = Animal::all();
         $adopters = Adopter::all();
-        $status = AdoptionStatus::cases();
+        $status = collect(AdoptionStatus::cases())->map(fn($case) => [
+            'value' => $case->value,
+            'label' => $case->label()
+        ]);
         return Inertia::render('Adoptions',
             [
                 'title' => 'Liste des adoptions',
@@ -47,10 +50,16 @@ class AdoptionsController extends Controller
             'adoption_date' => 'nullable|date',
             'status' => 'required',
             'note' => 'array',
-            'note.*' =>'string',
+            'note.*' => 'string',
         ]);
 
         $adoption = Adoption::create($validated);
+        $animal = Animal::findOrFail($validated['animal_id']);
+        $animal->update(
+            [
+                'status' => Status::IN_ADOPTION
+            ]
+        );
 
         $note = $request['note'];
         if ($note) {
@@ -83,10 +92,15 @@ class AdoptionsController extends Controller
             'status' => 'required',
         ]);
 
-        // TODO: CHANGE THE CURRENT LINKED ANIMAL'S STATUS BACK TO AVAILABLE
         $adoption = Adoption::findOrFail($id);
 
+        $animal = Animal::findOrFail($adoption->animal_id);
+        $animal->update(['status' => Status::AVAILABLE,]);
+
         $adoption->update($validated);
+
+        $animal = Animal::findOrFail($adoption->animal_id);
+        $animal->update(['status' => Status::IN_ADOPTION,]);
 
         $adoption->save();
     }

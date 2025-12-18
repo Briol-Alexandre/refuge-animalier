@@ -13,15 +13,19 @@
             :rows="formattedAdoptions"
             :cols="['Nom de l‘adoptant', 'Nom de l‘animal', 'Date de l‘adoption', 'Statut']"
             :fields="['adopter_name', 'animal_name', 'adoption_date', 'status']"
+            :filters="this.filters"
             @row-click="openShowModal">
 
             <template v-slot:filters>
-                <AdoptionsFilter />
+                <KeepAlive>
+                    <AdoptionsFilter :status="status" @filterChange="filterTable" :modelValue="currentFilterValue" />
+                </KeepAlive>
             </template>
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
                 <AdoptionShow :adoption="selectedRow" :animal="getAnimal(selectedRow.animal_id)"
-                              :adopter="getAdopter(selectedRow.adopter_id)" :animals="animals" :adopters="adopters" :status="status" :adoptions="adoptions" @updated="toggleShowModal"/>
+                              :adopter="getAdopter(selectedRow.adopter_id)" :animals="animals" :adopters="adopters"
+                              :status="status" :adoptions="adoptions" @updated="toggleShowModal" />
             </Modal>
 
         </TableContainer>
@@ -29,11 +33,9 @@
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
                 <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters"
-                                    :status="status" />
+                                    :status="status" @created="openCreateModal" />
             </Modal>
         </Teleport>
-        <p @click="console.log(adoptions)">test</p>
-
     </div>
 </template>
 
@@ -78,7 +80,9 @@ export default {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
-            selectedRow: null
+            selectedRow: null,
+            filters: [],
+            currentFilterValue: ''
         };
     },
 
@@ -90,7 +94,7 @@ export default {
                 adopter_name: this.getAdopter(adoption.adopter_id)?.name || 'N/A',
                 adoption_date: this.dateFormat(adoption.adoption_date)
             }));
-        },
+        }
     },
 
     methods: {
@@ -111,8 +115,19 @@ export default {
             return this.adopters.find(adopter => adopter.id === adopterId);
         },
         dateFormat(date) {
-            let splitedDate = date.split('T');
-            return splitedDate[0];
+            if (date) {
+                let splitedDate = date.split('T');
+                return splitedDate[0];
+            } else {
+                return null;
+            }
+
+        },
+        filterTable(filter) {
+            this.currentFilterValue = filter;
+            this.filters = {
+                'status': filter
+            };
         }
     }
 };

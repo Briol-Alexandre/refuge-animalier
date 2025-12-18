@@ -1,35 +1,37 @@
 <template>
-        <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
-            <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
-                <h1 class="title !mb-0">
-                    Liste des animaux
-                </h1>
-                <button class="button-light z-10" @click="openCreateModal">
-                    Ajouter un animal
-                </button>
-            </div>
-            <TableContainer
-                :paginationLinks="animals.links"
-                :rows="animals.data"
-                :cols="['Image', 'Nom', 'Espèce', 'Statut']"
-                :fields="['images', 'name', 'breed', 'status']"
-                @row-click="openShowModal">
-                <template v-slot:filters>
-                    <AnimalsFilter :species="species" :breeds="breeds" :coats="coats" :status="status"/>
-                </template>
-
-                <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                    <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines" @updated="toggleShowModal" @deleted="toggleShowModal"/>
-                </Modal>
-
-            </TableContainer>
-
-            <Teleport to="body">
-                <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                    <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats" :vaccines="vaccines" @closeModal="openCreateModal"/>
-                </Modal>
-            </Teleport>
+    <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
+        <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
+            <h1 class="title !mb-0">
+                Liste des animaux
+            </h1>
+            <button class="button-light z-10" @click="openCreateModal">
+                Ajouter un animal
+            </button>
         </div>
+        <TableContainer
+            :paginationLinks="animals.links"
+            :rows="animals.data"
+            :cols="['Image', 'Nom', 'Espèce', 'Statut']"
+            :fields="['images', 'name', 'breed', 'status']"
+            @row-click="openShowModal">
+            <template v-slot:filters>
+                <AnimalsFilter :species="species" :breeds="breeds" :coats="coats" :status="formattedStatus"/>
+            </template>
+
+            <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
+                <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats"
+                            :vaccines="vaccines" @updated="toggleShowModal" @deleted="toggleShowModal"/>
+            </Modal>
+
+        </TableContainer>
+
+        <Teleport to="body">
+            <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
+                <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats"
+                                  :vaccines="vaccines" @closeModal="openCreateModal"/>
+            </Modal>
+        </Teleport>
+    </div>
 </template>
 
 <script>
@@ -46,7 +48,7 @@ import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import InputLabel from '@/components/widget/form/InputLabel.vue';
 import Select from '@/components/widget/form/Select.vue';
 import AnimalsFilter from '@/components/widget/form/AnimalsFilter.vue';
-import { Button } from '@/components/ui/button/index.js';
+import {Button} from '@/components/ui/button/index.js';
 
 export default {
     name: '',
@@ -71,6 +73,25 @@ export default {
             isShowModalOpen: false,
             selectedRow: null
         };
+    },
+
+    mounted() {
+        this.animals.data.forEach((animal) => {
+            const statusObj = this.status.find(s => s.value === animal.status.value);
+            console.log(animal.status, statusObj);
+            if (statusObj) {
+                animal.status = statusObj.label;
+            }
+        });
+    },
+
+    computed: {
+        formattedStatus() {
+            return this.status.map((statu) => ({
+                value: statu.value,
+                label: statu.label
+            }));
+        }
     },
 
     methods: {

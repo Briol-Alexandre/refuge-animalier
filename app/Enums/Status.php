@@ -17,7 +17,7 @@ enum Status: string
         return array_column(self::cases(), 'value');
     }
 
-    public function label ()
+    public function label(): string
     {
         return match ($this) {
             self::AVAILABLE => 'Disponible',

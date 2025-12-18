@@ -13,4 +13,13 @@ enum AdoptionStatus: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::CLOSED => 'Clôturé',
+            self::PENDING => 'En attente',
+            self::ARCHIVED => 'Archivé',
+        };
+    }
 }

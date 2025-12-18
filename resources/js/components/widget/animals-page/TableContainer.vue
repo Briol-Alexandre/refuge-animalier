@@ -4,8 +4,10 @@
         <div class="flex justify-between">
             <div>
                 <Teleport to="body">
-                    <Modal :condition="isModalOpen" @close="openModal" index="z-30">
-                        <slot name="filters"></slot>
+                    <Modal :condition="isModalOpen" @close="openModal" index="z-30" modal-classes="max-w-[500px]">
+                        <KeepAlive>
+                            <slot name="filters"></slot>
+                        </KeepAlive>
                     </Modal>
                 </Teleport>
                 <button @click="openModal"
@@ -62,20 +64,35 @@ export default {
         TextareaLabel,
         AnimalCreateForm
     },
-    props: ['cols', 'fields', 'rows', 'paginationLinks'],
+    props: ['cols', 'fields', 'rows', 'paginationLinks', 'filters'],
 
     computed: {
         filteredRows() {
-            if (!this.search) return this.rows;
+            let filtered = this.rows;
 
-            const searchTerm = this.search.toLowerCase();
+            if (this.filters && Object.keys(this.filters).length > 0) {
+                const cols = Object.keys(this.filters);
 
-            return this.rows.filter(row =>
-                Object.values(row).some(value =>
-                    String(value).toLowerCase().includes(searchTerm)
-                )
-            );
+                cols.forEach((col) => {
+                    const value = this.filters[col];
+                    if (value !== '') {
+                        filtered = filtered.filter(row => row[col] === value);
+                    }
+                });
+            }
+
+            if (this.search) {
+                const searchTerm = this.search.toLowerCase();
+                filtered = filtered.filter(row =>
+                    Object.values(row).some(value =>
+                        String(value).toLowerCase().includes(searchTerm)
+                    )
+                );
+            }
+
+            return filtered;
         }
+
     },
 
     data() {

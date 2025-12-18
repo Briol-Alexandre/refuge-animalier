@@ -21,16 +21,16 @@
                 <span v-else-if="Array.isArray(row[field])">
                     <span v-for="(tableRow, i) in row[field]" :key="i"
                           class="text-xs bg-main-blue-opacity rounded-full px-1 py-px ml-1">
-                        {{ tableRow.name ?? 'Inconnu' }}
+                        {{ tableRow.name ?? 'Non renseigné' }}
                     </span>
                 </span>
 
                 <span v-else-if="typeof row[field] === 'object' && row[field] !== null">
-                    {{ row[field]?.name ?? 'Inconnu' }}
+                    {{ row[field]?.name ?? 'Non renseigné' }}
                 </span>
 
                 <span v-else>
-                    {{ row[field] ?? 'inconnu' }}
+                    {{ row[field] ?? 'Non renseigné' }}
                 </span>
             </td>
         </tr>
@@ -58,16 +58,16 @@
                 <div v-else-if="Array.isArray(row[field])" class="flex flex-wrap gap-1">
                     <span v-for="(tableRow, i) in row[field]" :key="i"
                           class="text-xs bg-main-blue-opacity rounded-full px-2 py-1">
-                        {{ tableRow.name ?? 'Inconnu' }}
+                        {{ tableRow.name ?? 'Non renseigné' }}
                     </span>
                 </div>
 
                 <div v-else-if="typeof row[field] === 'object' && row[field] !== null" class="text-sm">
-                    {{ row[field]?.name ?? 'Inconnu' }}
+                    {{ row[field]?.name ?? 'Non renseigné' }}
                 </div>
 
                 <div v-else class="text-sm">
-                    {{ row[field] ?? 'inconnu' }}
+                    {{ row[field] ?? 'Non renseigné' }}
                 </div>
             </div>
         </div>
