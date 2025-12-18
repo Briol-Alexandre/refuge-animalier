@@ -136,7 +136,7 @@
 
                 <Select id-name="status" label="Statut de l'animal" v-model="statusAnimal.status">
                     <option value="">--Choisir un status--</option>
-                    <option v-for="status in statusList" :value="status">{{ status }}</option>
+                    <option v-for="s in status" :value="s.label">{{ s.label }}</option>
                 </Select>
                 <InputError :message="statusAnimal.errors.status" />
                 <button type="submit" class="button-light ml-auto">Changer</button>
@@ -144,7 +144,7 @@
         </Modal>
         <Modal :condition="isModalOpen" @close="openEditModal" index="z-30" modal-classes="">
             <AnimalEditForm :open-modal="openEditModal" :species="species" :breeds="breeds" :coats="coats"
-                            :vaccines="vaccines" :animal="animal" @updated="$emit('updated');openEditModal" />
+                            :vaccines="vaccines" :animal="animal" :status="status" @updated="$emit('updated');openEditModal" />
         </Modal>
         <Modal :condition="isNoteModalOpen" @close="handleNoteModal" index="z-30" modal-classes="max-w-[500px]">
             <p class="title">{{ this.noteToShow.title }}</p>
@@ -181,12 +181,11 @@ export default {
     data() {
         return {
             toast: useToasterStore(),
-            statusList: useStatusStore().statusList,
             isArchiveModalOpen: false,
             isChangeStatusModalOpen: false,
             isVaccineModalOpen: false,
             statusAnimal: useForm({
-                'status': null
+                'status': this.animal.status
             }),
             deleteForm: useForm({
                 'id': this.animal.id

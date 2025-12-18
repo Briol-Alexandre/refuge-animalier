@@ -97,6 +97,9 @@ class AdoptionsController extends Controller
         $animal = Animal::findOrFail($adoption->animal_id);
         $animal->update(['status' => Status::AVAILABLE,]);
 
+        $status = AdoptionStatus::fromLabel($validated['status']);
+        $validated['status'] = $status;
+
         $adoption->update($validated);
 
         $animal = Animal::findOrFail($adoption->animal_id);
@@ -108,6 +111,7 @@ class AdoptionsController extends Controller
     public function destroy($id)
     {
     }
+
     public function updateStatus(Adoption $adoption, Request $request)
     {
         $status = $request['status'];

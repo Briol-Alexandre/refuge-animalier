@@ -44,7 +44,7 @@
                 label="Statut de l'adoption"
             >
                 <option value="">--Choisir un statut--</option>
-                <option v-for="statu in status" :value="statu">{{ statu }}</option>
+                <option v-for="statu in status" :value="statu.value">{{ statu.label }}</option>
             </Select>
             <InputError :message="formAdoption.errors.status"></InputError>
         </div>

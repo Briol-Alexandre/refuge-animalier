@@ -180,7 +180,7 @@
                 label="Statut"
             >
                 <option value="">--Choisir un statut--</option>
-                <option v-for="status in statusList" :value="status">{{ status }}</option>
+                <option v-for="status in status" :value="status.label">{{ status.label }}</option>
             </Select>
         </fieldset>
 
@@ -366,7 +366,7 @@ import Modal from '@/components/widget/Modal.vue';
 export default {
     name: '',
     components: { Modal, Input, ImageAdd, Close, Select, Button, InputError },
-    props: ['animal', 'species', 'breeds', 'coats', 'vaccines'],
+    props: ['animal', 'species', 'breeds', 'coats', 'vaccines', 'status'],
 
     data() {
         return {
@@ -394,7 +394,6 @@ export default {
             isCoatModalOpen: false,
             isVaccineModalOpen: false,
             page: usePage(),
-            statusList: useStatusStore().statusList,
             formNote: useForm({
                 id: null,
                 title: '',

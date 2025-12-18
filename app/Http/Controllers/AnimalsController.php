@@ -159,6 +159,9 @@ class AnimalsController extends Controller
         } else {
             $validated['images'] = $animal->images;
         }
+
+        $validated['status'] = Status::fromLabel($validated['status']);
+
         $animal->update($validated);
 
         $coats = $request['coat_id'];
@@ -189,7 +192,7 @@ class AnimalsController extends Controller
 
     public function updateStatus(Animal $animal, Request $request)
     {
-        $status = $request['status'];
+        $status = Status::fromLabel($request['status']);
         $animal->update(array('status' => $status));
         $animal->save();
         return back();
