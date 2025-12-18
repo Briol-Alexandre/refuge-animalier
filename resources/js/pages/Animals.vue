@@ -10,12 +10,15 @@
         </div>
         <TableContainer
             :paginationLinks="animals.links"
-            :rows="animals.data"
+            :rows="formatedAnimal"
             :cols="['Image', 'Nom', 'Espèce', 'Statut']"
             :fields="['images', 'name', 'breed', 'status']"
+            :filters="this.filters"
             @row-click="openShowModal">
             <template v-slot:filters>
-                <AnimalsFilter :species="species" :breeds="breeds" :coats="coats" :status="formattedStatus"/>
+                <KeepAlive>
+                    <AnimalsFilter :status="status" @filterChange="filterTable" :model-value="currentFilterValue"/>
+                </KeepAlive>
             </template>
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
@@ -71,7 +74,9 @@ export default {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
-            selectedRow: null
+            selectedRow: null,
+            filters: [],
+            currentFilterValue: '',
         };
     },
 
@@ -86,11 +91,11 @@ export default {
     },
 
     computed: {
-        formattedStatus() {
-            return this.status.map((statu) => ({
-                value: statu.value,
-                label: statu.label
-            }));
+        formatedAnimal() {
+            return this.animals.data.map(animal => ({
+                ...animal,
+                status: this.getStatusLabel(animal.status)
+            }))
         }
     },
 
@@ -104,6 +109,16 @@ export default {
         openShowModal(row) {
             this.selectedRow = row;
             this.isShowModalOpen = true;
+        },
+        getStatusLabel(statusValue) {
+            const statusObj = this.status.find(s => s.value === statusValue);
+            return statusObj ? statusObj.label : statusValue;
+        },
+        filterTable(filter) {
+            this.currentFilterValue = filter;
+            this.filters = {
+                'status': filter
+            };
         }
     }
 };

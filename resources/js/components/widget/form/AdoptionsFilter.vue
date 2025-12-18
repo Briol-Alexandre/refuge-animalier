@@ -1,13 +1,10 @@
 <template>
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-        <p class="title col-span-full !mb-0">
-            Filtres
-        </p>
-        <Select id-name="status" label="Statut de l'adoption" class="col-span-full" v-model="currentFilter"
-                @change="$emit('filterChange', currentFilter)">
-            <option value="">--Choisir un statut--</option>
-            <option v-for="s in status" :value="s.value">{{ s.label }}</option>
-        </Select>
+    <div class="flex gap-2 items-center">
+        <label for="status">Status</label>
+        <select id="status" name="status" v-model="currentFilter" class="px-2 py-1 bg-white border border-main-yellow rounded-lg" @change="$emit('filterChange', currentFilter)">
+            <option value="">Tous</option>
+            <option v-for="s in status" :value="s.label">{{ s.label }}</option>
+        </select>
     </div>
 </template>
 
@@ -23,7 +20,6 @@ export default {
 
     data() {
         return {
-            isFilterDisplayed: false,
             currentFilter: this.modelValue || ''
         };
     },
@@ -34,7 +30,8 @@ export default {
         }
     },
 
-    methods: {}
+    methods: {
+    }
 };
 </script>
 

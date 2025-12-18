@@ -37,23 +37,22 @@
         </tbody>
     </table>
 
+
     <div class="md:hidden flex flex-col gap-4">
         <div v-for="(row, index) in rows" :key="index"
              class="bg-white rounded-lg p-4 shadow-sm border border-softGray hover:shadow-md transition-shadow cursor-pointer"
              @click="$emit('row-click', row)">
 
             <div v-for="(field, fieldIndex) in fields" :key="field" class="mb-3 last:mb-0">
-                <!-- Label de la colonne -->
                 <div class="text-xs text-gray-500 font-medium mb-1">
                     {{ cols[fieldIndex] }}
                 </div>
-
-                <!-- Contenu -->
                 <div v-if="['images', 'avatar', 'image'].includes(field)" class="flex justify-center">
                     <img :src="getImageSrc(row[field])"
                          alt="Image"
                          class="w-20 h-20 object-cover rounded-full object-top" />
                 </div>
+
 
                 <div v-else-if="Array.isArray(row[field])" class="flex flex-wrap gap-1">
                     <span v-for="(tableRow, i) in row[field]" :key="i"
@@ -65,6 +64,7 @@
                 <div v-else-if="typeof row[field] === 'object' && row[field] !== null" class="text-sm">
                     {{ row[field]?.name ?? 'Non renseigné' }}
                 </div>
+
 
                 <div v-else class="text-sm">
                     {{ row[field] ?? 'Non renseigné' }}

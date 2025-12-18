@@ -1,21 +1,9 @@
 <template>
     <div
         class="relative col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
-        <div class="flex justify-between">
+        <div class="flex justify-between items-start">
             <div>
-                <Teleport to="body">
-                    <Modal :condition="isModalOpen" @close="openModal" index="z-30" modal-classes="max-w-[500px]">
-                        <KeepAlive>
-                            <slot name="filters"></slot>
-                        </KeepAlive>
-                    </Modal>
-                </Teleport>
-                <button @click="openModal"
-                        class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
-                    <Filters />
-                    Filtres
-                </button>
-
+                <slot name="filters"></slot>
             </div>
 
             <input type="search" name="search" id="search" v-model="search"

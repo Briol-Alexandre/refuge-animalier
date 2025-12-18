@@ -92,7 +92,8 @@ export default {
                 ...adoption,
                 animal_name: this.getAnimal(adoption.animal_id)?.name || 'N/A',
                 adopter_name: this.getAdopter(adoption.adopter_id)?.name || 'N/A',
-                adoption_date: this.dateFormat(adoption.adoption_date)
+                adoption_date: this.dateFormat(adoption.adoption_date),
+                status: this.getStatusLabel(adoption.status)
             }));
         }
     },
@@ -122,6 +123,10 @@ export default {
                 return null;
             }
 
+        },
+        getStatusLabel(statusValue) {
+            const statusObj = this.status.find(s => s.value === statusValue);
+            return statusObj ? statusObj.label : statusValue;
         },
         filterTable(filter) {
             this.currentFilterValue = filter;

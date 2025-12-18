@@ -55,6 +55,10 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('adoptions.update');
 
+    Route::put('/adoptions/{adoption}/status', [AdoptionsController::class, 'updateStatus'])
+        ->middleware(['auth'])
+        ->name('adoptions.status-update');
+
     Route::get('/users', [UsersController::class, 'index'])
         ->middleware(['auth'])
         ->name('users.index');

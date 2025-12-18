@@ -57,7 +57,7 @@
 
         </div>
         <div class="col-span-full flex justify-center gap-4">
-            <button class="button-dark">Archiver la fiche</button>
+            <button class="button-dark" @click="handleChangeStatusModal">Changer le statut de l'adoption</button>
             <button class="button-light" @click="handleEditModal">Modifier la fiche</button>
         </div>
     </div>
@@ -66,7 +66,8 @@
             <p class="title">{{ this.noteToShow.title }}</p>
             <p>{{ this.noteToShow.content }}</p>
         </Modal>
-        <Modal :condition="isCreateNoteModalOpen" @close="handleCreateNoteModal" index="z-30" modal-classes="max-w-[500px]">
+        <Modal :condition="isCreateNoteModalOpen" @close="handleCreateNoteModal" index="z-30"
+               modal-classes="max-w-[500px]">
             <form @submit.prevent="handleSubmitNote">
                 <p class="title">Créer une note</p>
                 <div class="flex flex-col">
@@ -100,7 +101,41 @@
             </form>
         </Modal>
         <Modal :condition="isEditModalOpened" @close="handleEditModal" index="z-30">
-            <AdoptionEditForm :adoption="adoption" :animals="animals" :adopters="adopters" :status="status" :adoptions="adoptions" @closeEditModal="handleEditModal" @updated="$emit('updated'); this.isEditModalOpened=false"/>
+            <AdoptionEditForm :adoption="adoption" :animals="animals" :adopters="adopters" :status="status"
+                              :adoptions="adoptions" @closeEditModal="handleEditModal"
+                              @updated="$emit('updated'); this.isEditModalOpened=false" />
+        </Modal>
+        <Modal
+            @close="handleArchiveModal"
+            :condition="isArchiveModalOpen"
+            index="z-30"
+            modal-classes="w-fit"
+            close-btn-classes="!top-5 !right-5"
+        >
+            <p>Voulez-vous vraiment archiver cette adoption ? </p>
+            <div class="flex justify-between gap-2 mt-6">
+                <button class="underline hover:cursor-pointer" @click="handleArchiveModal">Annuler</button>
+                <button class="text-red-600 underline hover:cursor-pointer" @click="archiveAdoption">
+                    Archiver
+                </button>
+            </div>
+        </Modal>
+        <Modal
+            @close="handleChangeStatusModal"
+            :condition="isChangeStatusModalOpen"
+            index="z-30"
+            modal-classes="max-w-[700px]"
+        >
+            <form class="flex flex-col gap-2" @submit.prevent="updateAdoptionStatus">
+                <p class="title !mb-0">Changer le statut de l'adoption</p>
+
+                <Select id-name="status" label="Statut de l'adoption" v-model="statusAdoption.status">
+                    <option value="">--Choisir un status--</option>
+                    <option v-for="statusItem in status" :value="statusItem.value">{{ statusItem.label }}</option>
+                </Select>
+                <InputError :message="statusAdoption.errors.status" />
+                <button type="submit" class="button-light ml-auto">Changer</button>
+            </form>
         </Modal>
     </Teleport>
 </template>
@@ -111,24 +146,32 @@ import InputLabel from '@/components/widget/form/InputLabel.vue';
 import TextareaLabel from '@/components/widget/form/TextareaLabel.vue';
 import InputError from '@/components/InputError.vue';
 import Input from '../ui/input/Input.vue';
+import Select from '@/components/widget/form/Select.vue';
 import { Button } from '@/components/ui/button/index.js';
 import { useForm } from '@inertiajs/vue3';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
+import { updateStatus } from '@/actions/App/Http/Controllers/AdoptionsController';
+import { useStatusStore } from '@/stores/statusStore.js';
+import { useToasterStore } from '@/stores/useToasterStore.js';
 import AdoptionEditForm from '@/components/widget/form/AdoptionEditForm.vue';
 
 export default {
     name: 'AdoptionShow',
     props: ['adoption', 'animal', 'adopter', 'adopters', 'animals', 'status', 'adoptions'],
     components: {
-        Button, Input, InputError,
+        Button,
+        Input,
+        InputError,
         Modal,
         InputLabel,
         TextareaLabel,
-        AdoptionEditForm
+        AdoptionEditForm,
+        Select
     },
 
     data() {
         return {
+            toast: useToasterStore(),
             showAll: false,
             isNoteModalOpen: false,
             noteToShow: null,
@@ -136,19 +179,24 @@ export default {
             formNoteCreate: useForm({
                 adoption_id: null,
                 title: '',
-                content: '',
+                content: ''
             }),
             isEditModalOpened: false,
-
+            isArchiveModalOpen: false,
+            isChangeStatusModalOpen: false,
+            statusAdoption: useForm({
+                'status': null
+            })
         };
     },
     computed: {
         visibleNotes() {
             return this.showAll ? this.adoption.notes : this.adoption.notes.slice(0, 3);
-        },
+        }
     },
 
     methods: {
+        updateStatus,
         handleEditModal() {
             this.isEditModalOpened = !this.isEditModalOpened;
         },
@@ -165,20 +213,48 @@ export default {
         handleSubmitNote() {
             this.formNoteCreate.adoption_id = this.adoption.id;
             this.formNoteCreate.post(note_store(), {
-                onSuccess:() =>{
-                    this.toast.success({text: 'Note créée'});
+                onSuccess: () => {
+                    this.toast.success({ text: 'Note créée' });
                     this.isCreateNoteModalOpen = false;
                     this.formNoteCreate.reset();
                 },
-                onError:() =>{
-                    this.toast.error({text: 'Une erreur est apparue lors de la création' });
+                onError: () => {
+                    this.toast.error({ text: 'Une erreur est apparue lors de la création' });
                 }
-            })
+            });
         },
-        async loadAdoption() {
-            // Recharge les données depuis l'API
-            const response = await axios.get(adoption_show(this.adoptionId));
-            this.adoption = response.data;
+        handleArchiveModal() {
+            this.isArchiveModalOpen = !this.isArchiveModalOpen;
+        },
+        handleChangeStatusModal() {
+            this.isChangeStatusModalOpen = !this.isChangeStatusModalOpen;
+        },
+        archiveAdoption() {
+            this.statusAdoption.status = 'Archivé';
+            this.statusAdoption.put(updateStatus(this.adoption.id), {
+                onSuccess: () => {
+                    this.adoption.status = this.statusAdoption.status;
+                    this.toast.success({ text: 'Adoption archivée avec succès !' });
+                    this.isArchiveModalOpen = false;
+                    this.$emit('updated');
+                },
+                onError: () => {
+                    this.toast.error({ text: 'Une erreur s\'est produite lors de l\'archivage' });
+                }
+            });
+        },
+        updateAdoptionStatus() {
+            this.statusAdoption.put(updateStatus(this.adoption.id), {
+                onSuccess: () => {
+                    this.adoption.status = this.statusAdoption.status;
+                    this.toast.success({ text: 'Statut mis à jour avec succès !' });
+                    this.isChangeStatusModalOpen = false;
+                    this.$emit('updated');
+                },
+                onError: () => {
+                    this.toast.error({ text: 'Une erreur s\'est produite lors de la mise à jour' });
+                }
+            });
         }
     }
 };

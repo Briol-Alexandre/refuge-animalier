@@ -108,4 +108,11 @@ class AdoptionsController extends Controller
     public function destroy($id)
     {
     }
+    public function updateStatus(Adoption $adoption, Request $request)
+    {
+        $status = $request['status'];
+        $adoption->update(array('status' => $status));
+        $adoption->save();
+        return back();
+    }
 }
