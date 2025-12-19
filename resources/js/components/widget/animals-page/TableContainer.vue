@@ -1,19 +1,9 @@
 <template>
     <div
         class="relative col-start-2 col-span-8 row-start-2 row-span-6 bg-softGray/40 rounded-2xl flex flex-col p-5 gap-5">
-        <div class="flex justify-between">
+        <div class="flex justify-between items-start">
             <div>
-                <Teleport to="body">
-                    <Modal :condition="isModalOpen" @close="openModal" index="z-30">
-                        <slot name="filters"></slot>
-                    </Modal>
-                </Teleport>
-                <button @click="openModal"
-                        class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
-                    <Filters />
-                    Filtres
-                </button>
-
+                <slot name="filters"></slot>
             </div>
 
             <input type="search" name="search" id="search" v-model="search"
@@ -62,16 +52,35 @@ export default {
         TextareaLabel,
         AnimalCreateForm
     },
-    props: ['cols', 'fields', 'rows', 'paginationLinks'],
+    props: ['cols', 'fields', 'rows', 'paginationLinks', 'filters'],
 
     computed: {
         filteredRows() {
-            if (!this.search) return this.rows;
+            let filtered = this.rows;
 
-            const searchTerm = this.search.toLowerCase();
+            if (this.filters && Object.keys(this.filters).length > 0) {
+                const cols = Object.keys(this.filters);
 
-            return this.rows.filter(row => row.name.toLowerCase().includes(searchTerm));
+                cols.forEach((col) => {
+                    const value = this.filters[col];
+                    if (value !== '') {
+                        filtered = filtered.filter(row => row[col] === value);
+                    }
+                });
+            }
+
+            if (this.search) {
+                const searchTerm = this.search.toLowerCase();
+                filtered = filtered.filter(row =>
+                    Object.values(row).some(value =>
+                        String(value).toLowerCase().includes(searchTerm)
+                    )
+                );
+            }
+
+            return filtered;
         }
+
     },
 
     data() {

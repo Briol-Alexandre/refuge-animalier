@@ -1,0 +1,55 @@
+.multiselect {
+    min-height: auto !important;
+}
+
+.multiselect__tags {
+    padding: 0.5rem !important;
+    background-color: white !important;
+    border: 2px solid #FCD34D !important;
+    border-radius: 0.5rem !important;
+    min-height: auto !important;
+}
+
+.multiselect__tags {
+    padding-left: 0.5rem !important;
+    padding-right: 2.5rem !important;
+}
+
+.multiselect--active .multiselect__tags {
+    border-color: #FCD34D !important;
+}
+.multiselect__option--highlight {
+    background-color: #FCD34D !important;
+    color: black !important;
+}
+.multiselect__option--selected {
+    background-color: #FCD34D !important;
+    color: black !important;
+    font-weight: normal !important;
+}
+.multiselect__option--selected.multiselect__option--highlight {
+    background-color: #FCD34D !important;
+    color: black !important;
+}
+.multiselect__option--highlight::after {
+    background-color: #FCD34D !important;
+    color: black !important;
+}
+.multiselect__tag {
+    background-color: #FCD34D !important;
+    color: black !important;
+}
+
+.multiselect__input,
+.multiselect__single {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.multiselect__placeholder {
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    font-family: "New Atten Round", sans-serif !important;
+    font-size: 18px !important;
+}

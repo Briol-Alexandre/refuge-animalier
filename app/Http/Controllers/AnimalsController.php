@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AdoptionStatus;
+use App\Enums\Status;
 use App\Jobs\ProcessUploadedAnimalImage;
 use App\Models\Animal;
 use App\Models\Breed;
@@ -27,7 +28,10 @@ class AnimalsController extends Controller
         $breeds = Breed::all();
         $species = Species::all();
         $coats = Coat::all();
-        $status = AdoptionStatus::values();
+        $status = collect(Status::cases())->map(fn($case) => [
+            'value' => $case->value,
+            'label' => $case->label()
+        ]);
         $vaccines = Vaccine::all();
         return Inertia::render('Animals', [
             'title' => 'Animaux',
@@ -50,7 +54,7 @@ class AnimalsController extends Controller
             'name' => 'required',
             'breed_id' => 'required|exists:breeds,id',
             'sexe' => 'required',
-            'age' => 'required',
+            'age' => 'required|date',
             'desc' => 'max:255',
             'status' => 'required',
             'images' => 'array',
@@ -155,6 +159,9 @@ class AnimalsController extends Controller
         } else {
             $validated['images'] = $animal->images;
         }
+
+        $validated['status'] = Status::fromLabel($validated['status']);
+
         $animal->update($validated);
 
         $coats = $request['coat_id'];
@@ -185,7 +192,7 @@ class AnimalsController extends Controller
 
     public function updateStatus(Animal $animal, Request $request)
     {
-        $status = $request['status'];
+        $status = Status::fromLabel($request['status']);
         $animal->update(array('status' => $status));
         $animal->save();
         return back();

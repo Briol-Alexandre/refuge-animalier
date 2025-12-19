@@ -28,7 +28,7 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->name('dashboard');
 
 
-        include 'animals.php';
+    include 'animals.php';
 
     Route::post('/notes', [NotesController::class, 'store'])
         ->middleware(['auth'])
@@ -46,6 +46,18 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
     Route::get('/adoptions', [AdoptionsController::class, 'index'])
         ->middleware(['auth'])
         ->name('adoptions.index');
+
+    Route::post('/adoption', [AdoptionsController::class, 'store'])
+        ->middleware(['auth'])
+        ->name('adoptions.store');
+
+    Route::put('/adoptions/{adoption}', [AdoptionsController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('adoptions.update');
+
+    Route::put('/adoptions/{adoption}/status', [AdoptionsController::class, 'updateStatus'])
+        ->middleware(['auth'])
+        ->name('adoptions.status-update');
 
     Route::get('/users', [UsersController::class, 'index'])
         ->middleware(['auth'])

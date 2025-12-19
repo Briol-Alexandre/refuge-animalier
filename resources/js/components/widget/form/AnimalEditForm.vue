@@ -180,7 +180,7 @@
                 label="Statut"
             >
                 <option value="">--Choisir un statut--</option>
-                <option v-for="status in statusList" :value="status">{{ status }}</option>
+                <option v-for="status in status" :value="status.label">{{ status.label }}</option>
             </Select>
         </fieldset>
 
@@ -359,14 +359,13 @@ import { update as animal_update } from '@/actions/App/Http/Controllers/AnimalsC
 import { update as note_update } from '@/actions/App/Http/Controllers/NotesController.js';
 import { destroy as note_delete } from '@/actions/App/Http/Controllers/NotesController.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
-import { useStatusStore } from '@/stores/statusStore.js';
 import Input from '../../ui/input/Input.vue';
 import Modal from '@/components/widget/Modal.vue';
 
 export default {
     name: '',
     components: { Modal, Input, ImageAdd, Close, Select, Button, InputError },
-    props: ['animal', 'species', 'breeds', 'coats', 'vaccines'],
+    props: ['animal', 'species', 'breeds', 'coats', 'vaccines', 'status'],
 
     data() {
         return {
@@ -394,7 +393,6 @@ export default {
             isCoatModalOpen: false,
             isVaccineModalOpen: false,
             page: usePage(),
-            statusList: useStatusStore().statusList,
             formNote: useForm({
                 id: null,
                 title: '',
@@ -608,14 +606,6 @@ export default {
                 onSuccess:() =>{
                     this.toast.success({text: 'Note créée'});
                     this.isCreateNoteModalOpen = false;
-
-                    const tempNote = {
-                        title: this.formNoteCreate.title,
-                        content: this.formNoteCreate.content,
-                    };
-
-                    this.animal.notes.push(tempNote);
-
                     this.formNoteCreate.reset();
                 },
                 onError:() =>{

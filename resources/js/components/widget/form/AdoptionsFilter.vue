@@ -1,29 +1,10 @@
 <template>
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-        <p class="title col-span-full !mb-0">
-            Filtres
-        </p>
-        <InputLabel id-name="adopter" type="text" placeholder="Élise">
-            Nom de l'adoptant
-        </InputLabel>
-
-        <InputLabel id-name="animal" type="text" placeholder="Moka">
-            Nom de l'animal
-        </InputLabel>
-
-        <Select id-name="status" label="Statut de l'adoption">
-            <option value="">--Choisir un statut--</option>
-            <option value="pending">En traitement</option>
-            <option value="accepted">Acceptée</option>
-        </Select>
-        <div class="flex items-center col-span-full justify-end gap-4">
-            <button>
-                Réinitialiser
-            </button>
-            <button class="button-light mb-0">
-                Appliquer
-            </button>
-        </div>
+    <div class="flex gap-2 items-center">
+        <label for="status">Status</label>
+        <select id="status" name="status" v-model="currentFilter" class="px-2 py-1 bg-white border border-main-yellow rounded-lg" @change="$emit('filterChange', currentFilter)">
+            <option value="">Tous</option>
+            <option v-for="s in status" :value="s.label">{{ s.label }}</option>
+        </select>
     </div>
 </template>
 
@@ -33,20 +14,25 @@ import Select from '@/components/widget/form/Select.vue';
 import { Button } from '@/components/ui/button/index.js';
 
 export default {
-  name: "",
+    name: '',
     components: { Button, Select, InputLabel },
-  props: [],
+    props: ['status', 'modelValue'],
 
-  data() {
-    return {
+    data() {
+        return {
+            currentFilter: this.modelValue || ''
+        };
+    },
 
+    watch: {
+        modelValue(newVal) {
+            this.currentFilter = newVal;
+        }
+    },
+
+    methods: {
     }
-  },
-
-  methods: {
-
-  }
-}
+};
 </script>
 
 <style>

@@ -357,7 +357,7 @@ export default {
         },
         selectedVaccines() {
             return this.vaccines.filter(v => this.formAnimal.vaccines.includes(v.id));
-        }
+        },
     },
     methods: {
         species_store,

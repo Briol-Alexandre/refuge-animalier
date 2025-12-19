@@ -2,7 +2,7 @@
     <div class="col-start-3 col-span-full grid grid-cols-10 grid-rows-8 gap-4 h-screen">
         <div class="mt-14 mb-14 col-start-2 col-span-8 row-start-1 flex justify-between items-center">
             <h1 class="title !mb-0">
-                Liste des adoptions
+                {{ title }}
             </h1>
             <button class="button-light z-10" @click="openCreateModal">
                 Ajouter une adoption
@@ -10,24 +10,30 @@
         </div>
         <TableContainer
             :paginationLinks="adoptions.links"
-            :rows="adoptions.data"
+            :rows="formattedAdoptions"
             :cols="['Nom de l‘adoptant', 'Nom de l‘animal', 'Date de l‘adoption', 'Statut']"
-            :fields="['adopter_id', 'animal_id', 'adoption_date', 'status']"
+            :fields="['adopter_name', 'animal_name', 'adoption_date', 'status']"
+            :filters="this.filters"
             @row-click="openShowModal">
 
             <template v-slot:filters>
-                <AdoptionsFilter />
+                <KeepAlive>
+                    <AdoptionsFilter :status="status" @filterChange="filterTable" :modelValue="currentFilterValue" />
+                </KeepAlive>
             </template>
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <AdoptionShow :adoption="selectedRow" />
+                <AdoptionShow :adoption="selectedRow" :animal="getAnimal(selectedRow.animal_id)"
+                              :adopter="getAdopter(selectedRow.adopter_id)" :animals="animals" :adopters="adopters"
+                              :status="status" :adoptions="adoptions" @updated="toggleShowModal" />
             </Modal>
 
         </TableContainer>
 
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                <AdoptionCreateForm :open-modal="openCreateModal" />
+                <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters"
+                                    :status="status" @created="openCreateModal" />
             </Modal>
         </Teleport>
     </div>
@@ -68,14 +74,28 @@ export default {
         AdoptionsFilter,
         AdoptionCreateForm
     },
-    props: ['adoptions'],
+    props: ['adoptions', 'title', 'animals', 'adopters', 'status'],
 
     data() {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
-            selectedRow: null
+            selectedRow: null,
+            filters: [],
+            currentFilterValue: ''
         };
+    },
+
+    computed: {
+        formattedAdoptions() {
+            return this.adoptions.data.map(adoption => ({
+                ...adoption,
+                animal_name: this.getAnimal(adoption.animal_id)?.name || 'N/A',
+                adopter_name: this.getAdopter(adoption.adopter_id)?.name || 'N/A',
+                adoption_date: this.dateFormat(adoption.adoption_date),
+                status: this.getStatusLabel(adoption.status)
+            }));
+        }
     },
 
     methods: {
@@ -87,8 +107,32 @@ export default {
         },
         openShowModal(row) {
             this.selectedRow = row;
-            console.log(this.selectedRow);
             this.isShowModalOpen = true;
+        },
+        getAnimal(animalId) {
+            return this.animals.find(animal => animal.id === animalId);
+        },
+        getAdopter(adopterId) {
+            return this.adopters.find(adopter => adopter.id === adopterId);
+        },
+        dateFormat(date) {
+            if (date) {
+                let splitedDate = date.split('T');
+                return splitedDate[0];
+            } else {
+                return null;
+            }
+
+        },
+        getStatusLabel(statusValue) {
+            const statusObj = this.status.find(s => s.value === statusValue);
+            return statusObj ? statusObj.label : statusValue;
+        },
+        filterTable(filter) {
+            this.currentFilterValue = filter;
+            this.filters = {
+                'status': filter
+            };
         }
     }
 };
