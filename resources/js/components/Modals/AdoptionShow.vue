@@ -22,8 +22,8 @@
                 </p>
                 <p v-if="adoption.contact_message">{{ adoption.contact_message }}</p>
                 <p v-else class="italic">Aucun message de contact</p>
-
             </div>
+
 
         </div>
         <div>
