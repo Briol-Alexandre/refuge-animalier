@@ -40,7 +40,7 @@ class Adoption extends Model
     protected function casts(): array
     {
         return [
-            'adoption_date' => 'date',
+            'adoption_date' => 'date:Y-m-d',
         ];
     }
 }

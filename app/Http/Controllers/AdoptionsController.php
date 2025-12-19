@@ -47,7 +47,7 @@ class AdoptionsController extends Controller
         $validated = $request->validate([
             'animal_id' => 'exists:animals,id',
             'adopter_id' => 'exists:adopters,id',
-            'adoption_date' => 'nullable|date',
+            'adoption_date' => 'nullable|date|date_format:Y-m-d',
             'status' => 'required',
             'note' => 'array',
             'note.*' => 'string',

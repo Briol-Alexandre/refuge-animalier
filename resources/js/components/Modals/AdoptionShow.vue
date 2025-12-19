@@ -138,6 +138,7 @@
             </form>
         </Modal>
     </Teleport>
+    <pre>{{adoption}}</pre>
 </template>
 
 <script>

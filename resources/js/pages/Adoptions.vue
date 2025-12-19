@@ -92,7 +92,6 @@ export default {
                 ...adoption,
                 animal_name: this.getAnimal(adoption.animal_id)?.name || 'N/A',
                 adopter_name: this.getAdopter(adoption.adopter_id)?.name || 'N/A',
-                adoption_date: this.dateFormat(adoption.adoption_date),
                 status: this.getStatusLabel(adoption.status)
             }));
         }
@@ -114,15 +113,6 @@ export default {
         },
         getAdopter(adopterId) {
             return this.adopters.find(adopter => adopter.id === adopterId);
-        },
-        dateFormat(date) {
-            if (date) {
-                let splitedDate = date.split('T');
-                return splitedDate[0];
-            } else {
-                return null;
-            }
-
         },
         getStatusLabel(statusValue) {
             const statusObj = this.status.find(s => s.value === statusValue);

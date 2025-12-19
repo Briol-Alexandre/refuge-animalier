@@ -16,7 +16,7 @@ class AdoptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'adoption_date' => Carbon::now(),
+            'adoption_date' => $this->faker->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
             'status' => $this->faker->randomElement(AdoptionStatus::values()),
             'animal_id' => Animal::inRandomOrder()->first()?->id ?? Animal::factory(),
             'adopter_id' => Adopter::factory(),
