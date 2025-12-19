@@ -61,7 +61,6 @@
             <button class="button-light" type="submit">Modifier</button>
         </div>
     </form>
-    <pre>{{adoption}}</pre>
 </template>
 
 <script>
@@ -131,7 +130,7 @@ export default {
         },
         handleAnimalChange() {
             this.formAdoption.animal_id = this.selectedAnimal?.id;
-        }
+        },
     }
 };
 </script>

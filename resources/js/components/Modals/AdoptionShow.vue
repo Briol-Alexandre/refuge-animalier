@@ -1,31 +1,56 @@
 <template>
-    <div class="grid grid-cols-2 gap-y-10">
+    <div class="grid grid-cols-2 gap-x-5 gap-y-10">
         <div>
             <p class="font-atten text-2xl font-black">Adoptant</p>
             <dl>
                 <div class="flex gap-2">
-                    <dt class="font-medium">Nom&nbsp;:</dt>
+                    <dt class="font-bold">Nom&nbsp;:</dt>
                     <dd>{{ adopter.name }}</dd>
                 </div>
                 <div class="flex gap-2">
-                    <dt class="font-medium">Email&nbsp;:</dt>
+                    <dt class="font-bold">Email&nbsp;:</dt>
                     <dd>{{ adopter.email }}</dd>
                 </div>
                 <div class="flex gap-2">
-                    <dt class="font-medium">Téléphone&nbsp;:</dt>
+                    <dt class="font-bold">Téléphone&nbsp;:</dt>
                     <dd>{{ adopter.tel }}</dd>
                 </div>
             </dl>
+            <div class="mt-4">
+                <p class="font-atten text-2xl font-black leading-none mb-2">Prise de contact <small
+                    class="block font-poppins font-medium text-sm">(formulaire rempli par l'adoptant)</small>
+                </p>
+                <p v-if="adoption.contact_message">{{ adoption.contact_message }}</p>
+                <p v-else class="italic">Aucun message de contact</p>
+
+            </div>
 
         </div>
         <div>
             <p class="font-atten text-2xl font-black">Animal</p>
-            <dl>
-                <div class="flex gap-2">
-                    <dt class="font-medium">Nom&nbsp;:</dt>
-                    <dd>{{ animal.name }}</dd>
+            <div class="flex h-full gap-2">
+                <div class="h-full w-1/2">
+                    <img
+                        :src="getImagesSrc(animal.images)[0]"
+                        :alt="'Image de ' + animal.name"
+                        class="h-full rounded aspect-video  object-cover"
+                    >
                 </div>
-            </dl>
+                <dl>
+                    <div class="flex gap-2">
+                        <dt class="font-bold">Nom&nbsp;:</dt>
+                        <dd>{{ animal.name }}</dd>
+                    </div>
+                    <div class="flex gap-2">
+                        <dt class="font-bold">Espèce&nbsp;:</dt>
+                        <dd>{{ animal.specie.name }}</dd>
+                    </div>
+                    <div class="flex gap-2">
+                        <dt class="font-bold">Race&nbsp;:</dt>
+                        <dd>{{ animal.breed.name }}</dd>
+                    </div>
+                </dl>
+            </div>
         </div>
         <div>
             <p class="font-atten text-2xl font-black">Status de l'adoption</p>
@@ -39,8 +64,12 @@
                 </button>
             </div>
             <ul class="list-disc list-inside">
-                <li v-for="(note, i) in visibleNotes" :key="i" class="hover:underline hover:cursor-pointer"
+                <li v-if="visibleNotes.length > 0" v-for="(note, i) in visibleNotes" :key="i"
+                    class="hover:underline hover:cursor-pointer"
                     @click="handleNoteModal(note)">{{ note.title }}
+                </li>
+                <li v-else class="list-none italic">
+                    Pas encore de note
                 </li>
             </ul>
             <button
@@ -49,12 +78,6 @@
                 <span v-if="!showAll">Afficher plus</span>
                 <span v-else>Afficher moins</span>
             </button>
-        </div>
-        <div class="col-span-full">
-            <p class="font-atten text-2xl font-black">Prise de contact <small>(formulaire rempli par l'adoptant)</small>
-            </p>
-            <p>{{ adoption.contact_message }}</p>
-
         </div>
         <div class="col-span-full flex justify-center gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">Changer le statut de l'adoption</button>
@@ -138,7 +161,6 @@
             </form>
         </Modal>
     </Teleport>
-    <pre>{{adoption}}</pre>
 </template>
 
 <script>
@@ -154,6 +176,7 @@ import { store as note_store } from '@/actions/App/Http/Controllers/NotesControl
 import { updateStatus } from '@/actions/App/Http/Controllers/AdoptionsController';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import AdoptionEditForm from '@/components/widget/form/AdoptionEditForm.vue';
+import Dump from '@/components/Debug/Dump.vue';
 
 export default {
     name: 'AdoptionShow',
@@ -166,7 +189,8 @@ export default {
         InputLabel,
         TextareaLabel,
         AdoptionEditForm,
-        Select
+        Select,
+        Dump
     },
 
     data() {
@@ -255,6 +279,13 @@ export default {
                     this.toast.error({ text: 'Une erreur s\'est produite lors de la mise à jour' });
                 }
             });
+        },
+        getImagesSrc(imageData) {
+            if (!imageData) return [];
+            const parsed = typeof imageData === 'string'
+                ? JSON.parse(imageData)
+                : imageData;
+            return Object.keys(parsed);
         }
     }
 };
