@@ -15,7 +15,7 @@ class AdoptionsController extends Controller
     public function index()
     {
         $adoptions = Adoption::with('notes')->orderBy('adoption_date', 'asc')->paginate(10);
-        $animals = Animal::all();
+        $animals = Animal::with('breed')->with('specie')->get();
         $adopters = Adopter::all();
         $status = collect(AdoptionStatus::cases())->map(fn($case) => [
             'value' => $case->value,
