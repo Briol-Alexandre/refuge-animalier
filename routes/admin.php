@@ -71,6 +71,10 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('users.update');
 
+    Route::delete('users/{user}', [UsersController::class, 'destroy'])
+        ->middleware(['auth'])
+        ->name('users.destroy');
+
     Route::get('/notifications', [NotificationsController::class, 'index'])
         ->middleware(['auth'])
         ->name('notifications.index');

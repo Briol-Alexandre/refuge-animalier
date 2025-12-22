@@ -7,6 +7,7 @@ use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
 
 
@@ -135,5 +136,8 @@ class UsersController extends Controller
 
     public function destroy($id)
     {
+        $volunteer = User::findOrFail($id);
+        $volunteer->delete();
+        return Inertia::location(route('users.index'));
     }
 }

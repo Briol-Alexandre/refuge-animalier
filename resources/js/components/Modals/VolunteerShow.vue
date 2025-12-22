@@ -27,13 +27,29 @@
         </div>
         <ScheduleTable :volunteer="schedule" />
         <div class="col-span-full flex justify-around">
-            <button class="button-dark">Supprimer le bénévole</button>
+            <button class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
             <button class="button-light" @click="handleEditModal">Modifier le bénévole</button>
         </div>
     </div>
     <Teleport to="body">
         <Modal :condition="isEditModalOpen" @close="handleEditModal" index="z-30">
             <VolunteerEditForm :volunteer="volunteer" :permissions="permissions" @updated="handleEditModal; $emit('updated')"/>
+        </Modal>
+        <Modal
+            @close="handleDeleteModal"
+            :condition="isDeleteModalOpen"
+            index="z-30"
+            modal-classes="w-fit"
+            close-btn-classes="!top-5 !right-5"
+        >
+            <p>Voulez-vous vraiment archiver : </p>
+            <p class="font-bold">{{ this.volunteer?.name }}</p>
+            <div class="flex justify-between gap-2 mt-6">
+                <button class="underline hover:cursor-pointer" @click="handleDeleteModal">Annuler</button>
+                <button class="text-red-600 underline hover:cursor-pointer" @click="handleDeleteSubmit">
+                    Supprimer
+                </button>
+            </div>
         </Modal>
     </Teleport>
 </template>
@@ -42,18 +58,42 @@
 import ScheduleTable from '@/components/widget/tables/ScheduleTable.vue';
 import Modal from '@/components/widget/Modal.vue';
 import VolunteerEditForm from '@/components/widget/form/VolunteerEditForm.vue';
+import { Button } from '@/components/ui/button/index.js';
+import { useForm } from '@inertiajs/vue3';
+import { useToasterStore } from '@/stores/useToasterStore.js';
+import {destroy as delete_volunteer} from '@/actions/App/Http/Controllers/UsersController.js'
 export default {
-    components: { ScheduleTable, Modal, VolunteerEditForm },
+    components: { Button, ScheduleTable, Modal, VolunteerEditForm },
     props: ['volunteer', 'schedule', 'permissions'],
     data() {
         return {
             isEditModalOpen: false,
+            isDeleteModalOpen: false,
+            deleteForm: useForm({
+                'id': this.volunteer.id
+            }),
+            toast: useToasterStore(),
         };
     },
 
     methods: {
+        delete_volunteer,
         handleEditModal() {
             this.isEditModalOpen = !this.isEditModalOpen;
+        },
+        handleDeleteModal(){
+            this.isDeleteModalOpen = !this.isDeleteModalOpen;
+        },
+        handleDeleteSubmit() {
+            this.deleteForm.delete(delete_volunteer(this.deleteForm.id), {
+                onSuccess: () => {
+                    this.toast.success({text: 'Bénévole supprimé avec succès'});
+                    this.isDeleteModalOpen = false;
+                },
+                onError: () => {
+                    this.toast.error({text:'Une erreur est survenue'})
+                }
+            })
         }
     }
 };
