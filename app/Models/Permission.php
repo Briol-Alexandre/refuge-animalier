@@ -14,9 +14,9 @@ class Permission extends Model
         'name'
     ];
 
-    public function volunteer():BelongsToMany
+    public function user():BelongsToMany
     {
-        return $this->belongsToMany(Volunteer::class, 'permission_volunteer');
+        return $this->belongsToMany(User::class, 'permission_user');
     }
 }
 

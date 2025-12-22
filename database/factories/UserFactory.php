@@ -22,7 +22,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $image = 'assets/img/default.jpg';
+        $imageJson =[$image => []];
         return [
+            'avatar' => json_encode($imageJson),
+            'tel' => $this->faker->phoneNumber(),
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

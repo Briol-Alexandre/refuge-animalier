@@ -14,6 +14,7 @@ use App\Models\Vaccine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use JetBrains\PhpStorm\NoReturn;
 
 class AnimalsController extends Controller
 {
@@ -48,6 +49,7 @@ class AnimalsController extends Controller
     {
     }
 
+    #[NoReturn]
     public function store(Request $request)
     {
         $validated = $request->validate([

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PermissionVolunteer extends Pivot
+class PermissionUser extends Pivot
 {
     use HasFactory;
 
@@ -17,9 +17,9 @@ class PermissionVolunteer extends Pivot
         'permission_id',
     ];
 
-    public function volunteer(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Volunteer::class);
+        return $this->belongsTo(User::class);
     }
 
     public function permission(): BelongsTo

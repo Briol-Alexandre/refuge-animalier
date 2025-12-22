@@ -18,14 +18,14 @@
                 <AnimalsFilter />
             </template>
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <VolunteerShow :volunteer="selectedRow" />
+                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal"/>
             </Modal>
 
         </TableContainer>
 
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
-                <VolunteerCreateForm :open-modal="openCreateModal" :permissions="permissions" />
+                <VolunteerCreateForm :open-modal="openCreateModal" :permissions="permissions" @created="openCreateModal"/>
             </Modal>
         </Teleport>
     </div>
@@ -64,7 +64,7 @@ export default {
             this.selectedRow = row;
             console.log(this.selectedRow);
             this.isShowModalOpen = true;
-        }
+        },
     }
 };
 </script>
