@@ -18,7 +18,7 @@
                 <AnimalsFilter />
             </template>
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <VolunteerShow :volunteer="selectedRow" :schedule="JSON.parse(selectedRow.schedule)" :permissions="permissions" @updated="toggleShowModal"/>
+                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal"/>
             </Modal>
 
         </TableContainer>
@@ -65,10 +65,6 @@ export default {
             console.log(this.selectedRow);
             this.isShowModalOpen = true;
         },
-        scheduleToArray() {
-            this.selectedRow.schedule = JSON.parse(this.selectedRow.schedule);
-            return this.selectedRow.schedule;
-        }
     }
 };
 </script>

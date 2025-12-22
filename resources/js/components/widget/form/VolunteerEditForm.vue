@@ -146,12 +146,6 @@ export default {
     },
 
     computed: {
-        parsedSchedule() {
-            if (typeof this.formVolunteer.schedule === 'object') {
-                return this.formVolunteer.schedule;
-            }
-            return JSON.parse(this.formVolunteer.schedule);
-        }
     },
 
     methods: {

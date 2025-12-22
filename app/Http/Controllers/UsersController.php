@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use JetBrains\PhpStorm\NoReturn;
+
 
 class UsersController extends Controller
 {
@@ -28,11 +28,10 @@ class UsersController extends Controller
     {
     }
 
-    #[NoReturn]
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'avatar' => 'image|mimes:jpg,png,gif',
+            'avatar' => 'nullable|image|mimes:jpg,png,gif',
             'name' => 'required|min:3',
             'email' => 'email|required|unique:users',
             'tel' => 'required',
@@ -42,12 +41,10 @@ class UsersController extends Controller
             'schedule.*.*' => 'bool'
         ]);
 
-        $validated['schedule'] = json_encode($validated['schedule']);
+        $new_image = [];
 
-        $avatar = $validated['avatar'];
-        $new_images = [];
-
-        if ($avatar) {
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
             $new_original_file_name = uniqid() . '.' . config('avatar.image_type');
             $full_path_to_original = Storage::putFileAs(
                 config('avatar.original_path'),
@@ -61,11 +58,11 @@ class UsersController extends Controller
                 $avatar = '';
             }
             $avatar = $full_path_to_original;
-            $new_images[$avatar] = $avatar;
+            $new_image[$avatar] = $avatar;
+            $validated['avatar'] = collect($new_image)->first();
+        } else {
+            $validated['avatar'] = '';
         }
-        $validated['avatar'] = collect($new_images);
-
-        $validated['avatar'] = $validated['avatar']->first();
         $validated['password'] = 'password';
 
         $user = User::create($validated);
@@ -85,12 +82,11 @@ class UsersController extends Controller
     {
     }
 
-    #[NoReturn]
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
             'name' => 'required|min:3',
-            'email' => 'email|required|unique:users,email,'. $user->id,
+            'email' => 'email|required|unique:users,email,' . $user->id,
             'tel' => 'required',
             'permissions' => 'array',
             'schedule' => 'array',
@@ -98,9 +94,7 @@ class UsersController extends Controller
             'schedule.*.*' => 'bool'
         ]);
 
-        $validated['schedule'] = json_encode($validated['schedule']);
-
-        $new_images = [];
+        $new_image = [];
 
         if ($request->hasFile('avatar')) {
             $request->validate([
@@ -120,8 +114,8 @@ class UsersController extends Controller
                 $avatar = '';
             }
             $avatar = $full_path_to_original;
-            $new_images[$avatar] = $avatar;
-            $validated['avatar'] = collect($new_images);
+            $new_image[$avatar] = $avatar;
+            $validated['avatar'] = collect($new_image);
         } else {
             $validated['avatar'] = $user->avatar;
         }

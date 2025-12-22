@@ -125,6 +125,7 @@ export default {
     methods: {
         handleSubmit() {
             this.formVolunteer.post(volunteer_store(), {
+                forceFormData: true,
                 onSuccess: () => {
                     this.toast.success({ text: 'Bénévole créée avec succès !' });
                     this.$emit('created');
