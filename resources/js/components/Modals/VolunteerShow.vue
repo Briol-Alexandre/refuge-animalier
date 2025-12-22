@@ -25,16 +25,37 @@
                 </ul>
             </div>
         </div>
-        <ScheduleTable :volunteer="schedule"/>
+        <ScheduleTable :volunteer="schedule" />
+        <div class="col-span-full flex justify-around">
+            <button class="button-dark">Supprimer le bénévole</button>
+            <button class="button-light" @click="handleEditModal">Modifier le bénévole</button>
+        </div>
     </div>
+    <Teleport to="body">
+        <Modal :condition="isEditModalOpen" @close="handleEditModal" index="z-30">
+            <VolunteerEditForm :volunteer="volunteer" :permissions="permissions" @updated="handleEditModal; $emit('updated')"/>
+        </Modal>
+    </Teleport>
 </template>
 
 <script>
 import ScheduleTable from '@/components/widget/tables/ScheduleTable.vue';
-
+import Modal from '@/components/widget/Modal.vue';
+import VolunteerEditForm from '@/components/widget/form/VolunteerEditForm.vue';
 export default {
-    components: { ScheduleTable },
-    props: ['volunteer', 'schedule'],
+    components: { ScheduleTable, Modal, VolunteerEditForm },
+    props: ['volunteer', 'schedule', 'permissions'],
+    data() {
+        return {
+            isEditModalOpen: false,
+        };
+    },
+
+    methods: {
+        handleEditModal() {
+            this.isEditModalOpen = !this.isEditModalOpen;
+        }
+    }
 };
 </script>
 <style scoped>

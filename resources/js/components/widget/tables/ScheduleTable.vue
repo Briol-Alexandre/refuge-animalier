@@ -8,7 +8,7 @@
             </tr>
             <tr v-for="time in times" :key="time.key">
                 <th>{{ time.label }}</th>
-                <td v-if="!volunteer" v-for="day in days" :key="day.key"
+                <td v-if="!volunteer" v-for="day in days" :key="`${day.key}-${time.key}`"
                     :class="schedule[day.key][time.key] ? 'bg-green-500/20' : 'bg-red-500/20'">
                     <label class="checkbox-cell">
                         <input
@@ -19,7 +19,18 @@
                         <span class="">{{ schedule[day.key][time.key] ? 'Oui' : 'Non' }}</span>
                     </label>
                 </td>
-                <td v-else v-for="d in days" :key="d.key"
+                <td v-else-if="volunteerSchedule" v-for="da in days" :key="`${da.key}-${time.key}-edit`"
+                    :class="volunteerSchedule[da.key][time.key] ? 'bg-green-500/20' : 'bg-red-500/20'">
+                    <label class="checkbox-cell">
+                        <input
+                            class="hidden"
+                            type="checkbox"
+                            v-model="volunteerSchedule[da.key][time.key]"
+                        />
+                        <span class="">{{ volunteerSchedule[da.key][time.key] ? 'Oui' : 'Non' }}</span>
+                    </label>
+                </td>
+                <td v-else v-for="d in days" :key="`${d.key}-${time.key}-view`"
                     :class="volunteer[d.key][time.key] === '1' ? 'bg-green-500/20' : 'bg-red-500/20'">
                     <span class="">{{ volunteer[d.key][time.key] === '1' ? 'Oui' : 'Non' }}</span>
                 </td>
@@ -31,7 +42,7 @@
 <script>
 export default {
     name: 'ScheduleTable',
-    props: ['modelValue', 'volunteer'],
+    props: ['modelValue', 'volunteer', 'volunteerSchedule'],
     emits: ['update:modelValue'],
 
     data() {

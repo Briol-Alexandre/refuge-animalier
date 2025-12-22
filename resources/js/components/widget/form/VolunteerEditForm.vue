@@ -1,22 +1,27 @@
 <template>
-    <form class="grid grid-cols-[30%_70%] gap-x-4 gap-y-2" @submit.prevent="handleSubmit">
+    <form class="grid grid-cols-[30%_70%] gap-x-4 gap-y-2" @submit.prevent="handleSubmit" enctype="multipart/form-data">
         <p class="col-span-full title">
-            Créer la fiche d'un bénévole
+            Modifier la fiche de {{ volunteer.name }}
         </p>
 
         <div class="h-full">
             <div class="flex flex-col h-full">
                 <label for="images" class="relative w-full h-full flex items-center justify-center">
-                    <div v-if="previewImage.length === 0" class="text-center flex flex-col items-center">
-                        <ImageAdd fill-color="#ECECEC" />
-                        Ajouter une ou <span class="block">plusieurs photos</span>
-                    </div>
-                    <div v-else
+                    <div v-if="previewImage"
                          class="absolute top-0 left-0 w-full h-full border-none object-cover grid grid-rows-[80%_20%] gap-2">
                         <img
                             :src="previewImage"
                             class="w-full h-full object-cover col-span-full"
                             alt="" />
+                    </div>
+                    <img
+                        v-else-if="formVolunteer.avatar"
+                        :src="formVolunteer.avatar"
+                        class="w-full h-full object-cover col-span-full"
+                        alt="" />
+                    <div v-else class="text-center flex flex-col items-center">
+                        <ImageAdd fill-color="#ECECEC" />
+                        Ajouter une ou <span class="block">plusieurs photos</span>
                     </div>
                     <InputError :message="formVolunteer.errors.avatar" class="absolute bottom-0" />
                 </label>
@@ -73,8 +78,8 @@
                 </div>
             </fieldset>
         </div>
-        <ScheduleTable v-model="formVolunteer.schedule" />
-        <button type="submit" class="col-span-2 ml-auto button-light mt-5">Ajouter le bénévole</button>
+        <ScheduleTable v-model="formVolunteer.schedule" :volunteer-schedule="formVolunteer.schedule" />
+        <button type="submit" class="col-span-2 ml-auto button-light mt-5">Modifier le bénévole</button>
     </form>
 </template>
 
@@ -88,14 +93,32 @@ import Modal from '@/components/widget/Modal.vue';
 import InputError from '@/components/InputError.vue';
 import Input from '../../ui/input/Input.vue';
 import { useForm } from '@inertiajs/vue3';
-import { store as volunteer_store } from '@/actions/App/Http/Controllers/UsersController.js';
+import { update as volunteer_update } from '@/actions/App/Http/Controllers/UsersController.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import ScheduleTable from '@/components/widget/tables/ScheduleTable.vue';
 
 export default {
     name: '',
     components: { Input, InputError, Modal, Button, ImageAdd, Select, TextareaLabel, InputLabel, ScheduleTable },
-    props: ['openModal', 'permissions', 'schedule'],
+    props: ['openModal', 'permissions', 'schedule', 'volunteer'],
+
+    mounted() {
+        if (this.volunteer) {
+            this.formVolunteer.avatar = this.volunteer.avatar || '';
+            this.formVolunteer.name = this.volunteer.name || '';
+            this.formVolunteer.email = this.volunteer.email || '';
+            this.formVolunteer.tel = this.volunteer.tel || '';
+            this.formVolunteer.permissions = this.volunteer.permissions
+                ? this.volunteer.permissions.map(p => p.id)
+                : [];
+            if (this.volunteer.schedule) {
+                const parsedSchedule = typeof this.volunteer.schedule === 'string'
+                    ? JSON.parse(this.volunteer.schedule)
+                    : this.volunteer.schedule;
+                this.formVolunteer.schedule = this.convertScheduleToBoolean(parsedSchedule);
+            }
+        }
+    },
 
     data() {
         return {
@@ -122,12 +145,24 @@ export default {
         };
     },
 
+    computed: {
+        parsedSchedule() {
+            if (typeof this.formVolunteer.schedule === 'object') {
+                return this.formVolunteer.schedule;
+            }
+            return JSON.parse(this.formVolunteer.schedule);
+        }
+    },
+
     methods: {
+        volunteer_update,
         handleSubmit() {
-            this.formVolunteer.post(volunteer_store(), {
+            this.formVolunteer._method = 'PATCH';
+            this.formVolunteer.post(volunteer_update(this.volunteer.id), {
+                forceFormData:true,
                 onSuccess: () => {
-                    this.toast.success({ text: 'Bénévole créée avec succès !' });
-                    this.$emit('created');
+                    this.toast.success({ text: 'Bénévole modifié avec succès !' });
+                    this.$emit('updated');
                 },
                 onError: () => {
                     this.toast.error({ text: 'Une erreur est survenue' });
@@ -142,6 +177,23 @@ export default {
                 this.formVolunteer.avatar = file;
                 this.previewImage = URL.createObjectURL(file);
             }
+        },
+        convertScheduleToBoolean(schedule) {
+            const converted = {};
+            for (const day in schedule) {
+                converted[day] = {};
+                for (const time in schedule[day]) {
+                    converted[day][time] = schedule[day][time] === '1' || schedule[day][time] === true;
+                }
+            }
+            return converted;
+        },
+        getImagesSrc(imageData) {
+            if (!imageData) return [];
+            const parsed = typeof imageData === 'string'
+                ? JSON.parse(imageData)
+                : imageData;
+            return Object.keys(parsed);
         }
     }
 };

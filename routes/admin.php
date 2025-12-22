@@ -63,9 +63,13 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
         ->middleware(['auth'])
         ->name('users.index');
 
-    Route::post('/user', [UsersController::class, 'store'])
+    Route::post('/users', [UsersController::class, 'store'])
         ->middleware(['auth'])
         ->name('users.store');
+
+    Route::post('/users/{user}', [UsersController::class, 'update'])
+        ->middleware(['auth'])
+        ->name('users.update');
 
     Route::get('/notifications', [NotificationsController::class, 'index'])
         ->middleware(['auth'])

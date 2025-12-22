@@ -36,8 +36,9 @@ class UsersController extends Controller
             'name' => 'required|min:3',
             'email' => 'email|required|unique:users',
             'tel' => 'required',
+            'permissions' => 'array',
             'schedule' => 'array',
-            'schedule.*' => 'array',
+            'schedule.*' => 'array|nullable',
             'schedule.*.*' => 'bool'
         ]);
 
@@ -84,8 +85,58 @@ class UsersController extends Controller
     {
     }
 
-    public function update(Request $request, $id)
+    #[NoReturn]
+    public function update(Request $request, User $user)
     {
+        $validated = $request->validate([
+            'name' => 'required|min:3',
+            'email' => 'email|required|unique:users,email,'. $user->id,
+            'tel' => 'required',
+            'permissions' => 'array',
+            'schedule' => 'array',
+            'schedule.*' => 'array|nullable',
+            'schedule.*.*' => 'bool'
+        ]);
+
+        $validated['schedule'] = json_encode($validated['schedule']);
+
+        $new_images = [];
+
+        if ($request->hasFile('avatar')) {
+            $request->validate([
+                'avatar' => 'image|mimes:jpg,png,gif',
+            ]);
+            $avatar = $request->file('avatar');
+            $new_original_file_name = uniqid() . '.' . config('avatar.image_type');
+            $full_path_to_original = Storage::putFileAs(
+                config('avatar.original_path'),
+                $avatar,
+                $new_original_file_name
+            );
+            if ($full_path_to_original) {
+                $avatar = $new_original_file_name;
+                ProcessUploadedUserAvatar::dispatch($full_path_to_original, $new_original_file_name);
+            } else {
+                $avatar = '';
+            }
+            $avatar = $full_path_to_original;
+            $new_images[$avatar] = $avatar;
+            $validated['avatar'] = collect($new_images);
+        } else {
+            $validated['avatar'] = $user->avatar;
+        }
+
+
+        $permissions = $request['permissions'];
+
+        $user->permissions()->sync($permissions);
+
+        $user->update($validated);
+
+        $user->save();
+
+        return back();
+
     }
 
     public function destroy($id)
