@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('permission_volunteer', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('volunteer_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('permission_id')->constrained();
             $table->timestamps();
         });

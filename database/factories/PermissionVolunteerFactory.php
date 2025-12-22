@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Permission;
-use App\Models\PermissionVolunteer;
+use App\Models\PermissionUser;
 use App\Models\Volunteer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class PermissionVolunteerFactory extends Factory
 {
-    protected $model = PermissionVolunteer::class;
+    protected $model = PermissionUser::class;
 
     public function definition(): array
     {

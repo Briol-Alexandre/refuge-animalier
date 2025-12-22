@@ -12,7 +12,6 @@ use App\Models\Permission;
 use App\Models\Species;
 use App\Models\User;
 use App\Models\Vaccine;
-use App\Models\Volunteer;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -97,10 +96,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $permissions = Permission::factory(10)->create();
-        $volunteers = Volunteer::factory(10)->create();
+        $users = User::factory(10)->create();
 
-        foreach ($volunteers as $volunteer) {
-            $volunteer->permissions()->attach(
+        foreach ($users as $user) {
+            $user->permissions()->attach(
                 $permissions->random(rand(1, 3))->pluck('id')->toArray()
             );
         }

@@ -12,8 +12,10 @@ class VolunteerFactory extends Factory
 
     public function definition(): array
     {
+        $image = 'assets/img/default.jpg';
+        $imageJson =[$image => []];
         return [
-            'avatar' => $this->faker->word(),
+            'avatar' => json_encode($imageJson),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'tel' => $this->faker->phoneNumber(),
