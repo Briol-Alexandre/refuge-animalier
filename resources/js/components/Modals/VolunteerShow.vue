@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-3 gap-5">
-        <img :src="volunteer.avatar" :alt="`Photo de ${volunteer.name}`"
+        <img :src="getImagesSrc(volunteer.avatar)" :alt="`Photo de ${volunteer.name}`"
              class="w-full h-full object-cover mt-2 rounded-lg" />
         <div class="col-span-2 self-center">
             <div class="mb-2 flex gap-4 items-center">
@@ -94,6 +94,13 @@ export default {
                     this.toast.error({text:'Une erreur est survenue'})
                 }
             })
+        },
+        getImagesSrc(imageData) {
+            if (!imageData) return [];
+            const parsed = typeof imageData === 'string'
+                ? JSON.parse(imageData)
+                : imageData;
+            return Object.keys(parsed);
         }
     }
 };

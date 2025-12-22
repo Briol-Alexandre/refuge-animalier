@@ -16,7 +16,7 @@
                     </div>
                     <img
                         v-else-if="formVolunteer.avatar"
-                        :src="formVolunteer.avatar"
+                        :src="getImagesSrc(formVolunteer.avatar)"
                         class="w-full h-full object-cover col-span-full"
                         alt="" />
                     <div v-else class="text-center flex flex-col items-center">
