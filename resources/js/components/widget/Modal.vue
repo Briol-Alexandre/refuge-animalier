@@ -7,7 +7,7 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
     >
-        <div @keydown.esc="closeModal" @click.self="closeModal" tabindex="0"
+        <div @keydown.esc="closeModal" @click.self="closeModal"
              class="absolute w-screen h-screen bg-softGray/30 backdrop-blur-xs top-0 left-0 " :class="index"
              v-if="condition">
             <div class="absolute top-1/2 left-1/2 -translate-1/2 bg-white rounded-2xl shadow-sm p-10 w-3/4"

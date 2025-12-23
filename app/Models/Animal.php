@@ -31,6 +31,11 @@ class Animal extends Model
         'status' => Status::class,
     ];
 
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
     public function breed(): BelongsTo
     {
         return $this->belongsTo(Breed::class);

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Models\Adoption;
 use App\Models\Animal;
 use App\Models\Notifications;
+use App\Models\User;
 use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,16 +15,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $animals = Animal::all();
-        $available_animals = Animal::where('status', '=', 'available')->get();
-        $cure_animals = Animal::where('status', '=', 'in_cure')->get();
-        $adoptions = Animal::where('status', '=', 'adopted')->get();
-        $volunteers = Volunteer::all();
+        $animals = Animal::count();
+        $available_animals = Animal::byStatus(Status::AVAILABLE)->count();
+        $cure_animals = Animal::byStatus(Status::IN_CURE)->count();
+        $adoptions = Animal::byStatus(Status::IN_ADOPTION)->count();
+
+        $volunteers = User::count();
         $notifications = Notifications::where('urgent', false)->where('read', false)->get();
         $urgents = Notifications::where('urgent', true)->where('read', false)->get();
         return Inertia::render('Dashboard',
             [
-                'title' =>'Dashboard',
+                'title' => 'Dashboard',
                 'animals' => $animals,
                 'available' => $available_animals,
                 'cures' => $cure_animals,

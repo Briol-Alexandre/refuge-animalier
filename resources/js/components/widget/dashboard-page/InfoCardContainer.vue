@@ -1,5 +1,5 @@
 <template>
-    <InfoCard v-for="data in datas" :opacity-color="data.colorOpacity" :number="data.model.length ?? 0"
+    <InfoCard v-for="data in datas" :opacity-color="data.colorOpacity" :number="data.model ?? 0"
               :title="data.title" :aria="toCamelCase(data.title)" :color="data.color" :grid-position="data.gridPos">
         <Hearth v-if="data.svg === 'hearth'" color="#FF6E6E" />
         <Paw v-if="data.svg === 'paw'" color="#F6C449" classes="w-6" />
