@@ -1,5 +1,6 @@
 <template>
-    <article :aria-labelledby="'card-title-'.aria" class="w-full h-full" :class="gridPosition">
+    <article :aria-labelledby="'card-title-'.aria" class="w-full h-full relative" :class="gridPosition">
+        <div v-if="display" class="absolute top-0 left-0 w-full h-full" @click="$emit('display', display, title)"></div>
         <div
             class="key-card bg-white border border-softGray rounded-2xl flex items-center justify-center py-2.5 max-xs:mt-5 h-full gap-4"
 
@@ -23,7 +24,7 @@ import Hearth from '@/components/svgs/Hearth.vue';
 export default {
   name: "",
     components: { Hearth },
-  props: ['aria','opacityColor', 'color', 'title', 'number', 'gridPosition'],
+  props: ['aria','opacityColor', 'color', 'title', 'number', 'gridPosition', 'display'],
 
   data() {
     return {

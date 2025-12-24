@@ -20,7 +20,7 @@
                         v-model="selected_year"
                         class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
                         <option value="">--Année--</option>
-                        <option :value="year" v-for="year in years">{{ year }}</option>
+                        <option :value="year" v-for="year in years" :key="year">{{ year }}</option>
                     </select>
                     <select
                         v-if="base_filter === 'monthly'"
@@ -37,9 +37,9 @@
                 </button>
             </div>
             <div class="grid grid-cols-4 grid-rows-6 gap-6 flex-1">
-                <InfoCard v-for="data in datas" :opacity-color="data.colorOpacity" :number="data.model ?? 0"
-                          :title="data.title" :aria="toCamelCase(data.title)" :color="data.color"
-                          :grid-position="data.gridPos">
+                <InfoCard v-for="data in datas" :key="data.title" :opacity-color="data.colorOpacity" :number="data.model ?? 0"
+                          :title="data.title" :aria="toCamelCase(data.title)" :color="data.color" :display="data.modelName"
+                          :grid-position="data.gridPos" @display="handleDisplayModel">
                     <Hearth v-if="data.svg === 'hearth'" color="#FF6E6E" />
                     <Paw v-if="data.svg === 'paw'" color="#F6C449" classes="w-6" />
                     <Hand v-if="data.svg === 'hand'" color="#9747FF" classes="w-6" />
@@ -47,8 +47,8 @@
                     <Vaccine v-if="data.svg === 'vaccine'" color="#00D4FF" />
                 </InfoCard>
                 <div class="col-start-1 col-end-4 row-start-2 row-end-6 bg-white rounded-2xl p-4">
-                    <p>Animaux adopté</p>
-                    <canvas id="chart" class="w-full h-full"></canvas>
+                    <p>{{ this.modelTitle }}</p>
+                    <Chart type="line" :data="chartData" :options="chartOptions" class="h-full" />
                 </div>
 
                 <div class="col-start-4 col-end-5 row-start-2 row-end-6 bg-white rounded-2xl">
@@ -71,7 +71,7 @@ import Paw from '@/components/svgs/Paw.vue';
 import Hand from '@/components/svgs/Hand.vue';
 import Hearth from '@/components/svgs/Hearth.vue';
 import User from '@/components/svgs/User.vue';
-import Chart from 'chart.js/auto';
+import Chart from 'primevue/chart';
 import Dump from '@/components/Debug/Dump.vue';
 
 export default {
@@ -87,24 +87,20 @@ export default {
     },
     props: ['animals', 'available', 'adoptions', 'volunteers', 'cures', 'animal_model', 'available_model', 'cure_model', 'adoption_model', 'volunteer_model'],
     mounted() {
-        this.chartInitialize();
+        this.chartData = this.setChartData();
+        this.chartOptions = this.setChartOptions();
     },
     data() {
         return {
             months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
-            years: [2025, 2024, 2023, 2022, 2021, 2020],
-            chartData: [
-                { year: 2010, count: 138 },
-                { year: 2011, count: 100 },
-                { year: 2012, count: 46 },
-                { year: 2013, count: 25 },
-                { year: 2014, count: 22 },
-                { year: 2015, count: 30 },
-                { year: 2016, count: 28 }
-            ],
-            base_filter: 'monthly',
+            years: [2020, 2021, 2022, 2023, 2024, 2025],
+            base_filter: 'yearly',
             selected_month: '',
-            selected_year: ''
+            selected_year: '',
+            chartData: null,
+            chartOptions: null,
+            modelToDisplay: 'animal_model',
+            modelTitle: 'Animaux recuillis'
         };
     },
 
@@ -113,6 +109,13 @@ export default {
         filteredAdoptions() { return this.filterByDate(this.adoption_model); },
         filteredAvailables() { return this.filterByDate(this.available_model); },
         filteredCures() { return this.filterByDate(this.cure_model); },
+        setLabels() {
+            if (this.base_filter === 'monthly') {
+                return ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+            } else {
+                return [2020, 2021, 2022, 2023, 2024, 2025];
+            }
+        },
         datas() {
             return [
                 {
@@ -121,7 +124,8 @@ export default {
                     colorOpacity: 'bg-main-red-opacity',
                     title: 'Animaux adoptés',
                     gridPos: 'row-start-1 row-span-1',
-                    svg: 'hearth'
+                    svg: 'hearth',
+                    modelName: 'adoption_model',
                 },
                 {
                     model: this.filteredAvailables.length,
@@ -129,7 +133,8 @@ export default {
                     colorOpacity: 'bg-main-yellow-opacity',
                     title: 'Animaux disponibles',
                     gridPos: 'row-start-1 row-span-1',
-                    svg: 'paw'
+                    svg: 'paw',
+                    modelName: 'available_model',
                 },
                 {
                     model: this.filteredAnimals.length,
@@ -137,7 +142,8 @@ export default {
                     colorOpacity: 'bg-main-blue-opacity',
                     title: 'Animaux recueillis',
                     gridPos: 'row-start-1 row-span-1',
-                    svg: 'hand'
+                    svg: 'hand',
+                    modelName: 'animal_model',
                 },
                 {
                     model: this.filteredCures.length,
@@ -145,12 +151,24 @@ export default {
                     colorOpacity: 'bg-main-lightBlue-opacity',
                     title: 'Animaux en soin',
                     gridPos: 'col-start-4 col-span-1 row-start-1 row-span-1',
-                    svg: 'vaccine'
+                    svg: 'vaccine',
+                    modelName: 'cure_model',
+
                 }
             ];
         },
+    },
 
-
+    watch: {
+        base_filter() {
+            this.chartData = this.setChartData();
+        },
+        selected_year() {
+            this.chartData = this.setChartData();
+        },
+        modelToDisplay() {
+            this.chartData = this.setChartData();
+        }
     },
 
     methods: {
@@ -173,34 +191,86 @@ export default {
             const tokens = string.split(/[_\s]+/).filter(Boolean);
             return tokens[0] + tokens.slice(1).map(word => word[0].toUpperCase() + word.slice(1)).join('');
         },
-        chartInitialize() {
-            new Chart(
-                document.getElementById('chart'),
-                {
-                    type: 'line',
-                    data: {
-                        labels: this.chartData.map(row => row.year),
-                        datasets: [
-                            {
-                                label: 'Acquisitions by year',
-                                data: this.chartData.map(row => row.count),
-                                backgroundColor: '#4F46E5'
-                            }
-                        ]
+        setData(model) {
+            if (this.base_filter === 'monthly') {
+                const monthCounts = Array(12).fill(0);
+
+                model.forEach((date) => {
+                    const [year, month] = date.split('-').map(Number);
+
+                    if (!this.selected_year || year === this.selected_year) {
+                        monthCounts[month - 1]++;
+                    }
+                });
+
+                return monthCounts;
+            } else {
+                const yearCounts = {};
+
+                model.forEach((date) => {
+                    const [year] = date.split('-').map(Number);
+                    yearCounts[year] = (yearCounts[year] || 0) + 1;
+                });
+
+                return this.years.map(year => yearCounts[year] || 0);
+            }
+        },
+        setChartData() {
+            const documentStyle = getComputedStyle(document.documentElement);
+
+            const modelData = this[this.modelToDisplay] || this.adoption_model;
+
+            return {
+                labels: this.setLabels,
+                datasets: [
+                    {
+                        label: this.modelTitle,
+                        data: this.setData(modelData),
+                        fill: false,
+                        borderColor: documentStyle.getPropertyValue('--main-yellow') || '#F6C449',
+                        tension: 0.4
                     },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: true
-                            }
+                ]
+            };
+        },
+        setChartOptions() {
+            const documentStyle = getComputedStyle(document.documentElement);
+            const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color') || '#666';
+            const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color') || '#ddd';
+
+            return {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: textColorSecondary
+                        },
+                        grid: {
+                            color: surfaceBorder
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: textColorSecondary,
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: surfaceBorder
                         }
                     }
                 }
-            );
+            };
+        },
+        handleDisplayModel (model, title) {
+            this.modelToDisplay = model;
+            this.modelTitle = title;
         }
-
-
     }
 };
 </script>
