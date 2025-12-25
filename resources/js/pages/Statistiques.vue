@@ -235,8 +235,8 @@ export default {
         },
         setChartOptions() {
             const documentStyle = getComputedStyle(document.documentElement);
-            const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color') || '#666';
-            const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color') || '#ddd';
+            const textColorSecondary = '#666';
+            const surfaceBorder = '#ddd';
 
             return {
                 responsive: true,
