@@ -32,7 +32,7 @@ class AnimalFactory extends Factory
             'desc' => $this->faker->sentence('40'),
             'status' => $this->faker->randomElement(Status::values()),
             'images' => json_encode($imageJson),
-            'created_at' => Carbon::now(),
+            'created_at' => $this->faker->dateTimeBetween('-5 years', 'now'),
             'updated_at' => Carbon::now(),
         ];
     }

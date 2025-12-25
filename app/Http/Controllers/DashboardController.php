@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $cure_animals = Animal::byStatus(Status::IN_CURE)->count();
         $adoptions = Animal::byStatus(Status::IN_ADOPTION)->count();
 
-        $volunteers = User::count();
+        $volunteers = User::count()-1;
         $notifications = Notifications::where('urgent', false)->where('read', false)->get();
         $urgents = Notifications::where('urgent', true)->where('read', false)->get();
         return Inertia::render('Dashboard',

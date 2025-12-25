@@ -35,6 +35,7 @@ class UserFactory extends Factory
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
+            'created_at' => $this->faker->dateTimeBetween('-5 years', 'now'),
         ];
     }
 
