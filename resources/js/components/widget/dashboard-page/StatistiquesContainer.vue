@@ -1,7 +1,7 @@
 <template>
     <section aria-labelledby="statistics-title"
-             class="col-start-8 col-end-10 row-start-4 row-span-4 border border-softGray rounded-2xl p-6 mb-0 flex flex-col gap-4">
-        <h2 class="font-atten font-medium text-2xl flex gap-2 items-center justify-center">
+             class="border border-softGray rounded-2xl px-4 pb-4 mb-0 flex flex-col gap-4 h-full overflow-y-scroll relative" :class="gridPos">
+        <h2 class="font-atten font-medium text-2xl flex gap-2 items-center justify-center sticky  pt-3 top-0 bg-white">
             <Statistiques />
             Statistiques
         </h2>
@@ -17,7 +17,7 @@ import StatistiqueList from '@/components/widget/dashboard-page/StatistiqueList.
 export default {
   name: "",
     components: { Statistiques, Download, StatistiqueList },
-  props: [],
+  props: ['gridPos'],
 
   data() {
     return {

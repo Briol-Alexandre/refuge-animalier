@@ -31,14 +31,17 @@
                     </select>
                 </div>
                 <button
-                    class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
+                    class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2"
+                    @click="toggleExportModal">
                     Exporter le rapport
                     <PDF />
                 </button>
             </div>
-            <div class="grid grid-cols-4 grid-rows-6 gap-6 flex-1">
-                <InfoCard v-for="data in datas" :key="data.title" :opacity-color="data.colorOpacity" :number="data.model ?? 0"
-                          :title="data.title" :aria="toCamelCase(data.title)" :color="data.color" :display="data.modelName"
+            <div class="grid grid-cols-4 grid-rows-6 gap-6 flex-1 max-h-full">
+                <InfoCard v-for="data in datas" :key="data.title" :opacity-color="data.colorOpacity"
+                          :number="data.model ?? 0"
+                          :title="data.title" :aria="toCamelCase(data.title)" :color="data.color"
+                          :display="data.modelName"
                           :grid-position="data.gridPos" @display="handleDisplayModel">
                     <Hearth v-if="data.svg === 'hearth'" color="#FF6E6E" />
                     <Paw v-if="data.svg === 'paw'" color="#F6C449" classes="w-6" />
@@ -50,14 +53,57 @@
                     <p>{{ this.modelTitle }}</p>
                     <Chart type="line" :data="chartData" :options="chartOptions" class="h-full" />
                 </div>
-
-                <div class="col-start-4 col-end-5 row-start-2 row-end-6 bg-white rounded-2xl">
-                    <!--Exportation des stats-->
-                </div>
+                <StatistiquesContainer grid-pos="col-start-4 col-end-5 row-start-2 row-end-6 bg-white"/>
 
             </div>
-
         </section>
+        <Teleport to="body">
+            <Modal :condition="isExportModalOpen" @close="toggleExportModal" index="z-30" modal-classes="max-w-[500px]">
+                <p class="title">Exporter le rapport</p>
+                <form class="flex flex-col gap-5" @submit.prevent="handleExport">
+                    <div class="flex justify-between">
+                        <div>
+                            <label for="baseFilter">
+                                Base de rendu
+                            </label>
+                            <select
+                                id="baseFilter"
+                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2"
+                                v-model="formExport.base_filter">
+                                <option selected value="monthly">Mensuel</option>
+                                <option value="yearly">Annuel</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="year">Année</label>
+                            <select
+                                v-model="formExport.selected_year"
+                                id="year"
+                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
+                                <option value="">--Année--</option>
+                                <option :value="year" v-for="year in years" :key="year">{{ year }}</option>
+                                <InputError :message="formExport.errors.selected_year"/>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="month">
+                                Mois
+                            </label>
+                            <select
+                                id="month"
+                                v-model="formExport.selected_month"
+                                :disabled="formExport.base_filter === 'yearly'"
+                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2 disabled:opacity-50 disabled:hover:cursor-not-allowed">
+                                <option value="">--Mois--</option>
+                                <option :value="num + 1" v-for="(month, num) in months" :key="num">{{ month }}</option>
+                                <InputError :message="formExport.errors.selected_month"/>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="button-light self-end">Exporter</button>
+                </form>
+            </Modal>
+        </Teleport>
     </div>
 </template>
 
@@ -73,23 +119,28 @@ import Hearth from '@/components/svgs/Hearth.vue';
 import User from '@/components/svgs/User.vue';
 import Chart from 'primevue/chart';
 import Dump from '@/components/Debug/Dump.vue';
+import Modal from '@/components/widget/Modal.vue';
+import { useForm } from '@inertiajs/vue3';
+import { exportPDF } from '@/actions/App/Http/Controllers/StatistiquesController.js';
+import { useToasterStore } from '@/stores/useToasterStore.js';
+import InputError from '@/components/InputError.vue';
+import StatistiquesContainer from '@/components/widget/dashboard-page/StatistiquesContainer.vue';
 
 export default {
     name: '',
     components: {
+        InputError,
         User, Hearth, Hand, Paw, Vaccine,
         LoggedLayout,
         Filters,
         PDF,
         InfoCard,
         Chart,
-        Dump
+        Dump,
+        Modal,
+        StatistiquesContainer
     },
-    props: ['animals', 'available', 'adoptions', 'volunteers', 'cures', 'animal_model', 'available_model', 'cure_model', 'adoption_model', 'volunteer_model'],
-    mounted() {
-        this.chartData = this.setChartData();
-        this.chartOptions = this.setChartOptions();
-    },
+    props: ['animals', 'available', 'adoptions', 'volunteers', 'cures', 'animal_model', 'available_model', 'cure_model', 'adoption_model', 'volunteer_model', 'pdfs'],
     data() {
         return {
             months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -100,15 +151,35 @@ export default {
             chartData: null,
             chartOptions: null,
             modelToDisplay: 'animal_model',
-            modelTitle: 'Animaux recuillis'
+            modelTitle: 'Animaux recueillis',
+            isExportModalOpen: false,
+            formExport: useForm({
+                base_filter: 'yearly',
+                selected_year: '',
+                selected_month: ''
+            }),
+            toast: useToasterStore(),
         };
     },
 
+    mounted() {
+        this.chartData = this.setChartData();
+        this.chartOptions = this.setChartOptions();
+    },
+
     computed: {
-        filteredAnimals() { return this.filterByDate(this.animal_model); },
-        filteredAdoptions() { return this.filterByDate(this.adoption_model); },
-        filteredAvailables() { return this.filterByDate(this.available_model); },
-        filteredCures() { return this.filterByDate(this.cure_model); },
+        filteredAnimals() {
+            return this.filterByDate(this.animal_model);
+        },
+        filteredAdoptions() {
+            return this.filterByDate(this.adoption_model);
+        },
+        filteredAvailables() {
+            return this.filterByDate(this.available_model);
+        },
+        filteredCures() {
+            return this.filterByDate(this.cure_model);
+        },
         setLabels() {
             if (this.base_filter === 'monthly') {
                 return ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -125,7 +196,7 @@ export default {
                     title: 'Animaux adoptés',
                     gridPos: 'row-start-1 row-span-1',
                     svg: 'hearth',
-                    modelName: 'adoption_model',
+                    modelName: 'adoption_model'
                 },
                 {
                     model: this.filteredAvailables.length,
@@ -134,7 +205,7 @@ export default {
                     title: 'Animaux disponibles',
                     gridPos: 'row-start-1 row-span-1',
                     svg: 'paw',
-                    modelName: 'available_model',
+                    modelName: 'available_model'
                 },
                 {
                     model: this.filteredAnimals.length,
@@ -143,7 +214,7 @@ export default {
                     title: 'Animaux recueillis',
                     gridPos: 'row-start-1 row-span-1',
                     svg: 'hand',
-                    modelName: 'animal_model',
+                    modelName: 'animal_model'
                 },
                 {
                     model: this.filteredCures.length,
@@ -152,11 +223,11 @@ export default {
                     title: 'Animaux en soin',
                     gridPos: 'col-start-4 col-span-1 row-start-1 row-span-1',
                     svg: 'vaccine',
-                    modelName: 'cure_model',
+                    modelName: 'cure_model'
 
                 }
             ];
-        },
+        }
     },
 
     watch: {
@@ -172,6 +243,7 @@ export default {
     },
 
     methods: {
+        exportPDF,
         filterByDate(model) {
             return model.filter((data) => {
                 const [year, month] = data.split('-').map(Number);
@@ -229,12 +301,11 @@ export default {
                         fill: false,
                         borderColor: documentStyle.getPropertyValue('--main-yellow') || '#F6C449',
                         tension: 0.4
-                    },
+                    }
                 ]
             };
         },
         setChartOptions() {
-            const documentStyle = getComputedStyle(document.documentElement);
             const textColorSecondary = '#666';
             const surfaceBorder = '#ddd';
 
@@ -242,7 +313,7 @@ export default {
                 responsive: true,
                 plugins: {
                     legend: {
-                        display: false,
+                        display: false
                     }
                 },
                 scales: {
@@ -267,9 +338,22 @@ export default {
                 }
             };
         },
-        handleDisplayModel (model, title) {
+        handleDisplayModel(model, title) {
             this.modelToDisplay = model;
             this.modelTitle = title;
+        },
+        toggleExportModal() {
+            this.isExportModalOpen = !this.isExportModalOpen;
+        },
+        handleExport() {
+            this.formExport.post(exportPDF(), {
+                onSuccess: () => {
+                    this.toast.success({text: 'PDF exporté avec succès'});
+                },
+                onError: () => {
+                    this.toast.error({text: 'Une erreur est survenue'})
+                }
+            });
         }
     }
 };

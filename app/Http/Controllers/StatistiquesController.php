@@ -8,8 +8,12 @@ use App\Models\Animal;
 use App\Models\Notifications;
 use App\Models\User;
 use App\Models\Volunteer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use JetBrains\PhpStorm\NoReturn;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class StatistiquesController extends Controller
 {
@@ -27,6 +31,15 @@ class StatistiquesController extends Controller
         $adoptions = Animal::byStatus(Status::ADOPTED)->pluck('created_at');
         $adoptions_count = $adoptions->count();
 
+        $files = Storage::disk('public')->files('pdfs');
+        $pdfs = collect($files)->map(function ($file) {
+            return [
+                'name' => basename($file),
+                'url' => '/storage/'. $file,
+                'size' => Storage::disk('public')->size($file),
+            ];
+        });
+
         return Inertia::render('Statistiques',
             [
                 'animals' => $animals_count,
@@ -37,31 +50,77 @@ class StatistiquesController extends Controller
                 'available_model' => $available_animals,
                 'cure_model' => $cure_animals,
                 'adoption_model' => $adoptions,
+                'pdfs' => $pdfs,
             ]);
     }
 
-    public function create()
-    {
-    }
-
-    public function store(Request $request)
-    {
-    }
 
     public function show($id)
     {
-        dd('test');
     }
 
-    public function edit($id)
+    #[NoReturn]
+    public function exportPDF(Request $request)
     {
-    }
+        $validated = $request->validate([
+            'selected_month' => 'nullable',
+            'selected_year' => 'required'
+        ]);
 
-    public function update(Request $request, $id)
-    {
-    }
+        $month = $validated['selected_month'];
+        $year = $validated['selected_year'];
+        if ($month) {
+            $parsedMonth = ucfirst(Carbon::createFromFormat('m', $month)->TranslatedFormat('F'));
+            $filename = "{$parsedMonth} {$year}.pdf";
+        } else {
+            $filename = "Rapport {$year}.pdf";
+        }
+        if ($month) {
+            $adopted = Animal::byStatus(Status::ADOPTED)
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            $available = Animal::byStatus(Status::AVAILABLE)
+                ->count();
+            $animal = Animal::whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            $cure = Animal::byStatus(Status::IN_CURE)
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            $volunteer = User::whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+        } else {
+            $adopted = Animal::byStatus(Status::ADOPTED)
+                ->whereYear('created_at', $year)
+                ->count();
+            $available = Animal::byStatus(Status::AVAILABLE)
+                ->count();
+            $animal = Animal::whereYear('created_at', $year)
+                ->count();
+            $cure = Animal::byStatus(Status::IN_CURE)
+                ->whereYear('created_at', $year)
+                ->count();
+            $volunteer = User::whereYear('created_at', $year)
+                ->count();
+        }
+        $animal_total = Animal::count();
 
-    public function destroy($id)
-    {
+        $datas = [
+            'month' => $month,
+            'year' => $year,
+            'adopted' => $adopted,
+            'available' => $available,
+            'animal' => $animal,
+            'cure' => $cure,
+            'volunteer' => $volunteer,
+            'animal_total' => $animal_total
+        ];
+
+        Pdf::view('pdf.export', ['datas' => $datas])->save(storage_path("app/public/pdfs/{$filename}"));
+
+        return back();
     }
 }
