@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Status;
 use App\Http\Controllers\AdoptionsController;
 use App\Http\Controllers\AnimalsController;
 use App\Http\Controllers\BreedsController;
@@ -12,6 +13,8 @@ use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\StatistiquesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VaccinesController;
+use App\Models\Animal;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -147,6 +150,10 @@ Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(functi
     Route::delete('/vaccines/{vaccine}', [VaccinesController::class, 'destroy'])
         ->middleware(['auth'])
         ->name('vaccines.destroy');
+
+    Route::post('/statistiques/export', [StatistiquesController::class, 'exportPDF'])
+        ->middleware(['auth'])
+        ->name('export-pdf');
 
 
     require __DIR__ . '/settings.php';
