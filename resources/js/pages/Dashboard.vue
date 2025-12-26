@@ -5,7 +5,7 @@
             </h1>
             <InfoCardContainer :datas="datas" />
             <NotificationContainer :notifications="notifications" :urgents="urgents"/>
-            <StatistiquesContainer />
+            <StatistiquesContainer grid-pos="col-start-8 col-end-10 row-start-4 row-span-4"/>
         </div>
 </template>
 

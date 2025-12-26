@@ -8,7 +8,9 @@ use App\Models\Animal;
 use App\Models\Notifications;
 use App\Models\User;
 use App\Models\Volunteer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use JetBrains\PhpStorm\NoReturn;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -29,6 +31,15 @@ class StatistiquesController extends Controller
         $adoptions = Animal::byStatus(Status::ADOPTED)->pluck('created_at');
         $adoptions_count = $adoptions->count();
 
+        $files = Storage::disk('public')->files('pdfs');
+        $pdfs = collect($files)->map(function ($file) {
+            return [
+                'name' => basename($file),
+                'url' => '/storage/'. $file,
+                'size' => Storage::disk('public')->size($file),
+            ];
+        });
+
         return Inertia::render('Statistiques',
             [
                 'animals' => $animals_count,
@@ -39,14 +50,13 @@ class StatistiquesController extends Controller
                 'available_model' => $available_animals,
                 'cure_model' => $cure_animals,
                 'adoption_model' => $adoptions,
+                'pdfs' => $pdfs,
             ]);
     }
 
 
-
     public function show($id)
     {
-        dd('test');
     }
 
     #[NoReturn]
@@ -60,9 +70,10 @@ class StatistiquesController extends Controller
         $month = $validated['selected_month'];
         $year = $validated['selected_year'];
         if ($month) {
-            $filename = "export_{$year}_{$month}.pdf";
+            $parsedMonth = ucfirst(Carbon::createFromFormat('m', $month)->TranslatedFormat('F'));
+            $filename = "{$parsedMonth} {$year}.pdf";
         } else {
-            $filename = "export_{$year}.pdf";
+            $filename = "Rapport {$year}.pdf";
         }
         if ($month) {
             $adopted = Animal::byStatus(Status::ADOPTED)
@@ -109,5 +120,7 @@ class StatistiquesController extends Controller
         ];
 
         Pdf::view('pdf.export', ['datas' => $datas])->save(storage_path("app/public/pdfs/{$filename}"));
+
+        return back();
     }
 }

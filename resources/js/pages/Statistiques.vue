@@ -54,9 +54,17 @@
                     <Chart type="line" :data="chartData" :options="chartOptions" class="h-full" />
                 </div>
 
-                <div class="col-start-4 col-end-5 row-start-2 row-end-6 bg-white rounded-2xl p-2">
+<!--                <div class="col-start-4 col-end-5 row-start-2 row-end-6 bg-white rounded-2xl p-2">
                     <p class="font-bold font-atten text- xl">Exports</p>
-                </div>
+                    <ul>
+                        <li v-for="pdf in pdfs">
+                            <a :href="pdf.url" target="_blank">
+                                {{pdf.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <StatistiquesContainer grid-pos="col-start-4 col-end-5 row-start-2 row-end-6 bg-white"/>
 
             </div>
         </section>
@@ -127,6 +135,7 @@ import { useForm } from '@inertiajs/vue3';
 import { exportPDF } from '@/actions/App/Http/Controllers/StatistiquesController.js';
 import { useToasterStore } from '@/stores/useToasterStore.js';
 import InputError from '@/components/InputError.vue';
+import StatistiquesContainer from '@/components/widget/dashboard-page/StatistiquesContainer.vue';
 
 export default {
     name: '',
@@ -139,9 +148,10 @@ export default {
         InfoCard,
         Chart,
         Dump,
-        Modal
+        Modal,
+        StatistiquesContainer
     },
-    props: ['animals', 'available', 'adoptions', 'volunteers', 'cures', 'animal_model', 'available_model', 'cure_model', 'adoption_model', 'volunteer_model'],
+    props: ['animals', 'available', 'adoptions', 'volunteers', 'cures', 'animal_model', 'available_model', 'cure_model', 'adoption_model', 'volunteer_model', 'pdfs'],
     data() {
         return {
             months: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -307,7 +317,6 @@ export default {
             };
         },
         setChartOptions() {
-            const documentStyle = getComputedStyle(document.documentElement);
             const textColorSecondary = '#666';
             const surfaceBorder = '#ddd';
 
