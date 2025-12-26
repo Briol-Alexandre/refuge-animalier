@@ -1,3 +1,4 @@
+@php use Carbon\Carbon; @endphp
 @props(['datas'])
 @php
     $logo = public_path('assets/img/svg/logo.svg');
@@ -5,7 +6,12 @@
     $pawSvg = public_path('assets/img/svg/paw.svg');
     $handSvg = public_path('assets/img/svg/hand.svg');
     $vaccineSvg = public_path('assets/img/svg/vaccine.svg');
-    $volunteerSvg = public_path('assets/img/svg/volunteer.svg')
+    $volunteerSvg = public_path('assets/img/svg/volunteer.svg');
+    if ($datas['month']) {
+        $parsedMonth = ucfirst(Carbon::createFromFormat('m', $datas['month'])->TranslatedFormat('F'));
+    } else {
+        $parsedMonth = null;
+    }
 @endphp
 
 <div class="pdf-container">
@@ -15,8 +21,12 @@
                 @inlinedImage($logo)
             </span>
         </div>
-        <h1>Rapport mensuel</h1>
-        <p class="period">{{ $datas['month'] }}/{{ $datas['year'] }}</p>
+        <h1>Rapport {{$datas['month'] ? 'mensuel' : 'annuel'}}</h1>
+        @if($parsedMonth)
+            <p class="period">{{ $parsedMonth }} {{ $datas['year'] }}</p>
+        @else
+            <p class="period">{{ $datas['year'] }}</p>
+        @endif
     </div>
 
     <div class="stats-grid">
@@ -26,7 +36,9 @@
                     @inlinedImage($hearthSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#FF6E6E"/>
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                            fill="#FF6E6E"/>
                     </svg>
                 @endif
             </div>
@@ -42,7 +54,9 @@
                     @inlinedImage($pawSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#F6C449"/>
+                        <path
+                            d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                            fill="#F6C449"/>
                     </svg>
                 @endif
             </div>
@@ -58,7 +72,9 @@
                     @inlinedImage($handSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M23 5.5V20c0 2.2-1.8 4-4 4h-7.3c-1.08 0-2.1-.43-2.85-1.19L1 14.83s1.26-1.23 1.3-1.25c.22-.19.49-.29.79-.29.22 0 .42.06.6.16.04.01 4.31 2.46 4.31 2.46V4c0-.83.67-1.5 1.5-1.5S11 3.17 11 4v7h1V1.5c0-.83.67-1.5 1.5-1.5S15 .67 15 1.5V11h1V2.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V11h1V5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5z" fill="#9747FF"/>
+                        <path
+                            d="M23 5.5V20c0 2.2-1.8 4-4 4h-7.3c-1.08 0-2.1-.43-2.85-1.19L1 14.83s1.26-1.23 1.3-1.25c.22-.19.49-.29.79-.29.22 0 .42.06.6.16.04.01 4.31 2.46 4.31 2.46V4c0-.83.67-1.5 1.5-1.5S11 3.17 11 4v7h1V1.5c0-.83.67-1.5 1.5-1.5S15 .67 15 1.5V11h1V2.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V11h1V5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5z"
+                            fill="#9747FF"/>
                     </svg>
                 @endif
             </div>
@@ -74,7 +90,9 @@
                     @inlinedImage($vaccineSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z" fill="#00D4FF"/>
+                        <path
+                            d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"
+                            fill="#00D4FF"/>
                     </svg>
                 @endif
             </div>
@@ -89,7 +107,9 @@
                     @inlinedImage($volunteerSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z" fill="#00D4FF"/>
+                        <path
+                            d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"
+                            fill="#00D4FF"/>
                     </svg>
                 @endif
             </div>
@@ -104,7 +124,9 @@
                     @inlinedImage($pawSvg)
                 @else
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z" fill="#00D4FF"/>
+                        <path
+                            d="M19 3h-3V1h-2v2h-4V1H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1z"
+                            fill="#00D4FF"/>
                     </svg>
                 @endif
             </div>

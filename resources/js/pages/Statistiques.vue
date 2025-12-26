@@ -37,7 +37,7 @@
                     <PDF />
                 </button>
             </div>
-            <div class="grid grid-cols-4 grid-rows-6 gap-6 flex-1">
+            <div class="grid grid-cols-4 grid-rows-6 gap-6 flex-1 max-h-full">
                 <InfoCard v-for="data in datas" :key="data.title" :opacity-color="data.colorOpacity"
                           :number="data.model ?? 0"
                           :title="data.title" :aria="toCamelCase(data.title)" :color="data.color"
@@ -53,17 +53,6 @@
                     <p>{{ this.modelTitle }}</p>
                     <Chart type="line" :data="chartData" :options="chartOptions" class="h-full" />
                 </div>
-
-<!--                <div class="col-start-4 col-end-5 row-start-2 row-end-6 bg-white rounded-2xl p-2">
-                    <p class="font-bold font-atten text- xl">Exports</p>
-                    <ul>
-                        <li v-for="pdf in pdfs">
-                            <a :href="pdf.url" target="_blank">
-                                {{pdf.name}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>-->
                 <StatistiquesContainer grid-pos="col-start-4 col-end-5 row-start-2 row-end-6 bg-white"/>
 
             </div>
