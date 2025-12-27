@@ -65,7 +65,7 @@
                 :modelValue="formAnimal.breed_id"
                 @update:modelValue="handleBreedChange"
                 id-name="breed"
-                label="Race de l‘animal"
+                label="Race de l'animal"
                 multiple
             >
                 <option value="">--Choisir une race--</option>
@@ -123,7 +123,7 @@
                 <InputError :message="formAnimal.errors.age" />
             </div>
 
-            <Select v-model="formAnimal.sexe" id-name="sexe" label="Sexe de l‘animal">
+            <Select v-model="formAnimal.sexe" id-name="sexe" label="Sexe de l'animal">
                 <option value="">--Choisir un sexe--</option>
                 <option value="male">Mâle</option>
                 <option value="female">Femelle</option>
@@ -376,6 +376,7 @@ export default {
         handleBreedChange(value) {
             if (value.includes('add-breed')) {
                 this.modalToOpen = 'breed';
+                this.formBreed.specie_id = this.formAnimal.specie_id;
                 this.formAnimal.breed_id = [];
             } else {
                 this.formAnimal.breed_id = value;
