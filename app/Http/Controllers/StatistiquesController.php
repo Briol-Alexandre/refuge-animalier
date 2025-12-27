@@ -42,6 +42,7 @@ class StatistiquesController extends Controller
 
         return Inertia::render('Statistiques',
             [
+                'title' => 'Statistiques',
                 'animals' => $animals_count,
                 'available' => $available_animals_count,
                 'cures' => $cure_animals_count,

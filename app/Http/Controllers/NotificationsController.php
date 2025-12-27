@@ -15,6 +15,7 @@ class NotificationsController extends Controller
         $notifications = Notifications::where('urgent', false)->get();
         return Inertia::render('Notifications',
             [
+                'title' => 'Notifications',
                 'notifications' => $notifications,
                 'urgents' => $urgents
             ]
