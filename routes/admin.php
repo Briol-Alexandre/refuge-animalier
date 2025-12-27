@@ -13,18 +13,12 @@ use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\StatistiquesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VaccinesController;
-use App\Models\Animal;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::domain('admin.lespattesheureuses.test')->middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('auth/Login', [
-            'canRegister' => Features::enabled(Features::registration()),
-        ]);
-    })->name('home');
+    Route::get('/', fn() => redirect()->route('dashboard'))->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['auth'])
