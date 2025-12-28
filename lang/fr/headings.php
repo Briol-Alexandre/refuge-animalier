@@ -1,6 +1,6 @@
 <?php
 return [
-    'header_title'=>'Un <strong>foyer</strong> pour chaque patte, un <strong>sourire</strong> pour chaque
+    'header_title' => 'Un <strong>foyer</strong> pour chaque patte, un <strong>sourire</strong> pour chaque
                 <strong>cœur</strong>',
     'key_title' => 'Quelques chiffres clefs',
     'adopt_title' => 'Nos animaux à l‘adoption',
@@ -11,6 +11,7 @@ return [
     'our-values' => 'Nos <strong>valeurs</strong>',
     'our-actions' => 'Nos <strong>actions</strong>',
     'header-paws' => 'Les <strong>Pattes heureuses</strong>, un refuge à Erps-Kwerps',
-    'header-animals' => 'Chaque animal mérite une <strong>seconde chance</strong>… Et si c’était avec <strong>vous</strong> ?'
+    'header-animals' => 'Chaque animal mérite une <strong>seconde chance</strong>… Et si c’était avec <strong>vous</strong> ?',
+    'quote_label' => 'Citation'
 
 ];
