@@ -1,6 +1,6 @@
 <x-layouts.client-layout>
     <x-home-page.header-main-page/>
     <x-home-page.slider-main-page/>
-    <x-home-page.animal-slider-main-page/>
+    <x-home-page.animal-slider-main-page :animals="$animals"/>
     <x-home-page.cta :title="__('headings.want-benevole')" />
 </x-layouts.client-layout>

@@ -12,9 +12,9 @@ return [
     'placeholder_phone' => '0444 44 44 44',
     'subject' => 'Objet de votre demande',
     'subject_placeholder' => '--Choisir un sujet--',
-    'subject_1' => 'Sujet 1',
-    'subject_2' => 'Sujet 2',
-    'message_label' => 'Message <small>(cela nous permettra d’en savoir plus sur votre cas et vos motivations)</small>',
+    'subject_1' => 'Demande de bénévolat',
+    'subject_2' => 'Autre',
+    'message_label' => 'Message <small>(à obligatoirement renseigner si vous avez choisi "Autre")</small>',
     'message_placeholder' => 'Votre message ici…',
     'submit' => 'Envoyer',
 ];

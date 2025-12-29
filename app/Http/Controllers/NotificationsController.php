@@ -11,8 +11,8 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        $urgents = Notifications::where('urgent', true)->get();
-        $notifications = Notifications::where('urgent', false)->get();
+        $urgents = Notifications::where('urgent', true)->orderBy("created_at", 'desc')->get();
+        $notifications = Notifications::where('urgent', false)->orderBy("created_at", 'desc')->get();
         return Inertia::render('Notifications',
             [
                 'title' => 'Notifications',

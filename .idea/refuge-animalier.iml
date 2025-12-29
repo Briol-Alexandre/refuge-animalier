@@ -16,6 +16,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/laravel-package-tools" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/laravel-pdf" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/spatie/temporary-directory" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mailgun-mailer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

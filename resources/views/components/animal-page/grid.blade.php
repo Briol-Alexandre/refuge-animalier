@@ -1,3 +1,4 @@
+@props(['animals'])
 <section aria-labelledby="adoptable-animals" class="mt-11 grid-basic">
     <h2 class="title text-center col-span-full" id="adoptable-animals">
         {!! __('headings.adoptable_animals') !!}
@@ -70,11 +71,12 @@
         </form>
     </div>
     <ul class="col-start-2 col-end-7 md:col-end-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        @for ($i = 1; $i <= 20; $i++)
+        @foreach($animals as $animal)
             <li class="col-span-1">
-                <x-slider.animal-card :name="'J.P. Rouve'" :breed="'G. Retriever'" :age="'3 mois'" :desc="'Lorem Ipsum posjdqihufgjhbilwqg pqisgdo dfuyh gpiqvsf gh q ghvfuidg piqsufhgliudfghduhgpq qt p'"
-                    :link="route('animals.client.show', 1)" />
+                <x-slider.animal-card :name="$animal->name" :breed="$animal->breed->name" :age="$animal->age" :desc="$animal->desc" :images="$animal->images"
+                    :link="route('animals.client.show', $animal->id)" />
             </li>
-        @endfor
+        @endforeach
+
     </ul>
 </section>

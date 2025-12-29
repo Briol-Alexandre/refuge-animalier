@@ -12,9 +12,9 @@ return [
     'placeholder_phone' => '0444 44 44 44',
     'subject' => 'Subject of your request',
     'subject_placeholder' => '--Choose a subject--',
-    'subject_1' => 'Subject 1',
-    'subject_2' => 'Subject 2',
-    'message_label' => 'Message <small>(this will help us learn more about your situation and your motivations)</small>',
+    'subject_1' => 'Volunteer Application',
+    'subject_2' => 'Other',
+    'message_label' => 'Message <small>(must be filled in if you selected “Other”)</small>',
     'message_placeholder' => 'Your message here…',
     'submit' => 'Send',
 ];
