@@ -1,21 +1,26 @@
 <?php
+
+use App\Enums\Status;
+use App\Http\Controllers\ClientAnimalController;
+use App\Models\Animal;
 use Illuminate\Support\Facades\Route;
 
 Route::domain('lespattesheureuses.test')->group(function () {
     Route::get('/', function () {
-        return view('client.homepage');
+        $animals = Animal::orderBy('created_at', 'desc')->take(4)->where('status', Status::AVAILABLE)->get();
+        return view('client.homepage', compact('animals'));
     })->name('home.client');
 
     Route::get('/pattesheureuses', function () {
         return view('client.paws');
     })->name('paws.client');
-    Route::get('/animals/{animal}', function (){
-        return view('client.animals.show');
-    })->name('animals.client.show');
-    Route::get('/animals', function () {
-        return view('client.animals');
-    })->name('animals.client');
-    Route::get('/contact', function (){
+    Route::get('/animals/{id}', [ClientAnimalController::class, 'show'])
+        ->name('animals.client.show');
+    Route::get('/animals', [ClientAnimalController::class, 'index'])
+        ->name('animals.client');
+    Route::post('animals/{id}', [ClientAnimalController::class, 'send'])
+        ->name('animals.client.demand');
+    Route::get('/contact', function () {
         return view('client.contact');
     })->name('contact.client');
 });

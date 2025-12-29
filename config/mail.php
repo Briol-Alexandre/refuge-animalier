@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'roundrobin'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,6 +84,9 @@ return [
             'mailers' => [
                 'smtp',
                 'log',
+                'postmark',
+                'mailgun',
+                'sendmail',
             ],
             'retry_after' => 60,
         ],
@@ -93,8 +96,20 @@ return [
             'mailers' => [
                 'ses',
                 'postmark',
+                'mailgun',
             ],
             'retry_after' => 60,
+        ],
+        'mailgun' => [
+
+            'transport' => 'mailgun',
+
+            // 'client' => [
+
+            //     'timeout' => 5,
+
+            // ],
+
         ],
 
     ],
