@@ -12,9 +12,9 @@ return [
     'placeholder_phone' => '0444 44 44 44',
     'subject' => 'Onderwerp van uw verzoek',
     'subject_placeholder' => '--Kies een onderwerp--',
-    'subject_1' => 'Onderwerp 1',
-    'subject_2' => 'Onderwerp 2',
-    'message_label' => 'Bericht <small>(zo leren we uw situatie en motivatie beter kennen)</small>',
+    'subject_1' => 'Aanvraag voor vrijwilligerswerk ',
+    'subject_2' => 'Andere',
+    'message_label' => 'Bericht <small>(verplicht in te vullen als u “Anders” hebt gekozen)</small>',
     'message_placeholder' => 'Uw bericht…',
     'submit' => 'Versturen',
 ];

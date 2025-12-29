@@ -2,6 +2,7 @@
 
 use App\Enums\Status;
 use App\Http\Controllers\ClientAnimalController;
+use App\Http\Controllers\ContactController;
 use App\Models\Animal;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,6 @@ Route::domain('lespattesheureuses.test')->group(function () {
     Route::get('/contact', function () {
         return view('client.contact');
     })->name('contact.client');
+    Route::post('/contact', [ContactController::class, 'send'])
+        ->name('contact.send');
 });

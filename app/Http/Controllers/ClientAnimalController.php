@@ -26,7 +26,7 @@ class ClientAnimalController extends Controller
             'message' => 'nullable'
         ]);
 
-        $fullName = $validated['first_name'] . $validated['last_name'];
+        $fullName = $validated['first_name'] . ' ' . $validated['last_name'];
 
         $id = $validated['animal_id'];
 
@@ -53,7 +53,7 @@ class ClientAnimalController extends Controller
 
 
 
-
+        //TODO: faire en sorte que le mail s'envoie toujours à l'admin
         Mail::to('email@domain.com')->queue(new AdoptionDemand($validated, $animal));
         return redirect()
             ->route('animals.client.show', $animal->id);
