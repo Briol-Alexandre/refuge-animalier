@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $adoptions = Animal::byStatus(Status::IN_ADOPTION)->count();
 
         $volunteers = User::count()-1;
-        $notifications = Notifications::where('urgent', false)->where('read', false)->get();
+        $notifications = Notifications::where('urgent', false)->where('read', false)->orderBy('created_at', 'desc')->get();
         $urgents = Notifications::where('urgent', true)->where('read', false)->get();
         return Inertia::render('Dashboard',
             [

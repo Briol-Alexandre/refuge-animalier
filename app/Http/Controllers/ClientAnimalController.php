@@ -8,6 +8,7 @@ use App\Mail\AdoptionDemand;
 use App\Models\Adopter;
 use App\Models\Adoption;
 use App\Models\Animal;
+use App\Models\Notifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use function Termwind\render;
@@ -45,6 +46,10 @@ class ClientAnimalController extends Controller
             'status' => AdoptionStatus::PENDING,
             'contact_message' => $validated['message']
         ]);
+
+        $notificationTitle = "{$fullName} veut adopter {$animal->name}";
+
+        Notifications::create(['title' => $notificationTitle, 'urgent' => false, 'read' => false]);
 
 
 
