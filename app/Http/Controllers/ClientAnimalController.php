@@ -54,7 +54,7 @@ class ClientAnimalController extends Controller
 
 
 
-        Mail::to('email@domain.com')->send(new AdoptionDemand($validated, $animal));
+        Mail::to('email@domain.com')->queue(new AdoptionDemand($validated, $animal));
         return redirect()
             ->route('animals.client.show', $animal->id);
 
