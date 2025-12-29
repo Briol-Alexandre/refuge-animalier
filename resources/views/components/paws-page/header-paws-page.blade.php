@@ -8,5 +8,6 @@
             {!! $content !!}
         </p>
     </div>
-    <img src="{{ $img_path }}" alt="Image du refuge Les Pattes Heureuses" class="col-start-2 col-end-7 md:col-start-7 md:col-end-12 rounded-btn-mobile md:rounded-btn">
+    <img src="{{ $img_path }}" alt="{{ __('paws.image_alt') }}"
+        class="col-start-2 col-end-7 md:col-start-7 md:col-end-12 rounded-btn-mobile md:rounded-btn">
 </section>

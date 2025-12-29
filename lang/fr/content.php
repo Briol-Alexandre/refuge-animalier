@@ -31,6 +31,9 @@ return [
     'content-header-paws' => 'Fondé en 2017, Les Pattes Heureuses, situé à Erps-Kwerps, est un refuge dédié au bien-être et à la
             protection des animaux abandonnés ou maltraités. Chaque jour, notre équipe de bénévoles s’engage à
             offrir à chaque compagnon une seconde chance, beaucoup d’amour, et un foyer où il pourra s’épanouir.',
-    'content-header-animals' => 'Nos refuges regorgent de petits cœurs en quête d’un foyer. Découvrez-les et écrivez ensemble un nouveau chapitre.'
+    'content-header-animals' => 'Nos refuges regorgent de petits cœurs en quête d’un foyer. Découvrez-les et écrivez ensemble un nouveau chapitre.',
+    'header_image_alt' => "Image d'un chien et d'un chat",
+    'image_of' => 'Image de :name',
+    'cta_image_alt' => 'Image représentant une femme caressant des chiens'
 
 ];

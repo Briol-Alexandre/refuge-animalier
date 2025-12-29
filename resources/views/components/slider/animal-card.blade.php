@@ -1,12 +1,11 @@
-@props(['name', 'age', 'breed', 'desc', 'link' =>null])
+@props(['name', 'age', 'breed', 'desc', 'link' => null])
 <article aria-labelledby="{{ $name }}-card" class="slider-item-animal relative h-fit last:mb-0 sm:h-80">
     <div class="group relative h-full rounded-btn overflow-hidden">
         <a href="{{$link}}" class="absolute-position z-20"></a>
         <div class="max-sm:hidden absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
                     transition-all duration-300 group-hover:bg-black/40"></div>
-        <img src="{{ asset('assets/img/dog.png') }}"
-             alt="Image de {{ $name }}"
-             class="w-full sm:h-full h-1/4 object-cover object-top">
+        <img src="{{ asset('assets/img/dog.png') }}" alt="{{ __('content.image_of', ['name' => $name]) }}"
+            class="w-full sm:h-full h-1/4 object-cover object-top">
         <div class="animal-card-info relative z-10 p-3 max-sm:bg-softGray/20 max-sm:pb-4">
             <h3 id="{{ $name }}-card" class="font-bold font-atten text-xl text-main-yellow">
                 {{ $name }}
@@ -19,17 +18,17 @@
                              border-y  border-text sm:border-white/50 divide-x  divide-text sm:divide-white/50">
 
                     <span class="flex items-center gap-1">
-                        <x-svgs.paw class="w-5 h-5"/>
+                        <x-svgs.paw class="w-5 h-5" />
                         <div>
-                            <p class="font-bold">Race</p>
+                            <p class="font-bold">{{ __('label.breed') }}</p>
                             <p>{{$breed}}</p>
                         </div>
                     </span>
 
                     <span class="flex items-center gap-1">
-                        <x-svgs.calendar class="w-5 h-5"/>
+                        <x-svgs.calendar class="w-5 h-5" />
                         <div>
-                            <p class="font-bold">Âge</p>
+                            <p class="font-bold">{{ __('label.age') }}</p>
                             <p>{{$age}}</p>
                         </div>
                     </span>
@@ -38,7 +37,7 @@
                 <p class="my-2 line-clamp-5">
                     {{$desc}}
                 </p>
-                <div class="button-light-hvr-lgt z-20 mx-auto">Adoptez-moi !</div>
+                <div class="button-light-hvr-lgt z-20 mx-auto">{{ __('label.adopt_me') }}</div>
             </div>
         </div>
 
