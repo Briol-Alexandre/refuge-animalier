@@ -165,7 +165,9 @@ const closeMenu = () => {
             class="hidden md:flex col-start-1 col-end-3 h-screen border-r-2 border-r-gray-100 px-3.5 flex-col justify-between items-center py-10"
         >
             <h2 id="desktop-nav" class="sr-only">Navigation principale</h2>
-            <Logo classes="w-full" />
+            <NavLink :href="DashboardIndex()">
+                <Logo classes="w-full" />
+            </NavLink>
 
             <div class="flex flex-col gap-5 w-full">
                 <NavLink :active="{'nav-link-active': $page.component==='Dashboard'}" :href="DashboardIndex()"
