@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnimalsController;
+use App\Models\Animal;
 
 return [
     Route::get('/animals', [AnimalsController::class, 'index'])
@@ -22,5 +23,10 @@ return [
     Route::delete('/animals/{animal}', [AnimalsController::class, 'destroy'])
         ->middleware(['auth'])
         ->name('animals.destroy'),
+
+    Route::get('/api/animals/{id}', function ($id) {
+        return Animal::with(['breed', 'coat', 'specie', 'vaccines', 'notes'])
+            ->find($id);
+    }),
 
 ];

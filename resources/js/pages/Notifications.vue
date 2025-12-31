@@ -75,10 +75,11 @@
             <div class="overflow-y-scroll h-[90%]">
                 <ul class="flex flex-col gap-4 h-full">
                     <li v-for="notification in notifications"
-                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative">
+                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative"
+                        @click="handleShowModal(notification, $event)">
                         <p class="notif_title flex-1" :class="!notification.read ? 'font-bold': 'pl-3'">
                             <span v-if="!notification.read" class="font-black">•</span>
-                            {{ notification.title }}
+                            {{ notification.title }} - {{ notification.type }}
                         </p>
                         <span class="self-end mr-4 text-gray-500">
                                 {{ dateFormat(notification.created_at) }}
@@ -134,6 +135,15 @@
                     </button>
                 </div>
             </Modal>
+            <Modal
+                @close="closeShowModal"
+                :condition="showAnimal && modelToShow !== null"
+                index="z-30"
+            >
+                <AnimalShow :animal="modelToShow" />
+            </Modal>
+            <Modal></Modal>
+            <Modal></Modal>
         </Teleport>
     </div>
 </template>
@@ -147,10 +157,13 @@ import { update } from '@/actions/App/Http/Controllers/NotificationsController.j
 import { destroy } from '@/actions/App/Http/Controllers/NotificationsController.js';
 import Close from '@/components/svgs/Close.vue';
 import More from '@/components/svgs/More.vue';
+import AnimalShow from '@/components/Modals/AnimalShow.vue';
+import axios from 'axios';
 
 export default {
     name: '',
     components: {
+        AnimalShow,
         Modal,
         LoggedLayout,
         Notifications,
@@ -163,7 +176,11 @@ export default {
             isModalOpen: false,
             isShowModalOpen: false,
             notifToDelete: null,
-            showActionsId: null
+            showActionsId: null,
+            showAnimal: false,
+            showAdoption: false,
+            showVolunteer: false,
+            modelToShow: null
         };
     },
 
@@ -177,6 +194,12 @@ export default {
         },
         handleShowActions(id) {
             this.showActionsId = this.showActionsId === id ? null : id;
+        },
+        closeShowModal() {
+            this.showAnimal = false;
+            this.showAdoption = false;
+            this.showVolunteer = false;
+            this.modelToShow = null;
         },
         deleteNotif() {
             const form = useForm();
@@ -214,6 +237,17 @@ export default {
         dateFormat(date) {
             date = new Date(date);
             return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+        },
+        async handleShowModal(notification, event) {
+            event?.stopPropagation();
+
+            let modelPath = 'App\\Models\\'
+            if (notification.notifiable_type === modelPath+'Animal') {
+                const response = await axios.get(`/api/animals/${notification.notifiable_id}`);
+                this.modelToShow = response.data;
+                console.log(this.modelToShow);
+                this.showAnimal = true;
+            }
         }
 
     }

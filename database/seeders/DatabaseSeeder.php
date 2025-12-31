@@ -137,6 +137,17 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        Notifications::factory(20)->create();
+        foreach ($animals->random(10) as $animal) {
+            Notifications::factory()->forAnimal($animal)->create();
+        }
+
+        $adoptions = Adoption::all();
+        foreach ($adoptions->random(min(5, $adoptions->count())) as $adoption) {
+            Notifications::factory()->forAdoption($adoption)->create();
+        }
+
+        foreach ($users->random(5) as $user) {
+            Notifications::factory()->forUser($user)->create();
+        }
     }
 }

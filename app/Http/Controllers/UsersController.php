@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessUploadedUserAvatar;
+use App\Mail\UserCreation;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
@@ -71,6 +73,8 @@ class UsersController extends Controller
         $permissions = $request['permissions'];
 
         $user->permissions()->attach($permissions);
+
+        Mail::to($user->email)->queue(new UserCreation($user));
 
         return back();
     }
