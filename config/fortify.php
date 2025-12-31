@@ -88,7 +88,7 @@ return [
 
     'prefix' => '',
 
-    'domain' => 'admin.lespattesheureuses.test',
+    'domain' => 'admin.refuge-animalier-main-jouskv.laravel.cloud',
 
     /*
     |--------------------------------------------------------------------------
