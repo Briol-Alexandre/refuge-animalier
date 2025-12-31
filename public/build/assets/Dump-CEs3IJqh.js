@@ -1,1 +1,0 @@
-import{_ as t,k as o,a,t as s,T as r,o as c}from"./app-eulf5Ui7.js";const l={name:"",props:["dumpValue"],data(){return{}},methods:{}},p={class:"bg-black text-yellow-500 z-40 absolute w-full h-full top-0 left-0"};function n(u,_,e,d,f,m){return c(),o(r,{to:"body"},[a("pre",p,s(e.dumpValue),1)])}const b=t(l,[["render",n]]);export{b as D};
