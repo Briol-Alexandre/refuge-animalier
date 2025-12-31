@@ -79,7 +79,8 @@
                         @click="handleShowModal(notification, $event)">
                         <p class="notif_title flex-1" :class="!notification.read ? 'font-bold': 'pl-3'">
                             <span v-if="!notification.read" class="font-black">•</span>
-                            {{ notification.title }} - {{ notification.type }}
+                            {{ notification.title }} - {{ notification.notifiable_type }} -
+                            {{ notification.notifiable_id }}
                         </p>
                         <span class="self-end mr-4 text-gray-500">
                                 {{ dateFormat(notification.created_at) }}
@@ -142,7 +143,10 @@
             >
                 <AnimalShow :animal="modelToShow" />
             </Modal>
-            <Modal></Modal>
+            <Modal @close="closeShowModal"
+                   :condition="showAdoption && modelToShow !== null">
+                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter" />
+            </Modal>
             <Modal></Modal>
         </Teleport>
     </div>
@@ -153,16 +157,17 @@ import LoggedLayout from '@/layouts/LoggedLayout.vue';
 import Modal from '@/components/widget/Modal.vue';
 import Notifications from '@/components/svgs/Notifications.vue';
 import { useForm } from '@inertiajs/vue3';
-import { update } from '@/actions/App/Http/Controllers/NotificationsController.js';
-import { destroy } from '@/actions/App/Http/Controllers/NotificationsController.js';
+import { destroy, update } from '@/actions/App/Http/Controllers/NotificationsController.js';
 import Close from '@/components/svgs/Close.vue';
 import More from '@/components/svgs/More.vue';
 import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import axios from 'axios';
+import AdoptionShow from '@/components/Modals/AdoptionShow.vue';
 
 export default {
     name: '',
     components: {
+        AdoptionShow,
         AnimalShow,
         Modal,
         LoggedLayout,
@@ -180,11 +185,18 @@ export default {
             showAnimal: false,
             showAdoption: false,
             showVolunteer: false,
-            modelToShow: null
+            modelToShow: null,
+            animalLinked: null
         };
     },
 
     methods: {
+        getAnimal(animalId) {
+            return this.animals.find(animal => animal.id === animalId);
+        },
+        getAdopter(adopterId) {
+            return this.adopters.find(adopter => adopter.id === adopterId);
+        },
         handleModal(notification) {
             this.notifToDelete = notification;
             this.isModalOpen = !this.isModalOpen;
@@ -241,12 +253,16 @@ export default {
         async handleShowModal(notification, event) {
             event?.stopPropagation();
 
-            let modelPath = 'App\\Models\\'
-            if (notification.notifiable_type === modelPath+'Animal') {
+            if (notification.notifiable_type === 'App\\Models\\Animal') {
                 const response = await axios.get(`/api/animals/${notification.notifiable_id}`);
                 this.modelToShow = response.data;
-                console.log(this.modelToShow);
                 this.showAnimal = true;
+            } else if (notification.notifiable_type === 'App\\Models\\Adoption') {
+                const response = await axios.get(`/api/adoptions/${notification.notifiable_id}`);
+                let datas = response.data;
+                this.modelToShow = datas[0];
+                this.animalLinked = datas[1];
+                this.showAdoption = true;
             }
         }
 
