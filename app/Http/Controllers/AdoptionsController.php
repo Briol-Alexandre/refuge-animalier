@@ -21,6 +21,7 @@ class AdoptionsController extends Controller
             'value' => $case->value,
             'label' => $case->label()
         ]);
+
         return Inertia::render('Adoptions',
             [
                 'title' => 'Liste des adoptions',
