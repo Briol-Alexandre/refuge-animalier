@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::domain('admin.refuge-animalier-main-jouskv.laravel.cloud')->middleware('auth')->group(function () {
+Route::domain('admin'. config('app.domain'))->middleware('auth')->group(function () {
     Route::get('/', fn() => redirect()->route('dashboard'))->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])

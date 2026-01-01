@@ -6,7 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Models\Animal;
 use Illuminate\Support\Facades\Route;
 
-Route::domain('refuge-animalier-main-jouskv.laravel.cloud')->group(function () {
+Route::domain(config('app.domain'))->group(function () {
     Route::get('/', function () {
         $animals = Animal::orderBy('created_at', 'desc')->take(4)->where('status', Status::AVAILABLE)->get();
         return view('client.homepage', compact('animals'));
