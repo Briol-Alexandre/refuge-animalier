@@ -49,8 +49,11 @@ class ClientAnimalController extends Controller
 
         $notificationTitle = "{$fullName} veut adopter {$animal->name}";
 
-        Notifications::create(['title' => $notificationTitle, 'urgent' => false, 'read' => false]);
-
+        $adoption->notifications()->create([
+            'title' => $notificationTitle,
+            'urgent' => false,
+            'read' => false,
+        ]);
 
 
         //TODO: faire en sorte que le mail s'envoie toujours à l'admin
@@ -66,7 +69,8 @@ class ClientAnimalController extends Controller
         return view('client.animals', compact('animals'));
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $animal = Animal::findOrFail($id);
         return view('client.animals.show', compact('animal'));
     }
