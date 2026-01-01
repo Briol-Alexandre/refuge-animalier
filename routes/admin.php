@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::domain('admin'. config('app.domain'))->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', fn() => redirect()->route('dashboard'))->name('home');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])

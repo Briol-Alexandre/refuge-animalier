@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/dashboard',
+    'home' => '/admin/dashboard',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,9 +86,9 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => 'admin',
 
-    'domain' => 'admin.refuge-animalier-main-jouskv.laravel.cloud',
+    'domain' => null,
 
     /*
     |--------------------------------------------------------------------------
