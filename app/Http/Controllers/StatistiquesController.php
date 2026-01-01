@@ -12,8 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use JetBrains\PhpStorm\NoReturn;
-use Spatie\LaravelPdf\Facades\Pdf;
+
+use Barryvdh\DomPDF\Facade\Pdf as DomPDF;
 
 class StatistiquesController extends Controller
 {
@@ -35,12 +35,13 @@ class StatistiquesController extends Controller
         $pdfs = collect($files)->map(function ($file) {
             return [
                 'name' => basename($file),
-                'url' => '/storage/'. $file,
+                'url' => '/storage/' . $file,
                 'size' => Storage::disk('public')->size($file),
             ];
         });
 
-        return Inertia::render('Statistiques',
+        return Inertia::render(
+            'Statistiques',
             [
                 'title' => 'Statistiques',
                 'animals' => $animals_count,
@@ -52,7 +53,8 @@ class StatistiquesController extends Controller
                 'cure_model' => $cure_animals,
                 'adoption_model' => $adoptions,
                 'pdfs' => $pdfs,
-            ]);
+            ]
+        );
     }
 
 
@@ -60,7 +62,6 @@ class StatistiquesController extends Controller
     {
     }
 
-    #[NoReturn]
     public function exportPDF(Request $request)
     {
         $validated = $request->validate([
@@ -120,7 +121,12 @@ class StatistiquesController extends Controller
             'animal_total' => $animal_total
         ];
 
-        Pdf::view('pdf.export', ['datas' => $datas])->save(storage_path("app/public/pdfs/{$filename}"));
+        // Ensure the target directory exists
+        Storage::disk('public')->makeDirectory('pdfs');
+
+        // Generate PDF with Barryvdh DomPDF and store it in public storage
+        $pdf = DomPDF::loadView('pdf.export', ['datas' => $datas]);
+        Storage::disk('public')->put('pdfs/' . $filename, $pdf->output());
 
         return back();
     }
