@@ -12,8 +12,8 @@ class Notifications extends Model
 
     protected $fillable = [
         'title',
-        'notifiables_type',
-        'notifiables_id',
+        'notifiable_type',
+        'notifiable_id',
         'read',
         'urgent',
         'type'
