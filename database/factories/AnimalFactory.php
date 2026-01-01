@@ -27,6 +27,7 @@ class AnimalFactory extends Factory
 
         return [
             'name' => $this->faker->name(),
+            'breed_id' => Breed::factory(),
             'sexe' => $this->faker->randomElement(Sexe::values()),
             'age' => Carbon::now(),
             'desc' => $this->faker->sentence('20'),
