@@ -146,10 +146,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         ->name('vaccines.destroy');
 
     Route::post('/statistiques/export', [StatistiquesController::class, 'exportPDF'])
-        ->name('statistiques.export');
-
-    Route::get('/statistiques/download/{filename}', [StatistiquesController::class, 'downloadPDF'])
-        ->name('statistiques.download');
+        ->middleware(['auth'])
+        ->name('export-pdf');
 
 
     require __DIR__ . '/settings.php';

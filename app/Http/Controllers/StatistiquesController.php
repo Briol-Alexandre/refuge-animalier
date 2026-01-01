@@ -35,7 +35,7 @@ class StatistiquesController extends Controller
         $pdfs = collect($files)->map(function ($file) {
             return [
                 'name' => basename($file),
-                'url' => route('statistiques.download', ['filename' => basename($file)]),
+                'url' => '/storage/' . $file,
                 'size' => Storage::disk('public')->size($file),
             ];
         });
@@ -122,27 +122,10 @@ class StatistiquesController extends Controller
         ];
 
         Storage::disk('public')->makeDirectory('pdfs');
+
         $pdf = DomPDF::loadView('pdf.export', ['datas' => $datas]);
         Storage::disk('public')->put('pdfs/' . $filename, $pdf->output());
 
-        $absolutePath = Storage::disk('public')->path('pdfs/' . $filename);
-        return response()->download($absolutePath, $filename, [
-            'Content-Type' => 'application/pdf',
-        ]);
-    }
-    public function downloadPDF($filename)
-    {
-        $filename = basename($filename);
-
-        $path = Storage::disk('public')->path('pdfs/' . $filename);
-
-        if (!file_exists($path)) {
-            abort(404, 'PDF non trouvé');
-        }
-
-        return response()->download($path, $filename, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        return back();
     }
 }
