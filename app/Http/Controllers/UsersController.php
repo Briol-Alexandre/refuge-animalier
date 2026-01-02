@@ -7,6 +7,7 @@ use App\Mail\UserCreation;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\In;
@@ -23,7 +24,8 @@ class UsersController extends Controller
         return Inertia::render('Users', [
             'volunteers' => $users,
             'permissions' => $permissions,
-            'volunteers_link' => $users_link
+            'volunteers_link' => $users_link,
+            'isAdmin' => \auth()->user()->role === 'Admin'
         ]);
     }
 
@@ -33,6 +35,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('create');
         $validated = $request->validate([
             'avatar' => 'nullable|image|mimes:jpg,png,gif',
             'name' => 'required|min:3',
@@ -72,7 +75,7 @@ class UsersController extends Controller
 
         $user->permissions()->attach($permissions);
 
-        //Mail::to($user->email)->queue(new UserCreation($user));
+        Mail::to($user->email)->queue(new UserCreation($user));
 
         return back();
     }
@@ -87,6 +90,7 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
+        Gate::authorize('update', $user);
         $validated = $request->validate([
             'name' => 'required|min:3',
             'email' => 'email|required|unique:users,email,' . $user->id,
@@ -139,6 +143,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $volunteer = User::findOrFail($id);
+        Gate::authorize('delete', $volunteer);
         if ($volunteer->notifications()) {
             $volunteer->notifications()->delete();
         }

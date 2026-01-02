@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tel');
             $table->json('schedule')->nullable();
             $table->string('password');
+            $table->enum('role', ['Admin', 'Bénévole'])->default('Bénévole');
             $table->rememberToken();
             $table->timestamps();
         });

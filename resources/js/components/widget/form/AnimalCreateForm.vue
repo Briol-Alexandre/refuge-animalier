@@ -8,7 +8,7 @@
             <div class="flex flex-col h-full">
                 <label for="images" class="relative w-full h-full flex items-center justify-center">
                     <div v-if="previewImages.length === 0" class="text-center flex flex-col items-center">
-                        <ImageAdd fill-color="#ECECEC" />
+                        <ImageAdd fill-color="#ECECEC"/>
                         Ajouter une ou <span class="block">plusieurs photos</span>
                     </div>
                     <div v-else
@@ -17,14 +17,14 @@
                             v-if="previewImages.length > 0"
                             :src="previewImages[0]"
                             class="w-full h-full object-cover col-span-full"
-                            alt="" />
+                            alt=""/>
                         <div class="grid grid-cols-3 gap-2 w-full h-full">
                             <img
                                 v-for="(img, index) in previewImages.slice(1)"
                                 :key="index"
                                 :src="img"
                                 class="w-full h-full object-cover"
-                                alt="" />
+                                alt=""/>
                         </div>
                     </div>
 
@@ -47,7 +47,7 @@
                 </label>
                 <input id="name" type="text" v-model="formAnimal.name"
                        class="p-2 bg-white border-2 border-main-yellow rounded-lg" placeholder="Ex. Moka">
-                <InputError :message="formAnimal.errors.name" />
+                <InputError :message="formAnimal.errors.name"/>
             </div>
 
             <Select
@@ -93,7 +93,7 @@
                         <p @click="modalToOpen = 'coat'" class="mb-4">+ Ajouter un pelage</p>
                         <span @click.stop="this.isCoatModalOpen = !this.isCoatModalOpen; this.formAnimal.coat_id = []"
                               class="absolute top-2 right-2 hover:cursor-pointer">
-                            <Close />
+                            <Close/>
                         </span>
                         <div v-for="coat in coats" :key="coat.id" class="flex gap-2">
                             <input
@@ -120,7 +120,7 @@
                 </label>
                 <input id="age" type="date" v-model="formAnimal.age"
                        class="p-2 bg-white border-2 border-main-yellow rounded-lg">
-                <InputError :message="formAnimal.errors.age" />
+                <InputError :message="formAnimal.errors.age"/>
             </div>
 
             <Select v-model="formAnimal.sexe" id-name="sexe" label="Sexe de l'animal">
@@ -151,7 +151,7 @@
                             vaccin</p>
                         <span @click.stop="isVaccineModalOpen = !isVaccineModalOpen; formAnimal.vaccines = []"
                               class="absolute top-2 right-2 hover:cursor-pointer">
-                            <Close />
+                            <Close/>
                         </span>
                         <div v-for="vaccine in filteredVaccines" :key="vaccine.id" class="flex gap-2">
                             <input
@@ -172,6 +172,7 @@
 
 
             <Select
+                v-if="isAdmin"
                 :modelValue="formAnimal.status"
                 @update:modelValue="handleStatusChange"
                 id-name="status"
@@ -180,6 +181,12 @@
                 <option value="">--Choisir un statut--</option>
                 <option v-for="status in statusList" :value="status">{{ status }}</option>
             </Select>
+            <div v-else class="flex flex-col opacity-75 -z-10">
+                <p>Status</p>
+                <p class="p-2 bg-white border-2 border-main-yellow rounded-lg hover:cursor-not-allowed">
+                    En attente
+                </p>
+            </div>
         </fieldset>
 
         <div class="col-span-full grid grid-cols-2 gap-x-4">
@@ -189,8 +196,8 @@
                 </label>
                 <textarea id="desc" v-model="formAnimal.desc"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez la description…" />
-                <InputError :message="formAnimal.errors.desc" />
+                          placeholder="Écrivez la description…"/>
+                <InputError :message="formAnimal.errors.desc"/>
             </div>
             <div class="flex flex-col h-full">
                 <p>
@@ -203,8 +210,8 @@
                 <label for="note['content']">Contenu de la note</label>
                 <textarea id="note['content']" v-model="formAnimal.note['content']"
                           class="p-2 bg-white border-2 border-main-yellow rounded-lg min-h-32"
-                          placeholder="Écrivez une note…" />
-                <InputError :message="formAnimal.errors.note" />
+                          placeholder="Écrivez une note…"/>
+                <InputError :message="formAnimal.errors.note"/>
             </div>
 
         </div>
@@ -228,7 +235,7 @@
                     <label for="name">Nom de l'espèce</label>
                     <input id="name" name="name" v-model="formSpecie.name" placeholder="Ex. Chihuahua"
                            class="p-2 bg-white border-2 border-main-yellow rounded-lg">
-                    <InputError :message="formSpecie.errors.name" />
+                    <InputError :message="formSpecie.errors.name"/>
                 </div>
                 <button type="submit" class="button-light ml-auto">Créer l'espèce</button>
             </form>
@@ -242,13 +249,13 @@
                     <label for="name">Nom de la race</label>
                     <input id="name" name="name" v-model="formBreed.name" placeholder="Ex. Chihuahua"
                            class="p-2 bg-white border-2 border-main-yellow rounded-lg">
-                    <InputError :message="formBreed.errors.name" />
+                    <InputError :message="formBreed.errors.name"/>
                 </div>
                 <Select id-name="specie_id" label="Espèce liée" v-model="formBreed.specie_id">
                     <option value="">--Choisir une espèce--</option>
                     <option v-for="specie in species" :value="specie.id">{{ specie.name }}</option>
                 </Select>
-                <InputError :message="formBreed.errors.specie_id" />
+                <InputError :message="formBreed.errors.specie_id"/>
                 <button type="submit" class="button-light ml-auto">Créer la race</button>
             </form>
         </Modal>
@@ -260,7 +267,7 @@
                     <label for="name">Nom du pelage</label>
                     <input id="name" name="name" v-model="formCoat.name" placeholder="Ex. Gris"
                            class="p-2 bg-white border-2 border-main-yellow rounded-lg">
-                    <InputError :message="formCoat.errors.name" />
+                    <InputError :message="formCoat.errors.name"/>
                 </div>
                 <button type="submit" class="button-light ml-auto">Créer le pelage</button>
             </form>
@@ -282,17 +289,17 @@ import TextareaLabel from '@/components/widget/form/TextareaLabel.vue';
 import Select from '@/components/widget/form/Select.vue';
 import ImageAdd from '@/components/svgs/ImageAdd.vue';
 import Close from '@/components/svgs/Close.vue';
-import { Button } from '@/components/ui/button/index.js';
+import {Button} from '@/components/ui/button/index.js';
 import Modal from '@/components/widget/Modal.vue';
-import { Form, useForm, usePage } from '@inertiajs/vue3';
-import { store as species_store } from '@/actions/App/Http/Controllers/SpeciesController';
-import { store as breeds_store } from '@/actions/App/Http/Controllers/BreedsController';
-import { store as coats_store } from '@/actions/App/Http/Controllers/CoatsController';
-import { store as animal_store } from '@/actions/App/Http/Controllers/AnimalsController';
-import { useToasterStore } from '@/stores/useToasterStore';
+import {Form, useForm, usePage} from '@inertiajs/vue3';
+import {store as species_store} from '@/actions/App/Http/Controllers/SpeciesController';
+import {store as breeds_store} from '@/actions/App/Http/Controllers/BreedsController';
+import {store as coats_store} from '@/actions/App/Http/Controllers/CoatsController';
+import {store as animal_store} from '@/actions/App/Http/Controllers/AnimalsController';
+import {useToasterStore} from '@/stores/useToasterStore';
 import InputError from '@/components/InputError.vue';
 import Input from '../../ui/input/Input.vue';
-import { useStatusStore } from '@/stores/statusStore.js';
+import {useStatusStore} from '@/stores/statusStore.js';
 
 export default {
     name: '',
@@ -309,15 +316,15 @@ export default {
         useToasterStore,
         Close
     },
-    props: ['openModal', 'species', 'breeds', 'coats', 'vaccines'],
+    props: ['openModal', 'species', 'breeds', 'coats', 'vaccines', 'isAdmin'],
     data() {
         return {
             modalToOpen: '',
             toast: useToasterStore(),
             previewImages: [],
-            formBreed: useForm({ name: '', specie_id: '' }),
-            formSpecie: useForm({ name: '' }),
-            formCoat: useForm({ name: '' }),
+            formBreed: useForm({name: '', specie_id: ''}),
+            formSpecie: useForm({name: ''}),
+            formCoat: useForm({name: ''}),
             formAnimal: useForm({
                 name: '',
                 breed_id: '',
@@ -325,7 +332,7 @@ export default {
                 age: '',
                 specie_id: '',
                 desc: '',
-                status: '',
+                status: this.isAdmin ? '' : 'pending',
                 images: '',
                 vaccines: [],
                 note: {
@@ -418,12 +425,12 @@ export default {
         handleSubmit() {
             this.formAnimal.post(animal_store(), {
                 onSuccess: () => {
-                    this.toast.success({ text: 'Animal créé avec succès !' });
+                    this.toast.success({text: 'Animal créé avec succès !'});
                     this.formAnimal.reset();
                     this.$emit('closeModal');
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
                     console.log(this.formAnimal.errors);
                 }
             });
@@ -432,36 +439,36 @@ export default {
         submitBreed() {
             this.formBreed.post(breeds_store(), {
                 onSuccess: () => {
-                    this.toast.success({ text: 'Race créée avec succès !' });
+                    this.toast.success({text: 'Race créée avec succès !'});
                     this.modalToOpen = '';
                     this.formBreed.reset();
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
                 }
             });
         },
         submitSpecie() {
             this.formSpecie.post(species_store(), {
                 onSuccess: () => {
-                    this.toast.success({ text: 'Espèce créée avec succès !' });
+                    this.toast.success({text: 'Espèce créée avec succès !'});
                     this.modalToOpen = '';
                     this.formSpecie.reset();
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
                 }
             });
         },
         submitCoat() {
             this.formCoat.post(coats_store(), {
                 onSuccess: () => {
-                    this.toast.success({ text: 'Pelage créé avec succès !' });
+                    this.toast.success({text: 'Pelage créé avec succès !'});
                     this.modalToOpen = '';
                     this.formCoat.reset();
                 },
                 onError: () => {
-                    this.toast.success({ text: 'Une erreur est apparue lors de la création' });
+                    this.toast.success({text: 'Une erreur est apparue lors de la création'});
                 }
             });
         }

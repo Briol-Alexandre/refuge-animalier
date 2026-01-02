@@ -22,7 +22,8 @@
         </div>
         <div class="flex flex-col">
             <label for="animal">Choisir un animal</label>
-            <multiselect id="animal" :options="filteredAnimals" track-by="name" label="name" v-model="formAdoption.animal_id"
+            <multiselect id="animal" :options="filteredAnimals" track-by="name" label="name"
+                         v-model="formAdoption.animal_id"
                          placeholder="Choisir un animal">
             </multiselect>
             <InputError :message="formAdoption.errors.animal_id"></InputError>
@@ -39,6 +40,7 @@
         </div>
         <div>
             <Select
+                v-if="isAdmin"
                 v-model="formAdoption.status"
                 id-name="status"
                 label="Statut de l'adoption"
@@ -46,6 +48,12 @@
                 <option value="">--Choisir un statut--</option>
                 <option v-for="statu in status" :value="statu.value">{{ statu.label }}</option>
             </Select>
+            <div v-else class="flex flex-col opacity-75 -z-10">
+                <p>Status</p>
+                <p class="p-2 bg-white border-2 border-main-yellow rounded-lg hover:cursor-not-allowed">
+                    En attente
+                </p>
+            </div>
             <InputError :message="formAdoption.errors.status"></InputError>
         </div>
         <div class="mt-4 col-span-full">
@@ -86,7 +94,7 @@ import InputError from '@/components/InputError.vue';
 export default {
     name: '',
     components: { InputError, Modal, Select, Multiselect },
-    props: ['openModal', 'animals', 'adopters', 'status'],
+    props: ['openModal', 'animals', 'adopters', 'status', 'isAdmin'],
 
     data() {
         return {
@@ -94,7 +102,7 @@ export default {
             formAdoption: useForm({
                 animal_id: '',
                 adopter_id: '',
-                status: '',
+                status: this.isAdmin ? '' : 'pending',
                 adoption_date: '',
                 note: {
                     title: '',

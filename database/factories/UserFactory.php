@@ -29,6 +29,7 @@ class UserFactory extends Factory
             'tel' => $faker->phoneNumber(),
             'name' => $faker->name(),
             'email' => $faker->unique()->safeEmail(),
+            'role' => 'Bénévole',
             'email_verified_at' => now(),
             'password' => static::$password ??= 'password',
             'remember_token' => Str::random(10),

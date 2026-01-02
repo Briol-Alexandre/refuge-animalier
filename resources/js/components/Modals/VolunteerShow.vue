@@ -17,22 +17,19 @@
                 </div>
             </dl>
             <div>
-                <p class="font-atten text-2xl font-black mb-2 mt-4">Permissions</p>
-                <ul class="flex gap-2">
-                    <li v-for="permission in volunteer.permissions"
-                        class="text-sm bg-main-blue-opacity rounded-full px-1 py-px">{{ permission.name }}
-                    </li>
-                </ul>
+                <dt class="font-atten text-2xl font-black mb-2 mt-4">Rôle</dt>
+                <dd>{{volunteer.role}}</dd>
+
             </div>
         </div>
         <ScheduleTable :volunteer="schedule" />
         <div v-if="!isNotShowPage" class="col-span-full flex justify-around">
-            <button class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
-            <button class="button-light" @click="handleEditModal">Modifier le bénévole</button>
+            <button v-if="!isAdmin" class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
+            <button v-if="!isAdmin" class="button-light" @click="handleEditModal">Modifier le bénévole</button>
         </div>
         <div v-else class="col-span-full flex justify-around">
-            <button class="button-dark" @click="handleDeleteModal">Refuser le bénévole</button>
-            <button class="button-light" @click="handleStatus">Accepter le bénévole</button>
+            <button v-if="!isAdmin" class="button-dark" @click="handleDeleteModal">Refuser le bénévole</button>
+            <button v-if="!isAdmin" class="button-light" @click="handleStatus">Accepter le bénévole</button>
         </div>
     </div>
     <Teleport to="body">
@@ -68,7 +65,7 @@ import { useToasterStore } from '@/stores/useToasterStore.js';
 import {destroy as delete_volunteer} from '@/actions/App/Http/Controllers/UsersController.js'
 export default {
     components: { Button, ScheduleTable, Modal, VolunteerEditForm },
-    props: ['volunteer', 'schedule', 'permissions', 'isNotShowPage'],
+    props: ['volunteer', 'schedule', 'permissions', 'isNotShowPage', 'isAdmin'],
     data() {
         return {
             isEditModalOpen: false,

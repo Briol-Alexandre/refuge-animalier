@@ -7,6 +7,7 @@ use App\Enums\Status;
 use App\Models\Adopter;
 use App\Models\Adoption;
 use App\Models\Animal;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,7 +28,8 @@ class AdoptionsController extends Controller
                 'adoptions' => $adoptions,
                 'animals' => $animals,
                 'adopters' => $adopters,
-                'status' => $status
+                'status' => $status,
+                'isAdmin' => \auth()->user()->role === 'Admin'
             ]
         );
     }
@@ -85,6 +87,9 @@ class AdoptionsController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $adoption = Adoption::findOrFail($id);
+        \Illuminate\Support\Facades\Gate::authorize('update', $adoption);
         $validated = $request->validate([
             'animal_id' => 'exists:animals,id',
             'adopter_id' => 'exists:adopters,id',
@@ -92,7 +97,6 @@ class AdoptionsController extends Controller
             'status' => 'required',
         ]);
 
-        $adoption = Adoption::findOrFail($id);
 
         $animal = Animal::findOrFail($adoption->animal_id);
         $animal->update(['status' => Status::AVAILABLE,]);
@@ -110,6 +114,10 @@ class AdoptionsController extends Controller
 
     public function destroy($id)
     {
+        $adoption = Adoption::findOrFail($id);
+        \Illuminate\Support\Facades\Gate::authorize('delete', $adoption);
+
+        $adoption->delete();
     }
 
     public function updateStatus(Adoption $adoption, Request $request)
