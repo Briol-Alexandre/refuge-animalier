@@ -20,9 +20,10 @@ class ProcessUploadedUserAvatar implements ShouldQueue
 
     public function handle()
     {
-        $image = Image::read(
-            Storage::get($this->full_path_to_original)
-        );
+        $imageContent = Storage::disk('s3')->get($this->full_path_to_original);
+
+        $image = Image::make($imageContent);
+
 
         $sizes = config('avatar.sizes');
         $jpeg_compression = config('avatar.jpeg_compression');
