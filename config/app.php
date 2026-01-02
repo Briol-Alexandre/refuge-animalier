@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'domain' => env('APP_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +83,7 @@ return [
 
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
+    'faker_locale' => env('APP_FAKER_LOCALE', 'fr_BE'),
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

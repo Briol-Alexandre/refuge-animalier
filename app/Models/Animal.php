@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Notifications\Notification;
 
 class Animal extends Model
 {
@@ -29,6 +30,7 @@ class Animal extends Model
 
     protected $casts = [
         'status' => Status::class,
+        /*'images' => 'array'*/
     ];
 
     public function scopeByStatus($query, $status)
@@ -71,5 +73,10 @@ class Animal extends Model
     public function notes(): MorphMany
     {
         return $this->morphMany(Note::class, 'notable');
+    }
+
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(Notifications::class, 'notifiable');
     }
 }

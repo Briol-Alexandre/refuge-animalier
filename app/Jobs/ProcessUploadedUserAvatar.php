@@ -3,12 +3,13 @@
 namespace App\Jobs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ProcessUploadedUserAvatar implements ShouldQueue
 {
-    use \Illuminate\Foundation\Queue\Queueable;
+    use Queueable;
 
     public function __construct(
         public string $full_path_to_original,
@@ -19,9 +20,10 @@ class ProcessUploadedUserAvatar implements ShouldQueue
 
     public function handle()
     {
-        $image = Image::read(
-            Storage::get($this->full_path_to_original)
-        );
+        $imageContent = Storage::disk('s3')->get($this->full_path_to_original);
+
+        $image = Image::make($imageContent);
+
 
         $sizes = config('avatar.sizes');
         $jpeg_compression = config('avatar.jpeg_compression');
@@ -34,8 +36,7 @@ class ProcessUploadedUserAvatar implements ShouldQueue
                 ->scale($size['width']);
 
             $path = sprintf($variant_pattern, $size['width'], $size['height']);
-            info('toto');
-            Storage::put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
+            Storage::disk('s3')->put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
         }
     }
 }

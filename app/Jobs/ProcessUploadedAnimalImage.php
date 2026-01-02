@@ -19,9 +19,9 @@ class ProcessUploadedAnimalImage implements ShouldQueue
 
     public function handle()
     {
-        $image = Image::read(
-            Storage::get($this->full_path_to_original)
-        );
+        $imageContent = Storage::disk('s3')->get($this->full_path_to_original);
+
+        $image = Image::make($imageContent);
 
         $sizes = config('image.sizes');
         $jpeg_compression = config('image.jpeg_compression');
@@ -30,12 +30,17 @@ class ProcessUploadedAnimalImage implements ShouldQueue
 
         foreach ($sizes as $size) {
             $variant = clone $image;
-            $variant
-                ->scale($size['width']);
+            $variant->resize($size['width'], null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
 
             $path = sprintf($variant_pattern, $size['width'], $size['height']);
-            info('toto');
-            Storage::put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
+            Storage::disk('s3')->put(
+                $path . '/' . $this->new_original_file_name,
+                $variant->encode($image_type, $jpeg_compression)
+            );
         }
     }
+
 }

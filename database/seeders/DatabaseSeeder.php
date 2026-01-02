@@ -96,7 +96,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $permissions = Permission::factory(10)->create();
-        $users = User::factory(100)->create();
+        $users = User::factory(20)->create();
 
         foreach ($users as $user) {
             $user->permissions()->attach(
@@ -104,10 +104,10 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        $adopters = Adopter::factory(100)->create();
+        $adopters = Adopter::factory(30)->create();
 
         $animals = collect();
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $animal = Animal::factory()->create([
                 'breed_id' => Breed::inRandomOrder()->first()->id,
             ]);
@@ -130,13 +130,24 @@ class DatabaseSeeder extends Seeder
             $animals->push($animal);
         }
 
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             Adoption::factory()->create([
                 'animal_id' => $animals->random()->id,
                 'adopter_id' => $adopters->random()->id,
             ]);
         }
 
-        Notifications::factory(20)->create();
+        foreach ($animals->random(10) as $animal) {
+            Notifications::factory()->forAnimal($animal)->create();
+        }
+
+        $adoptions = Adoption::all();
+        foreach ($adoptions->random(min(5, $adoptions->count())) as $adoption) {
+            Notifications::factory()->forAdoption($adoption)->create();
+        }
+
+        foreach ($users->random(5) as $user) {
+            Notifications::factory()->forUser($user)->create();
+        }
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ProcessUploadedUserAvatar;
+use App\Mail\UserCreation;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
@@ -47,23 +49,21 @@ class UsersController extends Controller
         if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
             $new_original_file_name = uniqid() . '.' . config('avatar.image_type');
-            $full_path_to_original = Storage::putFileAs(
+            $full_path_to_original = $avatar->storeAs(
                 config('avatar.original_path'),
-                $avatar,
-                $new_original_file_name
+                $new_original_file_name,
+                's3'
             );
             if ($full_path_to_original) {
-                $avatar = $new_original_file_name;
                 ProcessUploadedUserAvatar::dispatch($full_path_to_original, $new_original_file_name);
+                $validated['avatar'] = Storage::disk('s3')->url($full_path_to_original);
             } else {
-                $avatar = '';
+                $validated['avatar'] = '';
             }
-            $avatar = $full_path_to_original;
-            $new_image[$avatar] = $avatar;
-            $validated['avatar'] = collect($new_image)->first();
         } else {
             $validated['avatar'] = '';
         }
+
         $validated['password'] = 'password';
 
         $user = User::create($validated);
@@ -71,6 +71,8 @@ class UsersController extends Controller
         $permissions = $request['permissions'];
 
         $user->permissions()->attach($permissions);
+
+        //Mail::to($user->email)->queue(new UserCreation($user));
 
         return back();
     }
@@ -137,6 +139,9 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $volunteer = User::findOrFail($id);
+        if ($volunteer->notifications()) {
+            $volunteer->notifications()->delete();
+        }
         $volunteer->delete();
         return Inertia::location(route('users.index'));
     }

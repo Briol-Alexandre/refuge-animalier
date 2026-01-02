@@ -2,20 +2,20 @@
     <div class="grid grid-cols-3 gap-5">
         <div class="flex flex-col">
             <img
-                v-if="getImagesSrc(animal.images).length === 1"
-                :src="getImagesSrc(animal.images)[0]"
+                v-if="animalImages.length === 1"
+                :src="animalImages[0]"
                 :alt="'Image de ' + animal.name"
                 class="w-full h-full object-cover rounded"
             >
-            <div v-else-if="getImagesSrc(animal.images).length > 1" class="h-full flex flex-col gap-2">
+            <div v-else-if="animalImages.length > 1" class="h-full flex flex-col gap-2">
                 <img
-                    :src="getImagesSrc(animal.images)[0]"
+                    :src="animalImages[0]"
                     :alt="'Image de ' + animal.name"
                     class="w-full h-[80%] object-cover rounded"
                 >
                 <div class="grid grid-cols-3 gap-1 h-[20%]">
                     <img
-                        v-for="imageSrc in getImagesSrc(animal.images).slice(1)"
+                        v-for="imageSrc in animalImages.slice(1)"
                         :src="imageSrc"
                         :alt="`Photo alternative de ${animal.name}`"
                         class="w-full h-full object-cover rounded"
@@ -97,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="mx-auto col-span-full flex gap-4">
+        <div v-if="!isNotShowPage" class="mx-auto col-span-full flex gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">
                 Changer le statut de l'animal
             </button>
@@ -107,6 +107,17 @@
             <!-- TODO: MAKE THIS BUTTON ONLY ACCESSIBLE TO THE ADMIN -->
             <button class="button-light" @click="handleDeleteModal">
                 Supprimer la fiche
+            </button>
+        </div>
+        <div v-else class="mx-auto col-span-full flex gap-4">
+            <button class="button-dark" @click="handleChangeStatusModal">
+                Accepter la fiche
+            </button>
+            <button class="button-light" @click="openEditModal">
+                Modifier la fiche
+            </button>
+            <button class="button-light" @click="handleDeleteModal">
+                Refuser la fiche
             </button>
         </div>
     </div>
@@ -221,7 +232,7 @@ import Input from '../ui/input/Input.vue';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
 
 export default {
-    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines'],
+    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines', 'isNotShowPage'],
 
     components: {
         Input,
@@ -262,6 +273,9 @@ export default {
     computed: {
         visibleNotes() {
             return this.showAll ? this.animal.notes : this.animal.notes.slice(0, 3);
+        },
+        animalImages() {
+            return this.getImagesSrc(this.animal.images);
         }
     },
 
@@ -352,11 +366,37 @@ export default {
         },
         getImagesSrc(imageData) {
             if (!imageData) return [];
-            const parsed = typeof imageData === 'string'
-                ? JSON.parse(imageData)
-                : imageData;
-            return Object.keys(parsed);
+
+            let images = [];
+            if (typeof imageData === 'string') {
+                try {
+                    const parsed = JSON.parse(imageData);
+                    images = Array.isArray(parsed)
+                        ? parsed
+                        : Object.keys(parsed);
+                } catch {
+                    images = [imageData];
+                }
+            }
+
+            if (typeof imageData === 'object' && !Array.isArray(imageData)) {
+                images = Object.keys(imageData);
+            }
+
+            if (Array.isArray(imageData)) {
+                images = imageData;
+            }
+
+            return images
+                .filter(Boolean)
+                .map(src => {
+                    if (!src.startsWith('http') && !src.startsWith('/')) {
+                        return '/' + src;
+                    }
+                    return src;
+                });
         }
+
     }
 
 };

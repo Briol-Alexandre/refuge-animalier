@@ -107,27 +107,28 @@ export default {
 
     methods: {
         getImageSrc(imageData) {
+            let src = '';
             if (typeof imageData === 'string') {
                 if (imageData.startsWith('{') || imageData.startsWith('[')) {
                     try {
                         const parsed = JSON.parse(imageData);
-                        if (typeof parsed === 'object' && !Array.isArray(parsed)) {
-                            return Object.keys(parsed)[0] || '';
-                        }
-                        return parsed;
-                    } catch (e) {
-                        console.warn('Impossible de parser l\'image JSON:', e);
-                        return imageData;
+                        src = typeof parsed === 'object'
+                            ? Object.keys(parsed)[0] ?? ''
+                            : parsed;
+                    } catch {
+                        src = imageData;
                     }
+                } else {
+                    src = imageData;
                 }
-                return imageData;
             }
-
             if (typeof imageData === 'object' && imageData !== null) {
-                return Object.keys(imageData)[0] || '';
+                src = Object.keys(imageData)[0] ?? '';
             }
-
-            return '';
+            if (src && !src.startsWith('http') && !src.startsWith('/')) {
+                src = '/' + src;
+            }
+            return src || '/images/placeholder.png';
         }
     }
 };

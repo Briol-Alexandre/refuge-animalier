@@ -8,7 +8,6 @@ import {
     PinInputSlot,
 } from '@/components/ui/pin-input';
 import AuthLayout from '@/layouts/AuthLayout.vue';
-import { store } from '@/routes/two-factor/login';
 import { Form, Head } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
@@ -49,7 +48,7 @@ const codeValue = computed<string>(() => code.value.join(''));
 </script>
 
 <template>
-    <AuthLayout
+<!--    <AuthLayout
         :title="authConfigContent.title"
         :description="authConfigContent.description"
     >
@@ -137,5 +136,5 @@ const codeValue = computed<string>(() => code.value.join(''));
                 </Form>
             </template>
         </div>
-    </AuthLayout>
+    </AuthLayout>-->
 </template>

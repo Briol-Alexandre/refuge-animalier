@@ -74,10 +74,10 @@ class AnimalsController extends Controller
         if ($images) {
             foreach ($images as $image) {
                 $new_original_file_name = uniqid() . '.' . config('image.image_type');
-                $full_path_to_original = Storage::putFileAs(
+                $full_path_to_original = $image->storeAs(
                     config('image.original_path'),
-                    $image,
-                    $new_original_file_name
+                    $new_original_file_name,
+                    's3'
                 );
                 if ($full_path_to_original) {
                     $image = $new_original_file_name;
@@ -85,8 +85,8 @@ class AnimalsController extends Controller
                 } else {
                     $image = '';
                 }
-                $image = $full_path_to_original;
-                $new_images[$image] = $image;
+                $storedUrl = Storage::disk('s3')->url($full_path_to_original);
+                $new_images[$storedUrl] = $storedUrl;
             }
         }
         $validated['images'] = collect($new_images);
@@ -188,6 +188,10 @@ class AnimalsController extends Controller
     public function destroy($id)
     {
         $animal = Animal::findOrFail($id);
+
+        if($animal->notifications()) {
+            $animal->notifications()->delete();
+        }
 
         $animal->delete();
     }

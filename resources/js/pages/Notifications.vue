@@ -75,7 +75,8 @@
             <div class="overflow-y-scroll h-[90%]">
                 <ul class="flex flex-col gap-4 h-full">
                     <li v-for="notification in notifications"
-                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative">
+                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative"
+                        @click="handleShowModal(notification, $event)">
                         <p class="notif_title flex-1" :class="!notification.read ? 'font-bold': 'pl-3'">
                             <span v-if="!notification.read" class="font-black">•</span>
                             {{ notification.title }}
@@ -134,6 +135,22 @@
                     </button>
                 </div>
             </Modal>
+            <Modal
+                @close="closeShowModal"
+                :condition="showAnimal && modelToShow !== null"
+                index="z-30"
+            >
+                <AnimalShow :animal="modelToShow" :status="status" :is-not-show-page="true" @deleted="closeShowModal"/>
+            </Modal>
+            <Modal @close="closeShowModal"
+                   :condition="showAdoption && modelToShow !== null">
+                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter" :is-not-show-page="true" @updated="closeShowModal"/>
+            </Modal>
+            <Modal @close="closeShowModal"
+                   :condition="showVolunteer && modelToShow !== null"
+                   >
+                <VolunteerShow :volunteer="modelToShow" :schedule="modelToShow.schedule" :is-not-show-page="true" @accepted="closeShowModal"/>
+            </Modal>
         </Teleport>
     </div>
 </template>
@@ -143,31 +160,51 @@ import LoggedLayout from '@/layouts/LoggedLayout.vue';
 import Modal from '@/components/widget/Modal.vue';
 import Notifications from '@/components/svgs/Notifications.vue';
 import { useForm } from '@inertiajs/vue3';
-import { update } from '@/actions/App/Http/Controllers/NotificationsController.js';
-import { destroy } from '@/actions/App/Http/Controllers/NotificationsController.js';
+import { destroy, update } from '@/actions/App/Http/Controllers/NotificationsController.js';
 import Close from '@/components/svgs/Close.vue';
 import More from '@/components/svgs/More.vue';
+import AnimalShow from '@/components/Modals/AnimalShow.vue';
+import axios from 'axios';
+import AdoptionShow from '@/components/Modals/AdoptionShow.vue';
+import VolunteerShow from '@/components/Modals/VolunteerShow.vue';
+import { useStatusStore } from '@/stores/statusStore.js';
+import Dump from '@/components/Debug/Dump.vue';
 
 export default {
     name: '',
     components: {
+        VolunteerShow,
+        AdoptionShow,
+        AnimalShow,
         Modal,
         LoggedLayout,
         Notifications,
         Close,
-        More
+        More,
+        Dump
     },
-    props: ['notifications', 'urgents'],
+    props: ['notifications', 'urgents', 'status'],
     data() {
         return {
             isModalOpen: false,
             isShowModalOpen: false,
             notifToDelete: null,
-            showActionsId: null
+            showActionsId: null,
+            showAnimal: false,
+            showAdoption: false,
+            showVolunteer: false,
+            modelToShow: null,
+            animalLinked: null,
         };
     },
 
     methods: {
+        getAnimal(animalId) {
+            return this.animals.find(animal => animal.id === animalId);
+        },
+        getAdopter(adopterId) {
+            return this.adopters.find(adopter => adopter.id === adopterId);
+        },
         handleModal(notification) {
             this.notifToDelete = notification;
             this.isModalOpen = !this.isModalOpen;
@@ -177,6 +214,12 @@ export default {
         },
         handleShowActions(id) {
             this.showActionsId = this.showActionsId === id ? null : id;
+        },
+        closeShowModal() {
+            this.showAnimal = false;
+            this.showAdoption = false;
+            this.showVolunteer = false;
+            this.modelToShow = null;
         },
         deleteNotif() {
             const form = useForm();
@@ -213,7 +256,27 @@ export default {
         },
         dateFormat(date) {
             date = new Date(date);
-            return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+            return `${date.getDay()}/${date.getMonth()+1}/${date.getFullYear()}`;
+        },
+        async handleShowModal(notification, event) {
+            event?.stopPropagation();
+
+            if (notification.notifiable_type === 'App\\Models\\Animal') {
+                const response = await axios.get(`/api/animals/${notification.notifiable_id}`);
+                this.modelToShow = response.data;
+                this.showAnimal = true;
+            } else if (notification.notifiable_type === 'App\\Models\\Adoption') {
+                const response = await axios.get(`/api/adoptions/${notification.notifiable_id}`);
+                let datas = response.data;
+                this.modelToShow = datas[0];
+                this.animalLinked = datas[1];
+                this.showAdoption = true;
+            } else if (notification.notifiable_type=== 'App\\Models\\User') {
+                const response = await axios.get(`/api/users/${notification.notifiable_id}`);
+                this.modelToShow = response.data;
+                console.log(this.modelToShow);
+                this.showVolunteer = true;
+            }
         }
 
     }

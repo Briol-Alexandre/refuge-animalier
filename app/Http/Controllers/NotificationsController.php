@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Models\Notifications;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
@@ -11,13 +12,18 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        $urgents = Notifications::where('urgent', true)->orderBy("created_at", 'desc')->get();
-        $notifications = Notifications::where('urgent', false)->orderBy("created_at", 'desc')->get();
+        $urgents = Notifications::where('urgent', true)->orderBy("created_at", 'desc')->with('notifiable')->get();
+        $notifications = Notifications::where('urgent', false)->orderBy("created_at", 'desc')->with('notifiable')->get();
+        $status = collect(Status::cases())->map(fn($case) => [
+            'value' => $case->value,
+            'label' => $case->label()
+        ]);
         return Inertia::render('Notifications',
             [
                 'title' => 'Notifications',
                 'notifications' => $notifications,
-                'urgents' => $urgents
+                'urgents' => $urgents,
+                'status' => $status
             ]
         );
     }

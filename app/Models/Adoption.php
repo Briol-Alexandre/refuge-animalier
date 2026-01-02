@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Mockery\Matcher\Not;
+use phpDocumentor\Reflection\Utils;
 
 class Adoption extends Model
 {
@@ -35,6 +36,11 @@ class Adoption extends Model
     public function notes() :MorphMany
     {
         return $this->morphMany(Note::class, 'notable');
+    }
+
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(Notifications::class, 'notifiable');
     }
 
     protected function casts(): array

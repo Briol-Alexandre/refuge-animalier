@@ -1,3 +1,4 @@
+<!--
 <script setup lang="ts">
 import AlertError from '@/components/AlertError.vue';
 import { Button } from '@/components/ui/button';
@@ -121,3 +122,28 @@ onMounted(async () => {
         </CardContent>
     </Card>
 </template>
+-->
+<template>
+
+</template>
+
+<script>
+export default {
+  name: "",
+  props: [],
+  
+  data() {
+    return {
+     
+    }
+  },
+  
+  methods: {
+   
+  }
+}
+</script>
+
+<style>
+
+</style>

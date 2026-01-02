@@ -12,22 +12,22 @@ import Download from '@/components/svgs/Download.vue';
 import { router } from '@inertiajs/vue3';
 
 export default {
-  name: "",
+    name: "",
     components: { Download },
-  props: ['title', 'route'],
+    props: ['title', 'route'],
 
-  data() {
-    return {
+    data() {
+        return {
+
+        }
+    },
+
+    methods: {
+        router() {
+            return router
+        }
 
     }
-  },
-
-  methods: {
-      router() {
-          return router
-      }
-
-  }
 }
 </script>
 

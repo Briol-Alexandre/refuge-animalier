@@ -6,6 +6,8 @@ enum AdoptionStatus: string
 {
 
     case CLOSED = 'closed';
+
+    case ACCEPTED = 'accepted';
     case PENDING = 'pending';
     case ARCHIVED = 'archived';
 
@@ -17,9 +19,10 @@ enum AdoptionStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::CLOSED => 'Clôturé',
+            self::CLOSED => 'Clôturée',
             self::PENDING => 'En attente',
-            self::ARCHIVED => 'Archivé',
+            self::ARCHIVED => 'Archivée',
+            self::ACCEPTED => 'Acceptée'
         };
     }
 

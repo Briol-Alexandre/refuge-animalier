@@ -22,7 +22,7 @@ class ContactMailVolunteer extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address("noreply@lespattesheureuses.be", 'Les Pattes Heureuses'),
-            subject: 'Demande formulaire de contact',
+            subject: 'Demande de bénévolat',
         );
     }
 

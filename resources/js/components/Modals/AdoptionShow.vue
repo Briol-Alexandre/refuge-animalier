@@ -79,9 +79,13 @@
                 <span v-else>Afficher moins</span>
             </button>
         </div>
-        <div class="col-span-full flex justify-center gap-4">
+        <div v-if="!isNotShowPage" class="col-span-full flex justify-center gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">Changer le statut de l'adoption</button>
             <button class="button-light" @click="handleEditModal">Modifier la fiche</button>
+        </div>
+        <div v-else class="col-span-full flex justify-center gap-4">
+            <button class="button-light" @click="handleStatus(this.statusAccept)">Accepter la fiche</button>
+            <button class="button-dark" @click="handleStatus(this.statusRefuse)">Refuser la demande</button>
         </div>
     </div>
     <Teleport to="body">
@@ -180,7 +184,7 @@ import Dump from '@/components/Debug/Dump.vue';
 
 export default {
     name: 'AdoptionShow',
-    props: ['adoption', 'animal', 'adopter', 'adopters', 'animals', 'status', 'adoptions'],
+    props: ['adoption', 'animal', 'adopter', 'adopters', 'animals', 'status', 'adoptions', 'isNotShowPage'],
     components: {
         Button,
         Input,
@@ -210,7 +214,13 @@ export default {
             isChangeStatusModalOpen: false,
             statusAdoption: useForm({
                 'status': null
-            })
+            }),
+            statusAccept: useForm({
+                'status': 'accepted',
+            }),
+            statusRefuse: useForm({
+                'status': 'archived',
+            }),
         };
     },
     computed: {
@@ -279,6 +289,22 @@ export default {
                     this.toast.error({ text: 'Une erreur s\'est produite lors de la mise à jour' });
                 }
             });
+        },
+        handleStatus(form) {
+           form.put(updateStatus(this.adoption.id), {
+                onSuccess: () => {
+                    this.adoption.status =form.status;
+                    this.toast.success({ text: 'Status modifié avec succès !' });
+                    this.isChangeStatusModalOpen = false;
+                    this.$emit('updated');
+                },
+                onError: () => {
+                    this.toast.error({ text: 'Une erreur s\'est produite lors de la mise à jour' });
+                }
+            })
+        },
+        handleRefuse() {
+
         },
         getImagesSrc(imageData) {
             if (!imageData) return [];
