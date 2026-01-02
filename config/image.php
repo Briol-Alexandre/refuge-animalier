@@ -1,5 +1,5 @@
 <?php
-
+use Intervention\Image\Drivers\Gd\Driver;
 return [
     'image_type' => 'jpg',
     'sizes' => [
@@ -12,5 +12,5 @@ return [
     'jpeg_compression' => 80,
     'original_path' => 'images/animals/originals',
     'variant_pattern' => 'images/animals/variants/%sx%s',
-    'driver' => 'gd',
+    'driver' => Driver::class,
 ];
