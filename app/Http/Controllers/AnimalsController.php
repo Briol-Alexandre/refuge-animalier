@@ -68,39 +68,42 @@ class AnimalsController extends Controller
         $coats = $request['coat_id'];
         $vaccines = $request['vaccines'];
 
-        $images = $validated['images'] ?? [];
-        $storedImages = [];
+        $images = $validated['images'];
+        $new_images = [];
 
         if ($images) {
             foreach ($images as $image) {
-                $fileName = uniqid() . '.' . config('image.image_type');
-
-                $path = $image->storeAs(
+                $new_original_file_name = uniqid() . '.' . config('image.image_type');
+                $full_path_to_original = $image->storeAs(
                     config('image.original_path'),
-                    $fileName,
+                    $new_original_file_name,
                     'public'
                 );
-
-                if ($path) {
-                    ProcessUploadedAnimalImage::dispatch($path, $fileName);
-
-                    $storedImages[] = Storage::url($path);
+                if ($full_path_to_original) {
+                    $image = $new_original_file_name;
+                    ProcessUploadedAnimalImage::dispatch($full_path_to_original, $new_original_file_name);
+                } else {
+                    $image = '';
                 }
+                $image = $full_path_to_original;
+                $new_images[$image] = $image;
             }
         }
+        $validated['images'] = collect($new_images);
 
-        $validated['images'] = json_encode($storedImages);
+        $validated['images']->toJson();
 
         $animal = Animal::create($validated);
-
         if ($vaccines) {
-            $animal->vaccines()->attach($vaccines);
+            foreach ($vaccines as $vaccine) {
+                $animal->vaccines()->attach($vaccine);
+            }
         }
-
         if ($coats) {
-            $animal->coat()->attach($coats);
+            foreach ($coats as $coat) {
+                $animal->coat()->attach($coat);
+            }
         }
-
         $note = $request['note'];
         if ($note) {
             $animal->notes()->create([
@@ -110,8 +113,8 @@ class AnimalsController extends Controller
         }
 
         return back();
-    }
 
+    }
 
     public function show($id)
     {
