@@ -84,18 +84,18 @@
                         <span class="self-end mr-4 text-gray-500">
                                 {{ dateFormat(notification.created_at) }}
                             </span>
-                        <span @click="handleShowActions(notification.id)" class="hover:cursor-pointer">
+                        <span @click.stop="handleShowActions(notification.id)" class="hover:cursor-pointer">
                                 <More />
                             </span>
                         <div
                             class="absolute top-2 right-2 bg-white p-4 rounded-lg shadow-sm flex flex-col items-start gap-2 z-30"
                             v-if="showActionsId === notification.id">
                                 <span class="absolute top-2 right-2 hover:cursor-pointer"
-                                      @click="handleShowActions(null)">
+                                      @click.stop="handleShowActions(null)">
                                     <Close classes="w-3 h-3" />
                                 </span>
                             <button class="underline hover:cursor-pointer text-gray-400"
-                                    @click="readNotif(notification)">
+                                    @click.stop="readNotif(notification)">
                                 <span v-if="!notification.read">
                                     Marquer comme lu
                                 </span>
@@ -104,12 +104,12 @@
                                 </span>
                             </button>
                             <button class="underline hover:cursor-pointer text-red-400"
-                                    @click="urgentNotif(notification)"
+                                    @click.stop="urgentNotif(notification)"
                             >
                                 Ajouter aux urgences
                             </button>
                             <button class="underline hover:cursor-pointer text-red-400"
-                                    @click="handleModal(notification)"
+                                    @click.stop="handleModal(notification)"
                             >
                                 Supprimer la notification
                             </button>
