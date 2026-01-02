@@ -18,9 +18,9 @@ class AnimalFactory extends Factory
     {
         $arrayValues = ['male', 'female'];
         $images = [
-            'assets/img/dogs/dog1.png',
-            'assets/img/dogs/dog2.png',
-            'assets/img/dogs/dog3.png',
+            'assets/img/dogs/dog1.jpg',
+            'assets/img/dogs/dog2.jpg',
+            'assets/img/dogs/dog3.jpg',
         ];
         $selectedImage = $this->faker->randomElement($images);
         $imageJson = [$selectedImage => []];
