@@ -52,7 +52,6 @@ class AnimalsController extends Controller
     #[NoReturn]
     public function store(Request $request)
     {
-        dd($request);
         $validated = $request->validate([
             'name' => 'required',
             'breed_id' => 'required|exists:breeds,id',
