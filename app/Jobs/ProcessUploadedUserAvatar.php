@@ -21,7 +21,7 @@ class ProcessUploadedUserAvatar implements ShouldQueue
     public function handle()
     {
         $image = Image::read(
-            Storage::disk('s3')->get($this->full_path_to_original)
+            Storage::get($this->full_path_to_original)
         );
 
         $sizes = config('avatar.sizes');
@@ -35,7 +35,7 @@ class ProcessUploadedUserAvatar implements ShouldQueue
                 ->scale($size['width']);
 
             $path = sprintf($variant_pattern, $size['width'], $size['height']);
-            Storage::disk('s3')->put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
+            Storage::put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
         }
     }
 }

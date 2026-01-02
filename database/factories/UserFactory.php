@@ -23,10 +23,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $image = 'assets/img/default.jpg';
-        $imageJson =[$image => []];
         $faker = \Faker\Factory::create('fr_BE');
         return [
-            'avatar' => json_encode($imageJson),
+            'avatar' => $image,
             'tel' => $faker->phoneNumber(),
             'name' => $faker->name(),
             'email' => $faker->unique()->safeEmail(),

@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-3 gap-5">
-        <img :src="getImagesSrc(volunteer.avatar)" :alt="`Photo de ${volunteer.name}`"
+        <img :src="`/${volunteer.avatar}`" :alt="`Photo de ${volunteer.name}`"
              class="w-full h-full object-cover mt-2 rounded-lg" />
         <div class="col-span-2 self-center">
             <div class="mb-2 flex gap-4 items-center">
@@ -101,7 +101,7 @@ export default {
                 ? JSON.parse(imageData)
                 : imageData;
             return Object.keys(parsed);
-        }
+        },
     }
 };
 </script>
