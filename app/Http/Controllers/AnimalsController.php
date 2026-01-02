@@ -77,7 +77,7 @@ class AnimalsController extends Controller
                 $full_path_to_original = $image->storeAs(
                     config('image.original_path'),
                     $new_original_file_name,
-                    'public'
+                    's3'
                 );
                 if ($full_path_to_original) {
                     $image = $new_original_file_name;
