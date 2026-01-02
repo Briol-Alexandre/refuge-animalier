@@ -11,5 +11,6 @@ return [
     ],
     'jpeg_compression' => 80,
     'original_path' => 'images/animals/originals',
-    'variant_pattern' => 'images/animals/variants/%sx%s'
+    'variant_pattern' => 'images/animals/variants/%sx%s',
+    'driver' => 'gd',
 ];

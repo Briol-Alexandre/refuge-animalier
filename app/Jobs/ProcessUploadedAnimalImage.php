@@ -19,9 +19,9 @@ class ProcessUploadedAnimalImage implements ShouldQueue
 
     public function handle()
     {
-        $image = Image::read(
-            Storage::get($this->full_path_to_original)
-        );
+        $absolutePath = Storage::disk('public')->path($this->full_path_to_original);
+        $image = Image::read($absolutePath);
+
 
         $sizes = config('image.sizes');
         $jpeg_compression = config('image.jpeg_compression');
