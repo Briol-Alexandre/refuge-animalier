@@ -85,8 +85,8 @@ class AnimalsController extends Controller
                 } else {
                     $image = '';
                 }
-                $image = $full_path_to_original;
-                $new_images[$image] = $image;
+                $storedUrl = Storage::disk('s3')->url($full_path_to_original);
+                $new_images[$storedUrl] = $storedUrl;
             }
         }
         $validated['images'] = collect($new_images);
