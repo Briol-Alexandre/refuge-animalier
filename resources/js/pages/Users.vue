@@ -4,21 +4,21 @@
             <h1 class="title !mb-0">
                 Liste des bénévoles
             </h1>
-            <button class="button-light z-10" @click="openCreateModal">
+            <button v-if="isAdmin" class="button-light z-10" @click="openCreateModal">
                 Ajouter un bénévole
             </button>
         </div>
         <TableContainer
             :paginationLinks="volunteers_link.links"
             :rows="volunteers"
-            :cols="['Avatar', 'Nom', 'Email', 'Téléphone', 'Permissions']"
-            :fields="['avatar', 'name', 'email', 'tel', 'permissions']"
+            :cols="['Avatar', 'Nom', 'Email', 'Téléphone', 'Rôle']"
+            :fields="['avatar', 'name', 'email', 'tel', 'role']"
             @row-click="openShowModal">
             <template v-slot:filters>
                 <AnimalsFilter />
             </template>
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal"/>
+                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal" :is-admin="isAdmin"/>
             </Modal>
 
         </TableContainer>
@@ -43,7 +43,7 @@ import VolunteerShow from '@/components/Modals/VolunteerShow.vue';
 export default {
     name: '',
     components: { VolunteerShow, Button, VolunteerCreateForm, AnimalsFilter, Modal, TableContainer, LoggedLayout },
-    props: ['volunteers', 'permissions', 'volunteers_link'],
+    props: ['volunteers', 'permissions', 'volunteers_link', 'isAdmin'],
 
     data() {
         return {

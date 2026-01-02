@@ -22,8 +22,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Alexandre Briol',
-            'email' => 'alexandre.briol@gmail.com',
+            'name' => 'Élise Poulain',
+            'email' => 'elise.poulain@gmail.com',
+            'role' => 'Admin'
+        ]);
+        User::factory()->create([
+            'name' => 'Thomas Dupuis',
+            'email' => 'thomas.dupuis@gmail.com',
         ]);
 
         $speciesData = [

@@ -23,7 +23,7 @@
 
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
                 <AnimalShow :animal="selectedRow" :species="species" :breeds="breeds" :coats="coats"
-                            :vaccines="vaccines" :status="status" @updated="toggleShowModal" @deleted="toggleShowModal"/>
+                            :vaccines="vaccines" :status="status" @updated="toggleShowModal" @deleted="toggleShowModal" :is-admin="isAdmin"/>
             </Modal>
 
         </TableContainer>
@@ -31,7 +31,7 @@
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
                 <AnimalCreateForm :open-modal="openCreateModal" :species="species" :breeds="breeds" :coats="coats"
-                                  :vaccines="vaccines" @closeModal="openCreateModal"/>
+                                  :vaccines="vaccines" @closeModal="openCreateModal" :isAdmin="isAdmin"/>
             </Modal>
         </Teleport>
     </div>
@@ -68,7 +68,7 @@ export default {
         TableContainer,
         AnimalsFilter
     },
-    props: ['animals', 'coats', 'breeds', 'species', 'status', 'vaccines', 'title'],
+    props: ['animals', 'coats', 'breeds', 'species', 'status', 'vaccines', 'title', 'isAdmin'],
 
     data() {
         return {

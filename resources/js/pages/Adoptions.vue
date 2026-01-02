@@ -25,7 +25,7 @@
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
                 <AdoptionShow :adoption="selectedRow" :animal="getAnimal(selectedRow.animal_id)"
                               :adopter="getAdopter(selectedRow.adopter_id)" :animals="animals" :adopters="adopters"
-                              :status="status" :adoptions="adoptions" @updated="toggleShowModal" />
+                              :status="status" :adoptions="adoptions" @updated="toggleShowModal" :is-admin="isAdmin" />
             </Modal>
 
         </TableContainer>
@@ -33,7 +33,7 @@
         <Teleport to="body">
             <Modal :condition="isModalOpen" @close="openCreateModal" index="z-30">
                 <AdoptionCreateForm :open-modal="openCreateModal" :animals="animals" :adopters="adopters"
-                                    :status="status" @created="openCreateModal" />
+                                    :status="status" @created="openCreateModal" :is-admin="isAdmin"/>
             </Modal>
         </Teleport>
     </div>
@@ -74,7 +74,7 @@ export default {
         AdoptionsFilter,
         AdoptionCreateForm
     },
-    props: ['adoptions', 'title', 'animals', 'adopters', 'status'],
+    props: ['adoptions', 'title', 'animals', 'adopters', 'status', 'isAdmin'],
 
     data() {
         return {

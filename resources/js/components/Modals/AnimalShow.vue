@@ -101,11 +101,10 @@
             <button class="button-dark" @click="handleChangeStatusModal">
                 Changer le statut de l'animal
             </button>
-            <button class="button-light" @click="openEditModal">
+            <button v-if="isAdmin" class="button-light" @click="openEditModal">
                 Modifier la fiche
             </button>
-            <!-- TODO: MAKE THIS BUTTON ONLY ACCESSIBLE TO THE ADMIN -->
-            <button class="button-light" @click="handleDeleteModal">
+            <button v-if="isAdmin" class="button-light" @click="handleDeleteModal">
                 Supprimer la fiche
             </button>
         </div>
@@ -232,7 +231,7 @@ import Input from '../ui/input/Input.vue';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
 
 export default {
-    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines', 'isNotShowPage'],
+    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines', 'isNotShowPage', 'isAdmin'],
 
     components: {
         Input,

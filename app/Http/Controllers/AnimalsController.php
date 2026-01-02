@@ -12,6 +12,8 @@ use App\Models\Note;
 use App\Models\Species;
 use App\Models\Vaccine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use JetBrains\PhpStorm\NoReturn;
@@ -41,7 +43,8 @@ class AnimalsController extends Controller
             'breeds' => $breeds,
             'species' => $species,
             'status' => $status,
-            'vaccines' => $vaccines
+            'vaccines' => $vaccines,
+            'isAdmin' => \auth()->user()->role === 'Admin'
         ]);
     }
 
@@ -126,6 +129,9 @@ class AnimalsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $animal = Animal::findOrFail($id);
+        Gate::authorize('update', $animal);
+
         $validated = $request->validate([
             'name' => 'required',
             'breed_id' => 'required|exists:breeds,id',
@@ -135,7 +141,7 @@ class AnimalsController extends Controller
             'status' => 'required',
         ]);
 
-        $animal = Animal::findOrFail($id);
+
 
         if ($request->hasFile('images')) {
             $request->validate([
@@ -188,6 +194,7 @@ class AnimalsController extends Controller
     public function destroy($id)
     {
         $animal = Animal::findOrFail($id);
+        Gate::authorize("delete", $animal);
 
         if($animal->notifications()) {
             $animal->notifications()->delete();
