@@ -1,6 +1,7 @@
 <template>
     <div class="grid grid-cols-3 gap-5">
         <div class="flex flex-col">
+            <pre>{{animal.images}}</pre>
             <img
                 v-if="getImagesSrc(animal.images).length === 1"
                 :src="getImagesSrc(animal.images)[0]"

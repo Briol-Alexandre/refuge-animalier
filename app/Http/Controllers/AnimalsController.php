@@ -74,10 +74,10 @@ class AnimalsController extends Controller
         if ($images) {
             foreach ($images as $image) {
                 $new_original_file_name = uniqid() . '.' . config('image.image_type');
-                $full_path_to_original = Storage::putFileAs(
+                $full_path_to_original = $image->storeAs(
                     config('image.original_path'),
-                    $image,
-                    $new_original_file_name
+                    $new_original_file_name,
+                    'public'
                 );
                 if ($full_path_to_original) {
                     $image = $new_original_file_name;

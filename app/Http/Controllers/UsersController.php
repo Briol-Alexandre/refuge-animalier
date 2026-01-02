@@ -49,10 +49,10 @@ class UsersController extends Controller
         if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
             $new_original_file_name = uniqid() . '.' . config('avatar.image_type');
-            $full_path_to_original = Storage::putFileAs(
+            $full_path_to_original = $avatar->storeAs(
                 config('avatar.original_path'),
-                $avatar,
-                $new_original_file_name
+                $new_original_file_name,
+                's3'
             );
             if ($full_path_to_original) {
                 $avatar = $new_original_file_name;

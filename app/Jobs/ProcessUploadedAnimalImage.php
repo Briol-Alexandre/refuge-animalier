@@ -20,7 +20,7 @@ class ProcessUploadedAnimalImage implements ShouldQueue
     public function handle()
     {
         $image = Image::read(
-            Storage::get($this->full_path_to_original)
+            Storage::disk('public')->get($this->full_path_to_original)
         );
 
         $sizes = config('image.sizes');
@@ -34,8 +34,7 @@ class ProcessUploadedAnimalImage implements ShouldQueue
                 ->scale($size['width']);
 
             $path = sprintf($variant_pattern, $size['width'], $size['height']);
-            info('toto');
-            Storage::put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
+            Storage::disk('public')->put($path . '/' . $this->new_original_file_name, $variant->encodeByExtension($image_type, $jpeg_compression));
         }
     }
 }

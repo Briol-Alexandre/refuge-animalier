@@ -79,8 +79,7 @@
                         @click="handleShowModal(notification, $event)">
                         <p class="notif_title flex-1" :class="!notification.read ? 'font-bold': 'pl-3'">
                             <span v-if="!notification.read" class="font-black">•</span>
-                            {{ notification.title }} - {{ notification.notifiable_type }} -
-                            {{ notification.notifiable_id }}
+                            {{ notification.title }}
                         </p>
                         <span class="self-end mr-4 text-gray-500">
                                 {{ dateFormat(notification.created_at) }}
@@ -248,7 +247,7 @@ export default {
         },
         dateFormat(date) {
             date = new Date(date);
-            return `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
+            return `${date.getDay()}/${date.getMonth()+1}/${date.getFullYear()}`;
         },
         async handleShowModal(notification, event) {
             event?.stopPropagation();
@@ -263,6 +262,8 @@ export default {
                 this.modelToShow = datas[0];
                 this.animalLinked = datas[1];
                 this.showAdoption = true;
+            } else if (notification.notifiable_type=== 'App\\Models\\User') {
+
             }
         }
 
