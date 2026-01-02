@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->morphs('notifiable');
             $table->boolean('urgent');
             $table->boolean('read');
-            $table->enum('type', NotificationType::cases());
+            $table->enum('type', NotificationType::cases())->nullable();
             $table->timestamps();
         });
     }

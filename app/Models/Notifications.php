@@ -23,6 +23,7 @@ class Notifications extends Model
     {
         return [
             'read' => 'boolean',
+            'urgent' => 'boolean'
         ];
     }
 

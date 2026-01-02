@@ -30,7 +30,7 @@ class Animal extends Model
 
     protected $casts = [
         'status' => Status::class,
-        'images' => 'array'
+        /*'images' => 'array'*/
     ];
 
     public function scopeByStatus($query, $status)

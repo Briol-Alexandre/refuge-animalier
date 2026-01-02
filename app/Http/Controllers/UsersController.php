@@ -55,17 +55,15 @@ class UsersController extends Controller
                 's3'
             );
             if ($full_path_to_original) {
-                $avatar = $new_original_file_name;
                 ProcessUploadedUserAvatar::dispatch($full_path_to_original, $new_original_file_name);
+                $validated['avatar'] = Storage::disk('s3')->url($full_path_to_original);
             } else {
-                $avatar = '';
+                $validated['avatar'] = '';
             }
-            $avatar = $full_path_to_original;
-            $new_image[$avatar] = $avatar;
-            $validated['avatar'] = collect($new_image)->first();
         } else {
             $validated['avatar'] = '';
         }
+
         $validated['password'] = 'password';
 
         $user = User::create($validated);
