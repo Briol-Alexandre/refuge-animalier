@@ -11,12 +11,12 @@ class VolunteerPolicy
 
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->role === 'Admin';
     }
 
     public function view(User $user, User $model): bool
     {
-        return true;
+        return $user->role === 'Admin';
     }
 
     public function create(User $user): bool

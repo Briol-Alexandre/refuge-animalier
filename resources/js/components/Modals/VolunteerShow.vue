@@ -18,23 +18,24 @@
             </dl>
             <div>
                 <dt class="font-atten text-2xl font-black mb-2 mt-4">Rôle</dt>
-                <dd>{{volunteer.role}}</dd>
+                <dd>{{ volunteer.role }}</dd>
 
             </div>
         </div>
         <ScheduleTable :volunteer="schedule" />
         <div v-if="!isNotShowPage" class="col-span-full flex justify-around">
-            <button v-if="!isAdmin" class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
-            <button v-if="!isAdmin" class="button-light" @click="handleEditModal">Modifier le bénévole</button>
+            <button v-if="isAdmin" class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
+            <button v-if="isAdmin" class="button-light" @click="handleEditModal">Modifier le bénévole</button>
         </div>
         <div v-else class="col-span-full flex justify-around">
-            <button v-if="!isAdmin" class="button-dark" @click="handleDeleteModal">Refuser le bénévole</button>
-            <button v-if="!isAdmin" class="button-light" @click="handleStatus">Accepter le bénévole</button>
+            <button v-if="isAdmin" class="button-dark" @click="handleDeleteModal">Refuser le bénévole</button>
+            <button v-if="isAdmin" class="button-light" @click="handleStatus">Accepter le bénévole</button>
         </div>
     </div>
     <Teleport to="body">
         <Modal :condition="isEditModalOpen" @close="handleEditModal" index="z-30">
-            <VolunteerEditForm :volunteer="volunteer" :permissions="permissions" @updated="handleEditModal; $emit('updated')"/>
+            <VolunteerEditForm :volunteer="volunteer" :permissions="permissions"
+                               @updated="handleEditModal; $emit('updated')" />
         </Modal>
         <Modal
             @close="handleDeleteModal"
@@ -62,7 +63,8 @@ import VolunteerEditForm from '@/components/widget/form/VolunteerEditForm.vue';
 import { Button } from '@/components/ui/button/index.js';
 import { useForm } from '@inertiajs/vue3';
 import { useToasterStore } from '@/stores/useToasterStore.js';
-import {destroy as delete_volunteer} from '@/actions/App/Http/Controllers/UsersController.js'
+import { destroy as delete_volunteer } from '@/actions/App/Http/Controllers/UsersController.js';
+
 export default {
     components: { Button, ScheduleTable, Modal, VolunteerEditForm },
     props: ['volunteer', 'schedule', 'permissions', 'isNotShowPage', 'isAdmin'],
@@ -73,7 +75,7 @@ export default {
             deleteForm: useForm({
                 'id': this.volunteer.id
             }),
-            toast: useToasterStore(),
+            toast: useToasterStore()
         };
     },
 
@@ -82,19 +84,19 @@ export default {
         handleEditModal() {
             this.isEditModalOpen = !this.isEditModalOpen;
         },
-        handleDeleteModal(){
+        handleDeleteModal() {
             this.isDeleteModalOpen = !this.isDeleteModalOpen;
         },
         handleDeleteSubmit() {
             this.deleteForm.delete(delete_volunteer(this.deleteForm.id), {
                 onSuccess: () => {
-                    this.toast.success({text: 'Bénévole supprimé avec succès'});
+                    this.toast.success({ text: 'Bénévole supprimé avec succès' });
                     this.isDeleteModalOpen = false;
                 },
                 onError: () => {
-                    this.toast.error({text:'Une erreur est survenue'})
+                    this.toast.error({ text: 'Une erreur est survenue' });
                 }
-            })
+            });
         },
         getImagesSrc(imageData) {
             if (!imageData) return [];

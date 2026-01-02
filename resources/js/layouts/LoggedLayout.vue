@@ -150,7 +150,7 @@ const closeMenu = () => {
                     </p>
                 </Link>
                 <Link
-                    :href="'/logout'"
+                    :href="'/admin/logout'"
                     method="post"
                     as="button"
                     class="p-4 hover:bg-main-red-opacity rounded-lg text-main-red flex gap-2 w-full hover:cursor-pointer"
@@ -182,7 +182,7 @@ const closeMenu = () => {
                          title="Adoptions">
                     <Hearth :active="$page.component==='Adoptions'" />
                 </NavLink>
-                <NavLink :active="{'nav-link-active': $page.component==='Users'}" :href="UsersIndex()"
+                <NavLink v-if="$page.props.auth.user.role === 'Admin'" :active="{'nav-link-active': $page.component==='Users'}" :href="UsersIndex()"
                          title="Utilisateurs">
                     <User :active="$page.component==='Users'" />
                 </NavLink>
@@ -217,7 +217,7 @@ const closeMenu = () => {
                     </p>
                 </Link>
                 <Link
-                    :href="'/logout'"
+                    :href="'/admin/logout'"
                     method="post"
                     as="button"
                     class="p-4 hover:bg-main-red-opacity rounded-lg text-main-red flex gap-2 w-full hover:cursor-pointer"

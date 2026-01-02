@@ -18,6 +18,7 @@ class UsersController extends Controller
 {
     public function index()
     {
+        Gate::authorize('view');
         $users = User::paginate(6)->load('permissions');
         $users_link = User::paginate(6);
         $permissions = Permission::all();

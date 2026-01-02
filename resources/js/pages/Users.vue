@@ -18,7 +18,7 @@
                 <AnimalsFilter />
             </template>
             <Modal :condition="isShowModalOpen" @close="toggleShowModal" index="z-30">
-                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal" is-admin="isAdmin"/>
+                <VolunteerShow :volunteer="selectedRow" :schedule="selectedRow.schedule" :permissions="permissions" @updated="toggleShowModal" :is-admin="isAdmin"/>
             </Modal>
 
         </TableContainer>

@@ -81,7 +81,7 @@
         </div>
         <div v-if="!isNotShowPage" class="col-span-full flex justify-center gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">Changer le statut de l'adoption</button>
-            <button v-if="!isAdmin" class="button-light" @click="handleEditModal">Modifier la fiche</button>
+            <button v-if="isAdmin" class="button-light" @click="handleEditModal">Modifier la fiche</button>
         </div>
         <div v-else class="col-span-full flex justify-center gap-4">
             <button class="button-light" @click="handleStatus(this.statusAccept)">Accepter la fiche</button>
