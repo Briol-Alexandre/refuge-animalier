@@ -26,9 +26,13 @@
             </div>
         </div>
         <ScheduleTable :volunteer="schedule" />
-        <div class="col-span-full flex justify-around">
+        <div v-if="!isNotShowPage" class="col-span-full flex justify-around">
             <button class="button-dark" @click="handleDeleteModal">Supprimer le bénévole</button>
             <button class="button-light" @click="handleEditModal">Modifier le bénévole</button>
+        </div>
+        <div v-else class="col-span-full flex justify-around">
+            <button class="button-dark" @click="handleDeleteModal">Refuser le bénévole</button>
+            <button class="button-light" @click="handleStatus">Accepter le bénévole</button>
         </div>
     </div>
     <Teleport to="body">
@@ -64,7 +68,7 @@ import { useToasterStore } from '@/stores/useToasterStore.js';
 import {destroy as delete_volunteer} from '@/actions/App/Http/Controllers/UsersController.js'
 export default {
     components: { Button, ScheduleTable, Modal, VolunteerEditForm },
-    props: ['volunteer', 'schedule', 'permissions'],
+    props: ['volunteer', 'schedule', 'permissions', 'isNotShowPage'],
     data() {
         return {
             isEditModalOpen: false,
@@ -126,6 +130,9 @@ export default {
                     }
                     return src;
                 });
+        },
+        handleStatus() {
+            this.$emit('accepted');
         }
     }
 };

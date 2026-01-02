@@ -72,7 +72,7 @@ class UsersController extends Controller
 
         $user->permissions()->attach($permissions);
 
-        Mail::to($user->email)->queue(new UserCreation($user));
+        //Mail::to($user->email)->queue(new UserCreation($user));
 
         return back();
     }
@@ -139,6 +139,9 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $volunteer = User::findOrFail($id);
+        if ($volunteer->notifications()) {
+            $volunteer->notifications()->delete();
+        }
         $volunteer->delete();
         return Inertia::location(route('users.index'));
     }

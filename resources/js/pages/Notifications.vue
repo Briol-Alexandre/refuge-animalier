@@ -140,13 +140,17 @@
                 :condition="showAnimal && modelToShow !== null"
                 index="z-30"
             >
-                <AnimalShow :animal="modelToShow" />
+                <AnimalShow :animal="modelToShow" :status="status" :is-not-show-page="true" @deleted="closeShowModal"/>
             </Modal>
             <Modal @close="closeShowModal"
                    :condition="showAdoption && modelToShow !== null">
-                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter" />
+                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter" :is-not-show-page="true" @updated="closeShowModal"/>
             </Modal>
-            <Modal></Modal>
+            <Modal @close="closeShowModal"
+                   :condition="showVolunteer && modelToShow !== null"
+                   >
+                <VolunteerShow :volunteer="modelToShow" :schedule="modelToShow.schedule" :is-not-show-page="true" @accepted="closeShowModal"/>
+            </Modal>
         </Teleport>
     </div>
 </template>
@@ -162,19 +166,24 @@ import More from '@/components/svgs/More.vue';
 import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import axios from 'axios';
 import AdoptionShow from '@/components/Modals/AdoptionShow.vue';
+import VolunteerShow from '@/components/Modals/VolunteerShow.vue';
+import { useStatusStore } from '@/stores/statusStore.js';
+import Dump from '@/components/Debug/Dump.vue';
 
 export default {
     name: '',
     components: {
+        VolunteerShow,
         AdoptionShow,
         AnimalShow,
         Modal,
         LoggedLayout,
         Notifications,
         Close,
-        More
+        More,
+        Dump
     },
-    props: ['notifications', 'urgents'],
+    props: ['notifications', 'urgents', 'status'],
     data() {
         return {
             isModalOpen: false,
@@ -185,7 +194,7 @@ export default {
             showAdoption: false,
             showVolunteer: false,
             modelToShow: null,
-            animalLinked: null
+            animalLinked: null,
         };
     },
 
@@ -263,7 +272,10 @@ export default {
                 this.animalLinked = datas[1];
                 this.showAdoption = true;
             } else if (notification.notifiable_type=== 'App\\Models\\User') {
-
+                const response = await axios.get(`/api/users/${notification.notifiable_id}`);
+                this.modelToShow = response.data;
+                console.log(this.modelToShow);
+                this.showVolunteer = true;
             }
         }
 

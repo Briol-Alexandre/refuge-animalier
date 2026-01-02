@@ -97,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="mx-auto col-span-full flex gap-4">
+        <div v-if="!isNotShowPage" class="mx-auto col-span-full flex gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">
                 Changer le statut de l'animal
             </button>
@@ -107,6 +107,17 @@
             <!-- TODO: MAKE THIS BUTTON ONLY ACCESSIBLE TO THE ADMIN -->
             <button class="button-light" @click="handleDeleteModal">
                 Supprimer la fiche
+            </button>
+        </div>
+        <div v-else class="mx-auto col-span-full flex gap-4">
+            <button class="button-dark" @click="handleChangeStatusModal">
+                Accepter la fiche
+            </button>
+            <button class="button-light" @click="openEditModal">
+                Modifier la fiche
+            </button>
+            <button class="button-light" @click="handleDeleteModal">
+                Refuser la fiche
             </button>
         </div>
     </div>
@@ -221,7 +232,7 @@ import Input from '../ui/input/Input.vue';
 import { store as note_store } from '@/actions/App/Http/Controllers/NotesController.js';
 
 export default {
-    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines'],
+    props: ['animal', 'coats', 'breeds', 'species', 'status', 'vaccines', 'isNotShowPage'],
 
     components: {
         Input,

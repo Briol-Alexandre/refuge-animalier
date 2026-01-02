@@ -189,6 +189,10 @@ class AnimalsController extends Controller
     {
         $animal = Animal::findOrFail($id);
 
+        if($animal->notifications()) {
+            $animal->notifications()->delete();
+        }
+
         $animal->delete();
     }
 
