@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-cols-3 gap-5">
-        <img :src="`/${volunteer.avatar}`" :alt="`Photo de ${volunteer.name}`"
+        <img :src="getImagesSrc(volunteer.avatar)" :alt="`Photo de ${volunteer.name}`"
              class="w-full h-full object-cover mt-2 rounded-lg" />
         <div class="col-span-2 self-center">
             <div class="mb-2 flex gap-4 items-center">
@@ -97,11 +97,36 @@ export default {
         },
         getImagesSrc(imageData) {
             if (!imageData) return [];
-            const parsed = typeof imageData === 'string'
-                ? JSON.parse(imageData)
-                : imageData;
-            return Object.keys(parsed);
-        },
+
+            let images = [];
+            if (typeof imageData === 'string') {
+                try {
+                    const parsed = JSON.parse(imageData);
+                    images = Array.isArray(parsed)
+                        ? parsed
+                        : Object.keys(parsed);
+                } catch {
+                    images = [imageData];
+                }
+            }
+
+            if (typeof imageData === 'object' && !Array.isArray(imageData)) {
+                images = Object.keys(imageData);
+            }
+
+            if (Array.isArray(imageData)) {
+                images = imageData;
+            }
+
+            return images
+                .filter(Boolean)
+                .map(src => {
+                    if (!src.startsWith('http') && !src.startsWith('/')) {
+                        return '/' + src;
+                    }
+                    return src;
+                });
+        }
     }
 };
 </script>
