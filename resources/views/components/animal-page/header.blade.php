@@ -1,4 +1,4 @@
-@props(['name', 'images'])
+@props(['name', 'images', 'animal'])
 @php
     $images = json_decode($images, true);
     $imagesPath = array_keys($images);
@@ -9,5 +9,5 @@
     <h2 class="big-title col-span-full mx-auto mt-11 lg:mt-sectionPadding mb-8">
         {{$name}}
     </h2>
-    <x-animal-page.description-list/>
+    <x-animal-page.description-list :animal="$animal"/>
 </section>
