@@ -19,7 +19,8 @@
             <div class="overflow-y-scroll h-[80%]">
                 <ul class="flex flex-col gap-4">
                     <li v-for="urgent in urgents"
-                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative">
+                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative"
+                        @click="handleShowModal(urgent, $event)">
                         <p class="notif_title flex-1" :class="!urgent.read ? 'font-bold': 'pl-3'">
                             <span v-if="!urgent.read" class="font-black">•</span>
                             {{ urgent.title }}
@@ -75,7 +76,7 @@
             <div class="overflow-y-scroll h-[90%]">
                 <ul class="flex flex-col gap-4 h-full">
                     <li v-for="notification in notifications"
-                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative"
+                        class="bg-white p-2 py-3 rounded-lg flex justify-between items-center relative hover:cursor-pointer"
                         @click="handleShowModal(notification, $event)">
                         <p class="notif_title flex-1" :class="!notification.read ? 'font-bold': 'pl-3'">
                             <span v-if="!notification.read" class="font-black">•</span>
@@ -140,16 +141,43 @@
                 :condition="showAnimal && modelToShow !== null"
                 index="z-30"
             >
-                <AnimalShow :animal="modelToShow" :status="status" :is-not-show-page="true" @deleted="closeShowModal"/>
+                <AnimalShow :animal="modelToShow" :status="status" :is-not-show-page="true" @deleted="closeShowModal" />
             </Modal>
             <Modal @close="closeShowModal"
                    :condition="showAdoption && modelToShow !== null">
-                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter" :is-not-show-page="true" @updated="closeShowModal"/>
+                <AdoptionShow :adoption="modelToShow" :animal="animalLinked" :adopter="modelToShow.adopter"
+                              :is-not-show-page="true" @updated="closeShowModal" />
             </Modal>
             <Modal @close="closeShowModal"
                    :condition="showVolunteer && modelToShow !== null"
-                   >
-                <VolunteerShow :volunteer="modelToShow" :schedule="modelToShow.schedule" :is-not-show-page="true" @accepted="closeShowModal"/>
+            >
+                <VolunteerShow :volunteer="modelToShow" :schedule="modelToShow.schedule" :is-not-show-page="true"
+                               @accepted="closeShowModal" />
+            </Modal>
+            <Modal @close="closeShowModal"
+                   :condition="isNotificationModalOpen && modelToShow !== null">
+                <p class="title">Demande depuis le formulaire</p>
+                <dl>
+                    <div class="flex justify-between">
+                        <div>
+                            <dt class="font-bold">De&nbsp;:</dt>
+                            <dd>{{ modelToShow.from }}</dd>
+                        </div>
+                        <div>
+                            <dt class="font-bold">Email&nbsp;:</dt>
+                            <dd>{{ modelToShow.email }}</dd>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <dt class="font-bold">Message&nbsp;:</dt>
+                        <dd>{{ modelToShow.message }}</dd>
+                    </div>
+                    <div class="mt-4 w-full">
+                        <a :href="'mailto:' + modelToShow.email" class="button-light mx-auto">
+                            Répondre à {{modelToShow.from}}
+                        </a>
+                    </div>
+                </dl>
             </Modal>
         </Teleport>
     </div>
@@ -167,7 +195,6 @@ import AnimalShow from '@/components/Modals/AnimalShow.vue';
 import axios from 'axios';
 import AdoptionShow from '@/components/Modals/AdoptionShow.vue';
 import VolunteerShow from '@/components/Modals/VolunteerShow.vue';
-import { useStatusStore } from '@/stores/statusStore.js';
 import Dump from '@/components/Debug/Dump.vue';
 
 export default {
@@ -195,6 +222,7 @@ export default {
             showVolunteer: false,
             modelToShow: null,
             animalLinked: null,
+            isNotificationModalOpen: false
         };
     },
 
@@ -219,6 +247,7 @@ export default {
             this.showAnimal = false;
             this.showAdoption = false;
             this.showVolunteer = false;
+            this.isNotificationModalOpen = false;
             this.modelToShow = null;
         },
         deleteNotif() {
@@ -256,7 +285,7 @@ export default {
         },
         dateFormat(date) {
             date = new Date(date);
-            return `${date.getDay()}/${date.getMonth()+1}/${date.getFullYear()}`;
+            return `${date.getDay()}/${date.getMonth() + 1}/${date.getFullYear()}`;
         },
         async handleShowModal(notification, event) {
             event?.stopPropagation();
@@ -271,11 +300,14 @@ export default {
                 this.modelToShow = datas[0];
                 this.animalLinked = datas[1];
                 this.showAdoption = true;
-            } else if (notification.notifiable_type=== 'App\\Models\\User') {
+            } else if (notification.notifiable_type === 'App\\Models\\User') {
                 const response = await axios.get(`/api/users/${notification.notifiable_id}`);
                 this.modelToShow = response.data;
-                console.log(this.modelToShow);
                 this.showVolunteer = true;
+            } else if (notification.notifiable_type === 'App\\Models\\Demand') {
+                const response = await axios.get(`/api/demands/${notification.notifiable_id}`);
+                this.modelToShow = response.data;
+                this.isNotificationModalOpen = true;
             }
         }
 

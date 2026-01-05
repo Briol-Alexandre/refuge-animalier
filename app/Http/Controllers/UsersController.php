@@ -18,7 +18,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        Gate::authorize('view');
+        Gate::authorize('viewAny', User::class);
         $users = User::paginate(6)->load('permissions');
         $users_link = User::paginate(6);
         $permissions = Permission::all();
@@ -36,7 +36,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        Gate::authorize('create');
+        Gate::authorize('create', User::class);
         $validated = $request->validate([
             'avatar' => 'nullable|image|mimes:jpg,png,gif',
             'name' => 'required|min:3',

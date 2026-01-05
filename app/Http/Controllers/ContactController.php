@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactMailOther;
 use App\Mail\ContactMailVolunteer;
+use App\Models\Demand;
 use App\Models\Notifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -35,7 +36,17 @@ class ContactController extends Controller
             Notifications::create(['title' => $notificationTitleVolunteer, 'urgent' => false, 'read' => false]);
             Mail::to('email@domain.com')->queue(new ContactMailVolunteer($validated));
         } else {
-            Notifications::create(['title' => $notificationTitleOther, 'urgent' => false, 'read' => false]);
+            $demand = Demand::create([
+                'from' => $fullName,
+                'email' => $validated['email'],
+                'message' => $validated['message'],
+            ]);
+            $demand->notifications()->create([
+                'title' => $notificationTitleOther,
+                'urgent' => false,
+                'read' => false
+            ]);
+
             Mail::to('email@domain.com')->queue(new ContactMailOther($validated));
 
         }

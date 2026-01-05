@@ -168,7 +168,6 @@ const closeMenu = () => {
             <NavLink :href="DashboardIndex()">
                 <Logo classes="w-full" />
             </NavLink>
-
             <div class="flex flex-col gap-5 w-full">
                 <NavLink :active="{'nav-link-active': $page.component==='Dashboard'}" :href="DashboardIndex()"
                          title="Dashboard">
