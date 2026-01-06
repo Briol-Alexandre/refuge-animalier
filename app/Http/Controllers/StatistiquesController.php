@@ -31,12 +31,12 @@ class StatistiquesController extends Controller
         $adoptions = Animal::byStatus(Status::ADOPTED)->pluck('created_at');
         $adoptions_count = $adoptions->count();
 
-        $files = Storage::disk('public')->files('pdfs');
+        $files = Storage::disk('s3')->files('pdfs');
         $pdfs = collect($files)->map(function ($file) {
             return [
                 'name' => basename($file),
                 'url' => '/storage/' . $file,
-                'size' => Storage::disk('public')->size($file),
+                'size' => Storage::disk('s3')->size($file),
             ];
         });
 
