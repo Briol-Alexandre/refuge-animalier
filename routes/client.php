@@ -19,6 +19,7 @@ Route::group([], function () {
         ->name('animals.client.show');
     Route::get('/animals', [ClientAnimalController::class, 'index'])
         ->name('animals.client');
+    Route::post('animals/', [ClientAnimalController::class, 'filter'])->name('animal-client.filter');
     Route::post('animals/{id}', [ClientAnimalController::class, 'send'])
         ->name('animals.client.demand');
     Route::get('/contact', function () {

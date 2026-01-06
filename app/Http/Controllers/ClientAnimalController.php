@@ -8,13 +8,57 @@ use App\Mail\AdoptionDemand;
 use App\Models\Adopter;
 use App\Models\Adoption;
 use App\Models\Animal;
+use App\Models\Breed;
+use App\Models\Coat;
 use App\Models\Notifications;
+use App\Models\Species;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use function Termwind\render;
 
 class ClientAnimalController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = Animal::with('breed')->with('specie')->with('coat')->with('vaccines')->where('status', Status::AVAILABLE);
+        $coats = Coat::all();
+        $species = Species::all();
+        $breeds = Breed::all();
+
+        if ($request['specie']) {
+            $query->whereHas('specie', function ($q) use ($request) {
+                $q->where('species.id', $request->specie);
+            });
+        }
+
+        if ($request['breed']) {
+            $query->where('breed_id', $request['breed']);
+        }
+
+        if ($request['coat']) {
+            $query->whereHas('coat', function ($q) use ($request) {
+                $q->where('coats.id', $request->coat);
+            });
+        }
+
+        if ($request['sexe']) {
+            $query->where('sexe', $request['sexe']);
+        }
+
+        if ($request['search']) {
+            $query->where('name', 'like', '%' . $request['search'] . '%');
+        }
+
+        $animals = $query->get();
+        return view('client.animals', compact('animals', 'coats', 'breeds', 'species'));
+    }
+
+    public function show($id)
+    {
+        $animal = Animal::findOrFail($id);
+        return view('client.animals.show', compact('animal'));
+    }
+
     public function send(Request $request)
     {
         $validated = $request->validate([
@@ -55,23 +99,22 @@ class ClientAnimalController extends Controller
             'read' => false,
         ]);
 
-
-        //TODO: faire en sorte que le mail s'envoie toujours à l'admin
-        Mail::to('email@domain.com')->queue(new AdoptionDemand($validated, $animal));
+        Mail::to('elise.poulain@gmail.com')->queue(new AdoptionDemand($validated, $animal));
         return redirect()
             ->route('animals.client.show', $animal->id);
 
     }
 
-    public function index()
-    {
-        $animals = Animal::with('breed')->with('specie')->with('coat')->with('vaccines')->where('status', Status::AVAILABLE)->get();
-        return view('client.animals', compact('animals'));
-    }
 
-    public function show($id)
+    public function filter(Request $request)
     {
-        $animal = Animal::findOrFail($id);
-        return view('client.animals.show', compact('animal'));
+        $specie = $request['specie'];
+        $breed = $request['breed'];
+        $coat = $request['coat'];
+        $age = $request['age'];
+        $sexe = $request['sexe'];
+        $name = $request['search'];
+
+
     }
 }
