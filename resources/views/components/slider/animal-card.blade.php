@@ -9,8 +9,8 @@
         <div class="max-sm:hidden absolute inset-0 rounded-btn bg-gradient-to-b from-transparent to-black/60
                     transition-all duration-300 group-hover:bg-black/40"></div>
         <img src="{{ asset($imagesPath[0]) }}" alt="{{ __('content.image_of', ['name' => $name]) }}"
-            class="w-full sm:h-full h-1/4 object-cover object-top">
-        <div class="animal-card-info relative z-10 p-3 max-sm:bg-softGray/20 max-sm:pb-4">
+            class="w-full sm:h-full min-h-40 h-1/4 object-cover object-top">
+        <div class="animal-card-info w-full relative z-10 p-3 max-sm:bg-softGray/20 max-sm:pb-4">
             <h3 id="{{ $name }}-card" class="font-bold font-atten text-xl text-main-yellow">
                 {{ $name }}
             </h3>
