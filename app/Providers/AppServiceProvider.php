@@ -33,14 +33,14 @@ class AppServiceProvider extends ServiceProvider
             'statusList' => Status::cases(),
             'exports' => function () {
 
-                $files = Storage::disk('public')->files('pdfs');
+                $files = Storage::disk('s3')->files('pdfs');
 
                 return collect($files)->map(function ($file) {
                     return [
                         'name' => basename($file),
                         'url' => asset('storage/' . $file),
-                        'size' => Storage::disk('public')->size($file),
-                        'created_at' => Storage::disk('public')->lastModified($file),
+                        'size' => Storage::disk('s3')->size($file),
+                        'created_at' => Storage::disk('s3')->lastModified($file),
                     ];
                 });
             }
