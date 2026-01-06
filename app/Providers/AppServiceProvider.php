@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 return collect($files)->map(function ($file) {
                     return [
                         'name' => basename($file),
-                        'url' => asset('storage/' . $file),
+                        'url' => Storage::disk('s3')->url($file),
                         'size' => Storage::disk('s3')->size($file),
                         'created_at' => Storage::disk('s3')->lastModified($file),
                     ];
