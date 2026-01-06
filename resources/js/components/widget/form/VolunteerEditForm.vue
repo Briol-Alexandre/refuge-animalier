@@ -62,21 +62,6 @@
                     <InputError :message="formVolunteer.errors.tel" />
                 </div>
             </div>
-            <fieldset class="flex flex-col">
-                <legend class="flex justify-between w-full">
-                <span class="font-bold">
-                    Permissions
-                </span>
-                </legend>
-
-                <div class="grid grid-cols-3 gap-2">
-                <span v-for="permission in permissions" class="flex items-center gap-2">
-                    <input type="checkbox" :value="permission.id" :id="permission.id"
-                           v-model="formVolunteer.permissions">
-                    <label :for="permission.id">{{ permission.name }}</label>
-                </span>
-                </div>
-            </fieldset>
         </div>
         <ScheduleTable v-model="formVolunteer.schedule" :volunteer-schedule="formVolunteer.schedule" />
         <button type="submit" class="col-span-2 ml-auto button-light mt-5">Modifier le bénévole</button>
@@ -130,7 +115,7 @@ export default {
                 name: '',
                 email: '',
                 tel: '',
-                permissions: [],
+                role:'Bénévole',
                 schedule: {
                     monday: { morning: false, afternoon: false, evening: false },
                     tuesday: { morning: false, afternoon: false, evening: false },
@@ -184,11 +169,36 @@ export default {
         },
         getImagesSrc(imageData) {
             if (!imageData) return [];
-            const parsed = typeof imageData === 'string'
-                ? JSON.parse(imageData)
-                : imageData;
-            return Object.keys(parsed);
-        }
+
+            let images = [];
+            if (typeof imageData === 'string') {
+                try {
+                    const parsed = JSON.parse(imageData);
+                    images = Array.isArray(parsed)
+                        ? parsed
+                        : Object.keys(parsed);
+                } catch {
+                    images = [imageData];
+                }
+            }
+
+            if (typeof imageData === 'object' && !Array.isArray(imageData)) {
+                images = Object.keys(imageData);
+            }
+
+            if (Array.isArray(imageData)) {
+                images = imageData;
+            }
+
+            return images
+                .filter(Boolean)
+                .map(src => {
+                    if (!src.startsWith('http') && !src.startsWith('/')) {
+                        return '/' + src;
+                    }
+                    return src;
+                });
+        },
     }
 };
 </script>

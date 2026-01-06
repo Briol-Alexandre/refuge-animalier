@@ -57,21 +57,6 @@
                     <InputError :message="formVolunteer.errors.tel" />
                 </div>
             </div>
-            <fieldset class="flex flex-col">
-                <legend class="flex justify-between w-full">
-                <span class="font-bold">
-                    Permissions
-                </span>
-                </legend>
-
-                <div class="grid grid-cols-3 gap-2">
-                <span v-for="permission in permissions" class="flex items-center gap-2">
-                    <input type="checkbox" :value="permission.id" :id="permission.id"
-                           v-model="formVolunteer.permissions">
-                    <label :for="permission.id">{{ permission.name }}</label>
-                </span>
-                </div>
-            </fieldset>
         </div>
         <ScheduleTable v-model="formVolunteer.schedule" />
         <button type="submit" class="col-span-2 ml-auto button-light mt-5">Ajouter le bénévole</button>
@@ -101,13 +86,14 @@ export default {
         return {
             isPermissionModalOpen: false,
             previewImage: '',
+
             toast: useToasterStore(),
             formVolunteer: useForm({
                 avatar: '',
                 name: '',
                 email: '',
                 tel: '',
-                permissions: [],
+                role: 'Bénévole',
                 schedule: {
                     monday: { morning: false, afternoon: false, evening: false },
                     tuesday: { morning: false, afternoon: false, evening: false },

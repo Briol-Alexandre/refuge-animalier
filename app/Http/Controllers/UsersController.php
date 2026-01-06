@@ -42,7 +42,7 @@ class UsersController extends Controller
             'name' => 'required|min:3',
             'email' => 'email|required|unique:users',
             'tel' => 'required',
-            'permissions' => 'array',
+            'role' => 'required',
             'schedule' => 'array',
             'schedule.*' => 'array|nullable',
             'schedule.*.*' => 'bool'
@@ -72,10 +72,6 @@ class UsersController extends Controller
 
         $user = User::create($validated);
 
-        $permissions = $request['permissions'];
-
-        $user->permissions()->attach($permissions);
-
         Mail::to($user->email)->queue(new UserCreation($user));
 
         return back();
@@ -96,7 +92,7 @@ class UsersController extends Controller
             'name' => 'required|min:3',
             'email' => 'email|required|unique:users,email,' . $user->id,
             'tel' => 'required',
-            'permissions' => 'array',
+            'role' => 'required',
             'schedule' => 'array',
             'schedule.*' => 'array|nullable',
             'schedule.*.*' => 'bool'
@@ -127,11 +123,6 @@ class UsersController extends Controller
         } else {
             $validated['avatar'] = $user->avatar;
         }
-
-
-        $permissions = $request['permissions'];
-
-        $user->permissions()->sync($permissions);
 
         $user->update($validated);
 
