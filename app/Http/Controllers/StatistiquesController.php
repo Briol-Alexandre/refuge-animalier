@@ -121,10 +121,10 @@ class StatistiquesController extends Controller
             'animal_total' => $animal_total
         ];
 
-        Storage::disk('public')->makeDirectory('pdfs');
+        Storage::disk('s3')->makeDirectory('pdfs');
 
         $pdf = DomPDF::loadView('pdf.export', ['datas' => $datas]);
-        Storage::disk('public')->put('pdfs/' . $filename, $pdf->output());
+        Storage::disk('s3')->put('pdfs/' . $filename, $pdf->output());
 
         return back();
     }
