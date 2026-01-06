@@ -57,54 +57,54 @@
 
             </div>
         </section>
-        <Teleport to="body">
-            <Modal :condition="isExportModalOpen" @close="toggleExportModal" index="z-30" modal-classes="max-w-[500px]">
-                <p class="title">Exporter le rapport</p>
-                <form class="flex flex-col gap-5" @submit.prevent="handleExport">
-                    <div class="flex justify-between">
-                        <div>
-                            <label for="baseFilter">
-                                Base de rendu
-                            </label>
-                            <select
-                                id="baseFilter"
-                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2"
-                                v-model="formExport.base_filter">
-                                <option selected value="monthly">Mensuel</option>
-                                <option value="yearly">Annuel</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="year">Année</label>
-                            <select
-                                v-model="formExport.selected_year"
-                                id="year"
-                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
-                                <option value="">--Année--</option>
-                                <option :value="year" v-for="year in years" :key="year">{{ year }}</option>
-                                <InputError :message="formExport.errors.selected_year"/>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="month">
-                                Mois
-                            </label>
-                            <select
-                                id="month"
-                                v-model="formExport.selected_month"
-                                :disabled="formExport.base_filter === 'yearly'"
-                                class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2 disabled:opacity-50 disabled:hover:cursor-not-allowed">
-                                <option value="">--Mois--</option>
-                                <option :value="num + 1" v-for="(month, num) in months" :key="num">{{ month }}</option>
-                                <InputError :message="formExport.errors.selected_month"/>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="button-light self-end">Exporter</button>
-                </form>
-            </Modal>
-        </Teleport>
     </div>
+    <Teleport to="body">
+        <Modal :condition="isExportModalOpen" @close="toggleExportModal" index="z-30" modal-classes="max-w-[500px]">
+            <p class="title">Exporter le rapport</p>
+            <form class="flex flex-col gap-5" @submit.prevent="handleExport">
+                <div class="flex justify-between">
+                    <div>
+                        <label for="baseFilter">
+                            Base de rendu
+                        </label>
+                        <select
+                            id="baseFilter"
+                            class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2"
+                            v-model="formExport.base_filter">
+                            <option selected value="monthly">Mensuel</option>
+                            <option value="yearly">Annuel</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="year">Année</label>
+                        <select
+                            v-model="formExport.selected_year"
+                            id="year"
+                            class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2">
+                            <option value="">--Année--</option>
+                            <option :value="year" v-for="year in years" :key="year">{{ year }}</option>
+                            <InputError :message="formExport.errors.selected_year" />
+                        </select>
+                    </div>
+                    <div>
+                        <label for="month">
+                            Mois
+                        </label>
+                        <select
+                            id="month"
+                            v-model="formExport.selected_month"
+                            :disabled="formExport.base_filter === 'yearly'"
+                            class="hover:cursor-pointer bg-white p-1 border rounded-lg border-main-yellow flex items-center gap-2 disabled:opacity-50 disabled:hover:cursor-not-allowed">
+                            <option value="">--Mois--</option>
+                            <option :value="num + 1" v-for="(month, num) in months" :key="num">{{ month }}</option>
+                            <InputError :message="formExport.errors.selected_month" />
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="button-light self-end">Exporter</button>
+            </form>
+        </Modal>
+    </Teleport>
 </template>
 
 <script>

@@ -21,9 +21,6 @@ export default {
     },
 
     methods: {
-        parsePdf() {
-            return e;
-        }
     }
 };
 </script>
