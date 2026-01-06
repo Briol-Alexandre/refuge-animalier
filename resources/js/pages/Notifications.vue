@@ -25,21 +25,21 @@
                             <span v-if="!urgent.read" class="font-black">•</span>
                             {{ urgent.title }}
                         </p>
-                        <span class="self-end mr-4 text-gray-500">
+                        <span class="self-center mr-4 text-gray-500">
                                 {{ dateFormat(urgent.created_at) }}
                             </span>
-                        <span @click="handleShowActions(urgent.id)" class="hover:cursor-pointer">
+                        <span @click.stop="handleShowActions(urgent.id)" class="hover:cursor-pointer py-3">
                                 <More />
                             </span>
                         <div
                             class="absolute top-2 right-2 bg-white p-4 rounded-lg shadow-sm flex flex-col items-start gap-2 z-30"
                             v-if="showActionsId === urgent.id">
                                 <span class="absolute top-2 right-2 hover:cursor-pointer"
-                                      @click="handleShowActions(null)">
+                                      @click.stop="handleShowActions(null)">
                                     <Close classes="w-3 h-3" />
                                 </span>
                             <button class="underline hover:cursor-pointer text-gray-400"
-                                    @click="readNotif(urgent)">
+                                    @click.stop="readNotif(urgent)">
                                 <span v-if="!urgent.read">
                                     Marquer comme lu
                                 </span>
@@ -82,10 +82,10 @@
                             <span v-if="!notification.read" class="font-black">•</span>
                             {{ notification.title }}
                         </p>
-                        <span class="self-end mr-4 text-gray-500">
+                        <span class="self-center mr-4 text-gray-500">
                                 {{ dateFormat(notification.created_at) }}
                             </span>
-                        <span @click.stop="handleShowActions(notification.id)" class="hover:cursor-pointer">
+                        <span @click.stop="handleShowActions(notification.id)" class="hover:cursor-pointer py-4">
                                 <More />
                             </span>
                         <div

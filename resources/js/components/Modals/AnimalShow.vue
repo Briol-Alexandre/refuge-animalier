@@ -108,7 +108,7 @@
                 Supprimer la fiche
             </button>
         </div>
-        <div v-else class="mx-auto col-span-full flex gap-4">
+        <div v-else-if="$page.props.auth.user.role === 'Admin'" class="mx-auto col-span-full flex gap-4">
             <button class="button-dark" @click="handleChangeStatusModal">
                 Accepter la fiche
             </button>
