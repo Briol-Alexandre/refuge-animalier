@@ -2,15 +2,13 @@
 
 use App\Enums\Status;
 use App\Http\Controllers\ClientAnimalController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContactController;
 use App\Models\Animal;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
-    Route::get('/', function () {
-        $animals = Animal::orderBy('created_at', 'desc')->take(4)->where('status', Status::AVAILABLE)->get();
-        return view('client.homepage', compact('animals'));
-    })->name('home.client');
+    Route::get('/', [ClientController::class, 'index'])->name('home.client');
 
     Route::get('/pattesheureuses', function () {
         return view('client.paws');
