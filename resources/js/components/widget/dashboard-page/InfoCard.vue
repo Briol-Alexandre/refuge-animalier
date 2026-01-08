@@ -1,5 +1,5 @@
 <template>
-    <article :aria-labelledby="'card-title-'.aria" class="w-full h-full relative" :class="gridPosition">
+    <div class="w-full h-full relative" :class="gridPosition">
         <div v-if="display" class="absolute top-0 left-0 w-full h-full" @click="$emit('display', display, title)"></div>
         <div
             class="key-card bg-white border border-softGray rounded-2xl flex items-center justify-center py-2.5 max-xs:mt-5 h-full gap-4"
@@ -10,12 +10,12 @@
             </div>
             <div class="flex flex-col">
                 <b class="font-atten text-xl font-black leading-tight" :class="color">{{ number }}</b>
-                <h2 class="text-sm text-text leading-tight" :id="'card-title-'.aria">
+                <p class="text-sm text-text leading-tight">
                     {{ title }}
-                </h2>
+                </p>
             </div>
         </div>
-    </article>
+    </div>
 </template>
 
 <script>
